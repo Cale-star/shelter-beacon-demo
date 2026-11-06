@@ -166,7 +166,7 @@
   .plate { background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18); padding: 6px 10px; }
   .plate .jp { font-size: 22px; font-weight: 800; line-height: 1.05; }
   .plate .en { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #444; }
-  .dial-wrap { display: flex; align-items: center; gap: 10px; }
+  .dial-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
   .dial { display: flex; gap: 6px; background: #161616; padding: 6px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.3) inset; }
   .wheel { display: flex; flex-direction: column; align-items: center; width: 52px; }
   .wheel button { width: 52px; height: 40px; padding: 0; border: 0; border-radius: 6px; background: #2b2b2b; color: #ddd; font-size: 16px; }
@@ -176,7 +176,7 @@
   .led { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #8a8a84, #4b4b47); border: 2px solid #9aa09a; transition: background .08s, box-shadow .08s; }
   .led.on { background: radial-gradient(circle at 35% 35%, #ffe08a, #f2b200); box-shadow: 0 0 12px #f2b200; }
   .led.flash { background: radial-gradient(circle at 35% 35%, #fff, #9cc7ff); box-shadow: 0 0 16px #6fa8ff; }
-  .resend { padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #bfc5bf; color: #1b1b1b; font-size: 11px; font-weight: 800; line-height: 1.15; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+  .resend-unused { padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #bfc5bf; color: #1b1b1b; font-size: 11px; font-weight: 800; line-height: 1.15; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
   .switch-area { display: grid; grid-template-columns: minmax(0,1fr) 68px; column-gap: 8px; }
   .sw-head { grid-column: 2; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: .06em; line-height: 1.25; color: #c8352b; margin-bottom: 6px; }
   .sw-head span { font-size: 13px; }
@@ -194,8 +194,6 @@
     background: linear-gradient(90deg, #8e9494, #f2f3f3 45%, #a3a8a8); border-radius: 7px 7px 3px 3px; box-shadow: 0 2px 3px rgba(0,0,0,.35); }
   .row.on .bat { transform: translateY(-100%) rotate(0deg); }
   .row .jp { white-space: nowrap; }
-  .foot { margin-top: 16px; display: flex; justify-content: center; }
-  .foot .resend { font-size: 11px; padding: 5px 12px; background: transparent; box-shadow: none; color: #555; }
   /* right side */
   .hq-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
   .hq-card .k { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--ink-2); }
@@ -240,7 +238,7 @@
       <div class="title-plate"><div><div class="jp" lang="ja">避難所ビーコン</div><div class="en">SHELTER BEACON</div></div><div class="led" id="boxLed" role="img" aria-label="Status light" title="Status light"></div></div>
       <div class="occ-block">
         <div class="dial-wrap">
-          <div class="plate" style="text-align:center"><div class="jp" lang="ja">人数</div><div class="en">PEOPLE</div></div>
+          <div class="plate" style="text-align:center;padding:4px 14px"><span class="jp" lang="ja" style="font-size:20px">人数</span> <span class="en">PEOPLE</span></div>
           <div class="dial" role="group" aria-label="Number of people">
             <div class="wheel"><button data-step="10" aria-label="Tens up">&#9650;</button><div class="digit" id="dTens">2</div><button data-step="-10" aria-label="Tens down">&#9660;</button></div>
             <div class="wheel"><button data-step="1" aria-label="Ones up">&#9650;</button><div class="digit" id="dOnes">3</div><button data-step="-1" aria-label="Ones down">&#9660;</button></div>
@@ -251,7 +249,6 @@
         <div class="sw-head" aria-hidden="true">&#9650; <span lang="ja">必要</span><br>NEED</div>
         <div class="rows" id="boxSwitches"></div>
       </div>
-      <div class="foot"><button class="resend" data-prg="1"><span lang="ja">再送信</span> RESEND</button></div>
     </div>
   </section>
 
