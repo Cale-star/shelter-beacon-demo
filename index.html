@@ -830,7 +830,7 @@
     paintKnob(true);
     if (!quiet) {
       navigator.vibrate && navigator.vibrate(8);                      // a click you can feel (Android)
-      clearTimeout(occTimer); occTimer = setTimeout(demoSend, 700);    // send once the knob settles, like the firmware
+      clearTimeout(occTimer); occTimer = setTimeout(demoSend, 1500);   // send once the knob rests 1.5 s, like the firmware
     }
   }
   function paintKnob(bump) {
