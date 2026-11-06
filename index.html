@@ -157,12 +157,12 @@
   .hinge, .latch { position: absolute; width: 12px; height: 64px; background: linear-gradient(90deg, #cfd4cf, #e7eae7); border: 1px solid #bfc5bf; border-radius: 4px; }
   .hinge { left: -13px; } .latch { right: -13px; }
   .h1 { top: 14%; } .h2 { bottom: 14%; } .l1 { top: 16%; } .l2 { bottom: 16%; }
-  .title-plate { background: #1b1b1b; color: #fff; border-radius: 10px; padding: 10px 12px; text-align: center; }
+  .title-plate { background: #1b1b1b; color: #fff; border-radius: 10px; padding: 10px 14px; display: grid; grid-template-columns: 22px 1fr 22px; align-items: center; text-align: center; margin-bottom: 18px; }
+  .title-plate > div:first-child { grid-column: 2; }
+  .title-plate .led { grid-column: 3; justify-self: end; width: 18px; height: 18px; border-color: #555; }
   .title-plate .jp { font-size: 26px; font-weight: 800; letter-spacing: .06em; }
   .title-plate .en { font-size: 12px; font-weight: 700; letter-spacing: .32em; color: #f2b200; margin-top: 2px; }
-  .instr { margin: 10px 4px 14px; text-align: center; font-size: 13px; color: #333; line-height: 1.35; }
-  .instr b { font-size: 14px; }
-  .occ-block { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; margin-bottom: 16px; }
+  .occ-block { display: flex; justify-content: center; margin-bottom: 14px; }
   .plate { background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18); padding: 6px 10px; }
   .plate .jp { font-size: 22px; font-weight: 800; line-height: 1.05; }
   .plate .en { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #444; }
@@ -173,20 +173,19 @@
   .wheel button:active { background: #444; }
   .digit { width: 44px; height: 54px; margin: 4px 0; display: grid; place-items: center; background: #f4f4f0; color: #111; border-radius: 4px;
     font: 800 36px/1 var(--mono); box-shadow: 0 2px 3px rgba(0,0,0,.4) inset; }
-  .side-col { display: flex; flex-direction: column; gap: 8px; align-items: center; }
   .led { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #8a8a84, #4b4b47); border: 2px solid #9aa09a; transition: background .08s, box-shadow .08s; }
   .led.on { background: radial-gradient(circle at 35% 35%, #ffe08a, #f2b200); box-shadow: 0 0 12px #f2b200; }
   .led.flash { background: radial-gradient(circle at 35% 35%, #fff, #9cc7ff); box-shadow: 0 0 16px #6fa8ff; }
-  .tiny { font-size: 10px; font-weight: 800; letter-spacing: .1em; color: #444; text-align: center; line-height: 1.2; }
   .resend { padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #bfc5bf; color: #1b1b1b; font-size: 11px; font-weight: 800; line-height: 1.15; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
-  .switch-area { display: grid; grid-template-columns: minmax(0,1fr) 68px 40px; column-gap: 8px; }
+  .switch-area { display: grid; grid-template-columns: minmax(0,1fr) 68px; column-gap: 8px; }
+  .sw-head { grid-column: 2; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: .06em; line-height: 1.25; color: #c8352b; margin-bottom: 6px; }
+  .sw-head span { font-size: 13px; }
   .rows { grid-column: 1 / 3; display: flex; flex-direction: column; gap: 10px; }
   .row { display: grid; grid-template-columns: minmax(0,1fr) 68px; align-items: center; gap: 8px; padding: 0; border: 0; background: none; text-align: left; color: inherit; cursor: pointer; }
-  .row .plate { min-width: 0; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; gap: 8px; min-height: 58px; border: 2px solid transparent; transition: border-color .15s, background .15s; }
-  .row .ic { font-size: 22px; color: #1b1b1b; display: grid; place-items: center; }
-  .row .state { font-size: 11px; font-weight: 800; letter-spacing: .06em; color: #2e7d4f; }
+  .row .plate { min-width: 0; display: grid; grid-template-columns: 34px minmax(0,1fr); align-items: center; gap: 8px; min-height: 58px; border: 2px solid transparent; transition: border-color .15s, background .15s; }
+  .row .ic { font-size: 26px; color: #1b1b1b; display: grid; place-items: center; }
+  .row .plate .jp { font-size: 26px; } .row .plate .en { font-size: 10px; color: #555; }
   .row.on .plate { border-color: #c8352b; background: #fff3f1; }
-  .row.on .state { color: #c8352b; }
   .toggle { position: relative; width: 68px; height: 68px; display: grid; place-items: center; }
   .nut { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fafafa, #b8bcbc 55%, #7d8282); box-shadow: 0 1px 3px rgba(0,0,0,.45); position: relative; z-index: 2; }
   .nut::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d9dcdc, #8d9292); }
@@ -194,12 +193,9 @@
     transform-origin: 50% 100%; transform: translateY(-100%) rotate(180deg); transition: transform .14s ease-out;
     background: linear-gradient(90deg, #8e9494, #f2f3f3 45%, #a3a8a8); border-radius: 7px 7px 3px 3px; box-shadow: 0 2px 3px rgba(0,0,0,.35); }
   .row.on .bat { transform: translateY(-100%) rotate(0deg); }
-  .legend { grid-column: 3; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18); padding: 8px 2px; }
-  .lg-need, .lg-ok { text-align: center; font-size: 11px; font-weight: 800; line-height: 1.3; letter-spacing: .04em; }
-  .lg-need { color: #c8352b; } .lg-ok { color: #2e7d4f; }
-  .lg-need span { font-size: 13px; }
   .row .jp { white-space: nowrap; }
-  .serial { margin-top: 14px; text-align: right; font: 600 10px/1 var(--mono); color: #8a908a; letter-spacing: .08em; }
+  .foot { margin-top: 16px; display: flex; justify-content: center; }
+  .foot .resend { font-size: 11px; padding: 5px 12px; background: transparent; box-shadow: none; color: #555; }
   /* right side */
   .hq-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
   .hq-card .k { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--ink-2); }
@@ -213,7 +209,7 @@
     .unit { margin: 92px auto 8px; max-width: 420px; width: calc(100% - 28px); }
     .intro, footer { padding: 0 16px; }
   }
-  @media (max-width: 380px) { .encl { padding: 18px 12px 22px; } .switch-area { grid-template-columns: minmax(0,1fr) 58px 36px; column-gap: 6px; } .row { grid-template-columns: minmax(0,1fr) 58px; } .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 26px minmax(0,1fr); } .row .state { display: none; } .toggle { width: 60px; } .wheel, .wheel button { width: 46px; } }
+  @media (max-width: 380px) { .encl { padding: 18px 12px 22px; } .title-plate .jp { font-size: 21px; letter-spacing: .02em; } .title-plate { padding: 10px 8px; } .switch-area { grid-template-columns: minmax(0,1fr) 58px; column-gap: 6px; } .row { grid-template-columns: minmax(0,1fr) 58px; } .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 28px minmax(0,1fr); } .toggle { width: 60px; } .wheel, .wheel button { width: 46px; } }
 </style>
 </head>
 <body>
@@ -241,8 +237,7 @@
     <div class="hinge h1" aria-hidden="true"></div><div class="hinge h2" aria-hidden="true"></div>
     <div class="latch l1" aria-hidden="true"></div><div class="latch l2" aria-hidden="true"></div>
     <div class="encl">
-      <div class="title-plate"><div class="jp" lang="ja">避難所ビーコン</div><div class="en">SHELTER BEACON</div></div>
-      <p class="instr"><b lang="ja">必要なものはスイッチを上へ</b><br>Flip UP what you need</p>
+      <div class="title-plate"><div><div class="jp" lang="ja">避難所ビーコン</div><div class="en">SHELTER BEACON</div></div><div class="led" id="boxLed" role="img" aria-label="Status light" title="Status light"></div></div>
       <div class="occ-block">
         <div class="dial-wrap">
           <div class="plate" style="text-align:center"><div class="jp" lang="ja">人数</div><div class="en">PEOPLE</div></div>
@@ -251,17 +246,12 @@
             <div class="wheel"><button data-step="1" aria-label="Ones up">&#9650;</button><div class="digit" id="dOnes">3</div><button data-step="-1" aria-label="Ones down">&#9660;</button></div>
           </div>
         </div>
-        <div class="side-col">
-          <div class="led" id="boxLed" role="img" aria-label="Status light"></div>
-          <div class="tiny"><span lang="ja">状態</span><br>STATUS</div>
-          <button class="resend" data-prg="1"><span lang="ja">再送信</span><br>RESEND</button>
-        </div>
       </div>
       <div class="switch-area">
+        <div class="sw-head" aria-hidden="true">&#9650; <span lang="ja">必要</span><br>NEED</div>
         <div class="rows" id="boxSwitches"></div>
-        <div class="legend" aria-hidden="true"><span class="lg-need">&#9650;<br><span lang="ja">必要</span><br>NEED</span><span class="lg-ok">OK<br>&#9660;</span></div>
       </div>
-      <div class="serial">LoRa 915 MHz · SOLAR · v0.4</div>
+      <div class="foot"><button class="resend" data-prg="1"><span lang="ja">再送信</span> RESEND</button></div>
     </div>
   </section>
 
@@ -776,7 +766,6 @@
       const el = document.querySelector(`.row[data-sw="${n.key}"]`);
       el.classList.toggle("on", !!demoSw[n.key]);
       el.setAttribute("aria-pressed", demoSw[n.key] ? "true" : "false");
-      el.querySelector(".state").textContent = demoSw[n.key] ? "NEEDED" : "OK";
     });
     $("dTens").textContent = Math.floor(demoOcc / 10);
     $("dOnes").textContent = demoOcc % 10;
@@ -788,7 +777,7 @@
   function buildDemoControls() {
     $("boxSwitches").innerHTML = NEEDS.map(n =>
       `<button class="row" data-sw="${n.key}" aria-pressed="false" aria-label="${n.label}: ${n.desc}">` +
-      `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><br><span class="en">${n.label}</span></span><span class="state">OK</span></span>` +
+      `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><br><span class="en">${n.label}</span></span></span>` +
       `<span class="toggle" aria-hidden="true"><span class="nut"></span><span class="bat"></span></span></button>`).join("");
     document.addEventListener("click", e => {
       const b = e.target.closest("button");
