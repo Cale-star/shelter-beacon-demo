@@ -166,7 +166,28 @@
   .plate { background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18); padding: 6px 10px; }
   .plate .jp { font-size: 22px; font-weight: 800; line-height: 1.05; }
   .plate .en { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #444; }
-  .dial-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .dial-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .knob-row { display: flex; align-items: center; gap: 6px; }
+  .kstep { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #bfc5bf; background: #fff; color: #1b1b1b; font-size: 22px; font-weight: 700; line-height: 1; padding: 0; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+  .kstep:active { transform: scale(.94); }
+  .knob-face { position: relative; width: 216px; height: 216px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); touch-action: none; cursor: grab; outline: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+  .knob-face:focus-visible { box-shadow: 0 0 0 3px #f2b200; }
+  .knob-face.dragging { cursor: grabbing; }
+  .ticks { position: absolute; inset: 0; }
+  .tick { position: absolute; left: 50%; top: 50%; width: 3px; height: 12px; margin: -6px 0 0 -1.5px; background: #1b1b1b; border-radius: 2px; }
+  .tlab { position: absolute; width: 38px; height: 26px; margin: -13px 0 0 -19px; border: 0; padding: 0; background: none; font: 800 14px/26px Inter, system-ui, sans-serif; color: #555; text-align: center; border-radius: 6px; cursor: pointer; transition: color .15s, transform .15s; }
+  .tlab.sel { color: #1b1b1b; transform: scale(1.22); }
+  .knob { position: absolute; left: 50%; top: 50%; width: 112px; height: 112px; margin: -56px 0 0 -56px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 30%, #4a4a4a, #1a1a1a 62%, #0d0d0d);
+    box-shadow: 0 6px 12px rgba(0,0,0,.35), 0 2px 3px rgba(0,0,0,.4), inset 0 1px 1px rgba(255,255,255,.15);
+    transition: transform .42s cubic-bezier(.34,1.45,.55,1); }
+  .knob-face.dragging .knob { transition: transform .06s linear; }
+  .knob-grip { position: absolute; inset: 4px; border-radius: 50%; background: repeating-conic-gradient(from 0deg, rgba(255,255,255,.10) 0 4deg, rgba(0,0,0,0) 4deg 12deg); }
+  .knob::after { content: ""; position: absolute; inset: 20px; border-radius: 50%; background: radial-gradient(circle at 40% 32%, #3a3a3a, #161616); box-shadow: inset 0 1px 2px rgba(255,255,255,.12); }
+  .pointer { position: absolute; left: 50%; top: 6px; width: 6px; height: 30px; margin-left: -3px; border-radius: 3px; background: #f2b200; z-index: 2; box-shadow: 0 0 6px rgba(242,178,0,.6); }
+  .knob.bump { animation: knobBump .22s ease-out; }
+  @keyframes knobBump { 50% { filter: brightness(1.25); } }
+  .knob-read { font-size: 15px; color: #333; } .knob-read b { font: 800 22px/1 var(--mono); color: #1b1b1b; }
   .dial { display: flex; gap: 6px; background: #161616; padding: 6px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.3) inset; }
   .wheel { display: flex; flex-direction: column; align-items: center; width: 52px; }
   .wheel button { width: 52px; height: 40px; padding: 0; border: 0; border-radius: 6px; background: #2b2b2b; color: #ddd; font-size: 16px; }
@@ -189,10 +210,18 @@
   .toggle { position: relative; width: 68px; height: 68px; display: grid; place-items: center; }
   .nut { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fafafa, #b8bcbc 55%, #7d8282); box-shadow: 0 1px 3px rgba(0,0,0,.45); position: relative; z-index: 2; }
   .nut::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d9dcdc, #8d9292); }
-  .bat { position: absolute; left: 50%; top: 50%; width: 15px; height: 34px; margin-left: -7.5px; z-index: 3;
-    transform-origin: 50% 100%; transform: translateY(-100%) rotate(180deg); transition: transform .14s ease-out;
-    background: linear-gradient(90deg, #8e9494, #f2f3f3 45%, #a3a8a8); border-radius: 7px 7px 3px 3px; box-shadow: 0 2px 3px rgba(0,0,0,.35); }
-  .row.on .bat { transform: translateY(-100%) rotate(0deg); }
+  .bat { position: absolute; left: 50%; top: 50%; width: 14px; height: 36px; margin-left: -7px; z-index: 3;
+    transform-origin: 50% 100%; transform: translateY(-100%) rotate(180deg) scaleY(.92);
+    transition: transform .3s cubic-bezier(.3,1.6,.55,1), filter .3s;
+    background: linear-gradient(90deg, #7c8383, #fdfdfd 38%, #d3d6d6 58%, #858c8c); border-radius: 8px 8px 3px 3px;
+    filter: drop-shadow(-1px -3px 2px rgba(0,0,0,.30)); }
+  .bat::before { content: ""; position: absolute; left: 3px; right: 3px; top: 3px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.75); }
+  .row.on .bat { transform: translateY(-100%) rotate(0deg) scaleY(1); filter: drop-shadow(1px 4px 2px rgba(0,0,0,.35)); }
+  .nut.snap { animation: nutSnap .2s ease-out; }
+  @keyframes nutSnap { 40% { transform: scale(.9); } 100% { transform: scale(1); } }
+  .row .plate { transition: border-color .15s, background .15s, transform .12s; }
+  .row, .kstep, .tlab { -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+  .row:active .plate { transform: scale(.985); }
   .row .jp { white-space: nowrap; }
   /* right side */
   .hq-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
@@ -207,7 +236,7 @@
     .unit { margin: 92px auto 8px; max-width: 420px; width: calc(100% - 28px); }
     .intro, footer { padding: 0 16px; }
   }
-  @media (max-width: 380px) { .encl { padding: 18px 12px 22px; } .title-plate .jp { font-size: 21px; letter-spacing: .02em; } .title-plate { padding: 10px 8px; } .switch-area { grid-template-columns: minmax(0,1fr) 58px; column-gap: 6px; } .row { grid-template-columns: minmax(0,1fr) 58px; } .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 28px minmax(0,1fr); } .toggle { width: 60px; } .wheel, .wheel button { width: 46px; } }
+  @media (max-width: 380px) { .encl { padding: 18px 12px 22px; } .title-plate .jp { font-size: 21px; letter-spacing: .02em; } .title-plate { padding: 10px 8px; } .switch-area { grid-template-columns: minmax(0,1fr) 58px; column-gap: 6px; } .row { grid-template-columns: minmax(0,1fr) 58px; } .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 28px minmax(0,1fr); } .toggle { width: 60px; } .knob-face { width: 196px; height: 196px; } .kstep { width: 36px; height: 36px; } }
 </style>
 </head>
 <body>
@@ -227,7 +256,7 @@
 
 <div id="bannerSerial" class="banner">This browser can't talk to USB devices. Open this page in <b>Microsoft Edge</b> or <b>Google Chrome</b> (Firefox-based browsers don't support Web Serial). Demo mode still works.</div>
 <div id="bannerWrongPort" class="banner">This port is the <b>transmitter</b> (shelter box), not the receiver. Click <b>Disconnect</b>, then <b>Connect receiver</b> and pick the other COM port &mdash; Windows can swap the numbers when boards are re-plugged.</div>
-<p class="intro">When an earthquake knocks out cell towers and power, a shelter leader flips a switch for each need. The box radios HQ over LoRa, with no cell, grid or app, and HQ ranks every shelter by urgency. <b>Try it: flip the switches and dial the headcount, then watch what HQ sees.</b></p>
+<p class="intro">When an earthquake knocks out cell towers and power, a shelter leader flips a switch for each need. The box radios HQ over LoRa, with no cell, grid or app, and HQ ranks every shelter by urgency. <b>Try it: flip the switches and turn the people knob, then watch what HQ sees.</b></p>
 
 <div class="stage">
   <section class="unit" aria-label="Shelter box">
@@ -239,10 +268,15 @@
       <div class="occ-block">
         <div class="dial-wrap">
           <div class="plate" style="text-align:center;padding:4px 14px"><span class="jp" lang="ja" style="font-size:20px">人数</span> <span class="en">PEOPLE</span></div>
-          <div class="dial" role="group" aria-label="Number of people">
-            <div class="wheel"><button data-step="10" aria-label="Tens up">&#9650;</button><div class="digit" id="dTens">2</div><button data-step="-10" aria-label="Tens down">&#9660;</button></div>
-            <div class="wheel"><button data-step="1" aria-label="Ones up">&#9650;</button><div class="digit" id="dOnes">3</div><button data-step="-1" aria-label="Ones down">&#9660;</button></div>
+          <div class="knob-row">
+            <button class="kstep" data-kstep="-1" aria-label="Fewer people">&minus;</button>
+            <div class="knob-face" id="knobFace" role="slider" tabindex="0" aria-label="About how many people" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+              <div class="ticks" id="knobTicks"></div>
+              <div class="knob" id="knob"><div class="knob-grip"></div><div class="pointer"></div></div>
+            </div>
+            <button class="kstep" data-kstep="1" aria-label="More people">+</button>
           </div>
+          <div class="knob-read"><b id="knobVal">20</b> <span id="knobUnit">people</span></div>
         </div>
       </div>
       <div class="switch-area">
@@ -379,7 +413,7 @@
     $("needs").innerHTML = NEEDS.map(n =>
       `<div class="need is-unk" id="need-${n.id}"><div class="label">${n.label}</div><div class="desc">${n.desc}</div><div class="value">&mdash;</div><div class="since"></div></div>`
     ).join("") +
-      `<div class="need occ" id="need-occ"><div class="label">OCCUPANCY</div><div class="desc">People here (thumbwheel)</div><div class="value">&mdash;</div><div class="since"></div></div>`;
+      `<div class="need occ" id="need-occ"><div class="label">OCCUPANCY</div><div class="desc">People here (knob)</div><div class="value">&mdash;</div><div class="since"></div></div>`;
   }
   function flash(id) { const el = $(id); el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }
 
@@ -758,20 +792,68 @@
   const JP = { W: "水", M: "医療", FD: "食料", SH: "毛布", FU: "燃料" };
   const ICON = {"W": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 384 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0l1.8 0c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z\"></path></svg>", "M": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 576 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l32 0L96 32 64 32zm64 0l0 448 320 0 0-448L128 32zM512 480c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64l-32 0 0 448 32 0zM256 176c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 48 48 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l48 0 0-48z\"></path></svg>", "FD": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 512 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M176 56c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm24 48l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM56 176l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM0 283.4C0 268.3 12.3 256 27.4 256l457.1 0c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28l-231.5 0c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4zM224 200c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-96 0c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm216 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm120 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM296 32l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z\"></path></svg>", "SH": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 640 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z\"></path></svg>", "FU": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 512 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M336 448H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h320c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm157.2-340.7l-81-81c-6.2-6.2-16.4-6.2-22.6 0l-11.3 11.3c-6.2 6.2-6.2 16.4 0 22.6L416 97.9V160c0 28.1 20.9 51.3 48 55.2V376c0 13.2-10.8 24-24 24s-24-10.8-24-24v-32c0-48.6-39.4-88-88-88h-8V64c0-35.3-28.7-64-64-64H96C60.7 0 32 28.7 32 64v352h288V304h8c22.1 0 40 17.9 40 40v27.8c0 37.7 27 72 64.5 75.9 43 4.3 79.5-29.5 79.5-71.7V152.6c0-17-6.8-33.3-18.8-45.3zM256 192H96V64h160v128z\"></path></svg>"};
   let occTimer = null;
+  const OCC = [0, 5, 10, 15, 20, 30, 40, 60, 80, 100];          // same 10 clicks as the real knob
+  const SWEEP = 300, START = -150;                              // degrees, 0 = straight up
+  let kIdx = 4, kAngle = 0;
+  const angleOf = i => START + i * SWEEP / (OCC.length - 1);
+  function buildKnob() {
+    const t = $("knobTicks"), R = 92, RT = 72;
+    t.innerHTML = OCC.map((v, i) => {
+      const a = angleOf(i) * Math.PI / 180, x = 108 + R * Math.sin(a), y = 108 - R * Math.cos(a);
+      return `<button class="tlab" data-kidx="${i}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px" aria-label="${v === 100 ? "100 or more" : v} people">${v === 100 ? "100+" : v}</button>`;
+    }).join("") + OCC.map((v, i) => {
+      const deg = angleOf(i), a = deg * Math.PI / 180, x = 108 + RT * Math.sin(a), y = 108 - RT * Math.cos(a);
+      return `<span class="tick" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px;transform:rotate(${deg}deg)"></span>`;
+    }).join("");
+    const face = $("knobFace");
+    let drag = false;
+    const idxFromEvent = e => {
+      const r = face.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      let deg = Math.atan2(dx, -dy) * 180 / Math.PI;                    // 0 = up, clockwise positive
+      deg = Math.max(START, Math.min(START + SWEEP, deg));
+      return Math.round((deg - START) / (SWEEP / (OCC.length - 1)));
+    };
+    face.addEventListener("pointerdown", e => { if (e.target.closest(".tlab")) return; drag = true; face.classList.add("dragging"); face.setPointerCapture(e.pointerId); setKnob(idxFromEvent(e)); });
+    face.addEventListener("pointermove", e => { if (drag) setKnob(idxFromEvent(e)); });
+    const end = () => { drag = false; face.classList.remove("dragging"); };
+    face.addEventListener("pointerup", end); face.addEventListener("pointercancel", end);
+    face.addEventListener("keydown", e => {
+      if (["ArrowRight", "ArrowUp"].includes(e.key)) { setKnob(kIdx + 1); e.preventDefault(); }
+      if (["ArrowLeft", "ArrowDown"].includes(e.key)) { setKnob(kIdx - 1); e.preventDefault(); }
+    });
+  }
+  function setKnob(i, quiet) {
+    i = Math.max(0, Math.min(OCC.length - 1, i));
+    if (i === kIdx && !quiet) return;
+    kIdx = i; demoOcc = OCC[i];
+    paintKnob(true);
+    if (!quiet) {
+      navigator.vibrate && navigator.vibrate(8);                      // a click you can feel (Android)
+      clearTimeout(occTimer); occTimer = setTimeout(demoSend, 700);    // send once the knob settles, like the firmware
+    }
+  }
+  function paintKnob(bump) {
+    const k = $("knob"); k.style.transform = `rotate(${angleOf(kIdx)}deg)`;
+    if (bump) { k.classList.remove("bump"); void k.offsetWidth; k.classList.add("bump"); }
+    document.querySelectorAll(".tlab").forEach((b, i) => b.classList.toggle("sel", i === kIdx));
+    $("knobVal").textContent = OCC[kIdx] === 100 ? "100+" : OCC[kIdx];
+    $("knobFace").setAttribute("aria-valuenow", OCC[kIdx]);
+  }
   function paintBox() {
     NEEDS.forEach(n => {
       const el = document.querySelector(`.row[data-sw="${n.key}"]`);
       el.classList.toggle("on", !!demoSw[n.key]);
       el.setAttribute("aria-pressed", demoSw[n.key] ? "true" : "false");
     });
-    $("dTens").textContent = Math.floor(demoOcc / 10);
-    $("dOnes").textContent = demoOcc % 10;
+    if (OCC[kIdx] !== demoOcc) { const j = OCC.indexOf(demoOcc); if (j >= 0) kIdx = j; }
+    paintKnob(false);
     $("boxLed").classList.toggle("on", NEEDS.some(n => demoSw[n.key]));
   }
   function flashLed() {
     const l = $("boxLed"); l.classList.add("flash"); setTimeout(() => l.classList.remove("flash"), 120);
   }
   function buildDemoControls() {
+    buildKnob();
     $("boxSwitches").innerHTML = NEEDS.map(n =>
       `<button class="row" data-sw="${n.key}" aria-pressed="false" aria-label="${n.label}: ${n.desc}">` +
       `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><br><span class="en">${n.label}</span></span></span>` +
@@ -779,12 +861,13 @@
     document.addEventListener("click", e => {
       const b = e.target.closest("button");
       if (!b || !demoOn) return;
-      if (b.dataset.sw) { demoSw[b.dataset.sw] = !demoSw[b.dataset.sw]; demoSend(); }
-      else if (b.dataset.step) {            // thumbwheel: each digit wraps 0-9 on its own, like the real part
-        const st = Number(b.dataset.step), t = Math.floor(demoOcc / 10), o = demoOcc % 10;
-        demoOcc = Math.abs(st) === 10 ? ((t + Math.sign(st) + 10) % 10) * 10 + o : t * 10 + (o + st + 10) % 10;
-        clearTimeout(occTimer); occTimer = setTimeout(demoSend, 700);   // send once the dial settles
+      if (b.dataset.sw) {
+        demoSw[b.dataset.sw] = !demoSw[b.dataset.sw]; demoSend();
+        const nut = b.querySelector(".nut"); nut.classList.remove("snap"); void nut.offsetWidth; nut.classList.add("snap");
+        navigator.vibrate && navigator.vibrate(12);
       }
+      else if (b.dataset.kstep) { setKnob(kIdx + Number(b.dataset.kstep)); return; }
+      else if (b.dataset.kidx) { setKnob(Number(b.dataset.kidx)); return; }
       else if (b.dataset.prg) { demoSend(); }
       else if (b.dataset.drop) { demoDropUntil = Date.now() + 25000; addEvent("Demo: signal lost for 25 s, so packets are dropped"); }
       else return;
@@ -793,7 +876,7 @@
   }
   function startDemo() {
     if (port) return;
-    demoOn = true; demoPkt = 0; demoSw = {}; demoOcc = 23; demoDropUntil = 0; demoStart = Date.now();
+    demoOn = true; demoPkt = 0; demoSw = {}; demoOcc = 20; kIdx = 4; demoDropUntil = 0; demoStart = Date.now();
     resetState();
     $("bannerDemo").classList.add("show");
     $("demoControls").classList.add("show");
