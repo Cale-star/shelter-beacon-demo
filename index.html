@@ -143,44 +143,77 @@
   #btnConnect, #btnDisconnect, #btnDemo, #connChip, #bannerSerial, #bannerWrongPort { display: none !important; }
   .intro { max-width: 1200px; margin: 16px auto 0; padding: 0 24px; color: var(--ink-2); font-size: 15px; }
   .intro b { color: var(--ink); }
-  .box {
-    max-width: 1200px; margin: 16px auto 0; padding: 16px 18px 18px; border-radius: 14px;
-    background: var(--panel); border: 1px solid var(--line); border-top: 6px solid #f2b200; box-shadow: var(--shadow);
+  .stage { max-width: 1200px; margin: 8px auto 0; padding: 0 24px; display: grid; grid-template-columns: 420px minmax(0,1fr); gap: 28px; align-items: start; }
+  /* the enclosure */
+  .unit { position: relative; margin: 96px 18px 12px; }
+  .encl {
+    position: relative; background: linear-gradient(160deg, #eef1ee, #dfe3df 60%, #d6dbd6); border-radius: 22px;
+    padding: 22px 20px 26px; box-shadow: 0 1px 0 #fff inset, 0 10px 24px rgba(0,0,0,.18), 0 2px 4px rgba(0,0,0,.12);
+    border: 1px solid #c9cec9; color: #1b1b1b;
   }
-  .box-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-  .box-title { font-weight: 750; letter-spacing: .04em; font-size: 14px; }
-  .box-title span { font-weight: 500; color: var(--ink-2); letter-spacing: 0; }
-  .led { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2); }
-  .led i { width: 14px; height: 14px; border-radius: 50%; background: var(--unk-bg); border: 1px solid var(--line); transition: background .08s; }
-  .led.on i { background: #f2b200; }
-  .led.flash i { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-  .switches { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
-  .sw {
-    display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 6px 10px;
-    border-radius: 12px; border: 2px solid var(--line); background: var(--panel); min-height: 132px;
-  }
-  .sw .jp { font-size: 22px; font-weight: 700; line-height: 1; }
-  .sw .en { font-size: 12px; font-weight: 700; letter-spacing: .05em; color: var(--ink-2); }
-  .sw .lever { width: 30px; height: 50px; border-radius: 16px; background: var(--unk-bg); border: 2px solid var(--line); position: relative; }
-  .sw .lever::after { content: ""; position: absolute; left: 3px; right: 3px; height: 20px; border-radius: 10px; background: var(--ink-2); bottom: 3px; transition: bottom .12s; }
-  .sw .state { font-size: 12px; font-weight: 700; color: var(--ok); }
-  .sw.on { border-color: var(--need); background: var(--need-bg); }
-  .sw.on .lever::after { bottom: 23px; background: var(--need); }
-  .sw.on .state { color: var(--need); }
-  .box-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
-  .people { display: inline-flex; align-items: center; gap: 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 10px; }
-  .people b { font-family: var(--mono); font-size: 22px; min-width: 2.2ch; text-align: center; }
-  .people button { padding: 6px 12px; font-weight: 700; }
-  .hint { font-size: 13px; color: var(--ink-2); }
-  .hq-mini { margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); font-size: 15px; }
-  .hq-mini b { font-size: 18px; margin-right: 6px; }
+  .antenna { position: absolute; left: 20%; top: -92px; width: 11px; height: 96px; border-radius: 6px 6px 2px 2px;
+    background: linear-gradient(90deg, #111, #3a3a3a 45%, #111); }
+  .antenna::after { content: ""; position: absolute; left: -3px; bottom: -4px; width: 17px; height: 10px; border-radius: 3px; background: #222; }
+  .hinge, .latch { position: absolute; width: 12px; height: 64px; background: linear-gradient(90deg, #cfd4cf, #e7eae7); border: 1px solid #bfc5bf; border-radius: 4px; }
+  .hinge { left: -13px; } .latch { right: -13px; }
+  .h1 { top: 14%; } .h2 { bottom: 14%; } .l1 { top: 16%; } .l2 { bottom: 16%; }
+  .title-plate { background: #1b1b1b; color: #fff; border-radius: 10px; padding: 10px 12px; text-align: center; }
+  .title-plate .jp { font-size: 26px; font-weight: 800; letter-spacing: .06em; }
+  .title-plate .en { font-size: 12px; font-weight: 700; letter-spacing: .32em; color: #f2b200; margin-top: 2px; }
+  .instr { margin: 10px 4px 14px; text-align: center; font-size: 13px; color: #333; line-height: 1.35; }
+  .instr b { font-size: 14px; }
+  .occ-block { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; margin-bottom: 16px; }
+  .plate { background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18); padding: 6px 10px; }
+  .plate .jp { font-size: 22px; font-weight: 800; line-height: 1.05; }
+  .plate .en { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #444; }
+  .dial-wrap { display: flex; align-items: center; gap: 10px; }
+  .dial { display: flex; gap: 6px; background: #161616; padding: 6px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,.3) inset; }
+  .wheel { display: flex; flex-direction: column; align-items: center; width: 52px; }
+  .wheel button { width: 52px; height: 40px; padding: 0; border: 0; border-radius: 6px; background: #2b2b2b; color: #ddd; font-size: 16px; }
+  .wheel button:active { background: #444; }
+  .digit { width: 44px; height: 54px; margin: 4px 0; display: grid; place-items: center; background: #f4f4f0; color: #111; border-radius: 4px;
+    font: 800 36px/1 var(--mono); box-shadow: 0 2px 3px rgba(0,0,0,.4) inset; }
+  .side-col { display: flex; flex-direction: column; gap: 8px; align-items: center; }
+  .led { width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #8a8a84, #4b4b47); border: 2px solid #9aa09a; transition: background .08s, box-shadow .08s; }
+  .led.on { background: radial-gradient(circle at 35% 35%, #ffe08a, #f2b200); box-shadow: 0 0 12px #f2b200; }
+  .led.flash { background: radial-gradient(circle at 35% 35%, #fff, #9cc7ff); box-shadow: 0 0 16px #6fa8ff; }
+  .tiny { font-size: 10px; font-weight: 800; letter-spacing: .1em; color: #444; text-align: center; line-height: 1.2; }
+  .resend { padding: 6px 8px; border-radius: 8px; background: #fff; border: 1px solid #bfc5bf; color: #1b1b1b; font-size: 11px; font-weight: 800; line-height: 1.15; box-shadow: 0 1px 2px rgba(0,0,0,.15); }
+  .switch-area { display: grid; grid-template-columns: minmax(0,1fr) 68px 40px; column-gap: 8px; }
+  .rows { grid-column: 1 / 3; display: flex; flex-direction: column; gap: 10px; }
+  .row { display: grid; grid-template-columns: minmax(0,1fr) 68px; align-items: center; gap: 8px; padding: 0; border: 0; background: none; text-align: left; color: inherit; cursor: pointer; }
+  .row .plate { min-width: 0; display: grid; grid-template-columns: 30px minmax(0,1fr) auto; align-items: center; gap: 8px; min-height: 58px; border: 2px solid transparent; transition: border-color .15s, background .15s; }
+  .row .ic { font-size: 22px; color: #1b1b1b; display: grid; place-items: center; }
+  .row .state { font-size: 11px; font-weight: 800; letter-spacing: .06em; color: #2e7d4f; }
+  .row.on .plate { border-color: #c8352b; background: #fff3f1; }
+  .row.on .state { color: #c8352b; }
+  .toggle { position: relative; width: 68px; height: 68px; display: grid; place-items: center; }
+  .nut { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fafafa, #b8bcbc 55%, #7d8282); box-shadow: 0 1px 3px rgba(0,0,0,.45); position: relative; z-index: 2; }
+  .nut::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d9dcdc, #8d9292); }
+  .bat { position: absolute; left: 50%; top: 50%; width: 15px; height: 34px; margin-left: -7.5px; z-index: 3;
+    transform-origin: 50% 100%; transform: translateY(-100%) rotate(180deg); transition: transform .14s ease-out;
+    background: linear-gradient(90deg, #8e9494, #f2f3f3 45%, #a3a8a8); border-radius: 7px 7px 3px 3px; box-shadow: 0 2px 3px rgba(0,0,0,.35); }
+  .row.on .bat { transform: translateY(-100%) rotate(0deg); }
+  .legend { grid-column: 3; display: flex; flex-direction: column; justify-content: space-between; align-items: center; background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0,0,0,.18); padding: 8px 2px; }
+  .lg-need, .lg-ok { text-align: center; font-size: 11px; font-weight: 800; line-height: 1.3; letter-spacing: .04em; }
+  .lg-need { color: #c8352b; } .lg-ok { color: #2e7d4f; }
+  .lg-need span { font-size: 13px; }
+  .row .jp { white-space: nowrap; }
+  .serial { margin-top: 14px; text-align: right; font: 600 10px/1 var(--mono); color: #8a908a; letter-spacing: .08em; }
+  /* right side */
+  .hq-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .hq-card .k { font-size: 13px; font-weight: 700; letter-spacing: .06em; color: var(--ink-2); }
+  .hq-card .big { font-size: 40px; font-weight: 800; line-height: 1.1; margin: 2px 0 4px; }
+  .hq-card .why { font-size: 14px; color: var(--ink-2); }
+  .side-notes { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; color: var(--ink-2); }
+  .side-notes button { align-self: flex-start; }
   footer { max-width: 1200px; margin: 8px auto 32px; padding: 0 24px; color: var(--ink-2); font-size: 13px; }
-  @media (max-width: 560px) {
-    .switches { grid-template-columns: repeat(3, minmax(0,1fr)); }
-    .box, .intro { margin-left: 12px; margin-right: 12px; }
-    .box { padding: 14px; } .intro, footer { padding: 0 4px; }
-    footer { margin-left: 12px; margin-right: 12px; }
+  @media (max-width: 900px) {
+    .stage { grid-template-columns: 1fr; padding: 0 12px; gap: 12px; }
+    .unit { margin: 92px auto 8px; max-width: 420px; width: calc(100% - 28px); }
+    .intro, footer { padding: 0 16px; }
   }
+  @media (max-width: 380px) { .encl { padding: 18px 12px 22px; } .switch-area { grid-template-columns: minmax(0,1fr) 58px 36px; column-gap: 6px; } .row { grid-template-columns: minmax(0,1fr) 58px; } .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 26px minmax(0,1fr); } .row .state { display: none; } .toggle { width: 60px; } .wheel, .wheel button { width: 46px; } }
 </style>
 </head>
 <body>
@@ -200,22 +233,52 @@
 
 <div id="bannerSerial" class="banner">This browser can't talk to USB devices. Open this page in <b>Microsoft Edge</b> or <b>Google Chrome</b> (Firefox-based browsers don't support Web Serial). Demo mode still works.</div>
 <div id="bannerWrongPort" class="banner">This port is the <b>transmitter</b> (shelter box), not the receiver. Click <b>Disconnect</b>, then <b>Connect receiver</b> and pick the other COM port &mdash; Windows can swap the numbers when boards are re-plugged.</div>
-<p class="intro">When an earthquake knocks out cell towers and power, a shelter leader flips a switch for each need. The box radios HQ over LoRa, with no cell, grid or app, and HQ ranks every shelter by urgency. <b>Try it: flip switches on the pretend box, then watch HQ's dashboard below.</b></p>
+<p class="intro">When an earthquake knocks out cell towers and power, a shelter leader flips a switch for each need. The box radios HQ over LoRa, with no cell, grid or app, and HQ ranks every shelter by urgency. <b>Try it: flip the switches and dial the headcount, then watch what HQ sees.</b></p>
 
-<section class="box" aria-label="Pretend shelter box">
-  <div class="box-head">
-    <div class="box-title">SHELTER BOX <span>&middot; on your phone instead of a wall</span></div>
-    <div class="led" id="boxLed"><i></i><span>status LED</span></div>
-  </div>
-  <div class="switches" id="boxSwitches"></div>
-  <div class="box-row">
-    <div class="people"><span class="hint">People</span><button data-occ="-5" aria-label="5 fewer people">&minus;</button><b id="boxOcc">23</b><button data-occ="5" aria-label="5 more people">+</button></div>
-    <button data-prg="1">Resend (PRG)</button>
-    <button data-drop="1">Lose signal for 25 s</button>
-  </div>
-  <div class="hq-mini" aria-live="polite">HQ sees: <b id="boxPrio">&mdash;</b> <span id="boxWhy" class="hint"></span></div>
-  <div class="hint" style="margin-top:10px">Each change is sent 3&times; over a simulated radio link, like the real box. HQ ignores the repeat copies.</div>
-</section>
+<div class="stage">
+  <section class="unit" aria-label="Shelter box">
+    <div class="antenna" aria-hidden="true"></div>
+    <div class="hinge h1" aria-hidden="true"></div><div class="hinge h2" aria-hidden="true"></div>
+    <div class="latch l1" aria-hidden="true"></div><div class="latch l2" aria-hidden="true"></div>
+    <div class="encl">
+      <div class="title-plate"><div class="jp" lang="ja">避難所ビーコン</div><div class="en">SHELTER BEACON</div></div>
+      <p class="instr"><b lang="ja">必要なものはスイッチを上へ</b><br>Flip UP what you need</p>
+      <div class="occ-block">
+        <div class="dial-wrap">
+          <div class="plate" style="text-align:center"><div class="jp" lang="ja">人数</div><div class="en">PEOPLE</div></div>
+          <div class="dial" role="group" aria-label="Number of people">
+            <div class="wheel"><button data-step="10" aria-label="Tens up">&#9650;</button><div class="digit" id="dTens">2</div><button data-step="-10" aria-label="Tens down">&#9660;</button></div>
+            <div class="wheel"><button data-step="1" aria-label="Ones up">&#9650;</button><div class="digit" id="dOnes">3</div><button data-step="-1" aria-label="Ones down">&#9660;</button></div>
+          </div>
+        </div>
+        <div class="side-col">
+          <div class="led" id="boxLed" role="img" aria-label="Status light"></div>
+          <div class="tiny"><span lang="ja">状態</span><br>STATUS</div>
+          <button class="resend" data-prg="1"><span lang="ja">再送信</span><br>RESEND</button>
+        </div>
+      </div>
+      <div class="switch-area">
+        <div class="rows" id="boxSwitches"></div>
+        <div class="legend" aria-hidden="true"><span class="lg-need">&#9650;<br><span lang="ja">必要</span><br>NEED</span><span class="lg-ok">OK<br>&#9660;</span></div>
+      </div>
+      <div class="serial">LoRa 915 MHz · SOLAR · v0.4</div>
+    </div>
+  </section>
+
+  <aside>
+    <div class="hq-card" aria-live="polite">
+      <div class="k">WHAT HQ SEES</div>
+      <div class="big" id="boxPrio">&mdash;</div>
+      <div class="why" id="boxWhy"></div>
+      <div class="why" id="boxSum" style="margin-top:6px;color:var(--ink)"></div>
+    </div>
+    <div class="side-notes">
+      <span>Each change is radioed 3&times;, about half a second apart. HQ drops the repeat copies and ranks the shelter: Medical +3, Water +2, Food / Shelter / Fuel +1, 25+ people +1, 50+ +2. Three or more = <b style="color:var(--need)">HIGH</b>.</span>
+      <button data-drop="1">Simulate losing the signal for 25 s</button>
+      <span>The full HQ dashboard is below &darr;</span>
+    </div>
+  </aside>
+</div>
 
 <div id="bannerDemo" class="banner">SIMULATED DATA &mdash; no radio here. On the real system these messages arrive over LoRa from the box.</div>
 
@@ -706,14 +769,17 @@
     }
   }
   const JP = { W: "水", M: "医療", FD: "食料", SH: "毛布", FU: "燃料" };
+  const ICON = {"W": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 384 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0l1.8 0c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z\"></path></svg>", "M": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 576 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l32 0L96 32 64 32zm64 0l0 448 320 0 0-448L128 32zM512 480c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64l-32 0 0 448 32 0zM256 176c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 48 48 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l48 0 0-48z\"></path></svg>", "FD": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 512 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M176 56c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm24 48l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM56 176l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM0 283.4C0 268.3 12.3 256 27.4 256l457.1 0c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28l-231.5 0c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4zM224 200c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-96 0c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm216 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm120 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM296 32l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z\"></path></svg>", "SH": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 640 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z\"></path></svg>", "FU": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 512 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M336 448H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h320c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm157.2-340.7l-81-81c-6.2-6.2-16.4-6.2-22.6 0l-11.3 11.3c-6.2 6.2-6.2 16.4 0 22.6L416 97.9V160c0 28.1 20.9 51.3 48 55.2V376c0 13.2-10.8 24-24 24s-24-10.8-24-24v-32c0-48.6-39.4-88-88-88h-8V64c0-35.3-28.7-64-64-64H96C60.7 0 32 28.7 32 64v352h288V304h8c22.1 0 40 17.9 40 40v27.8c0 37.7 27 72 64.5 75.9 43 4.3 79.5-29.5 79.5-71.7V152.6c0-17-6.8-33.3-18.8-45.3zM256 192H96V64h160v128z\"></path></svg>"};
+  let occTimer = null;
   function paintBox() {
     NEEDS.forEach(n => {
-      const el = document.querySelector(`.sw[data-sw="${n.key}"]`);
+      const el = document.querySelector(`.row[data-sw="${n.key}"]`);
       el.classList.toggle("on", !!demoSw[n.key]);
       el.setAttribute("aria-pressed", demoSw[n.key] ? "true" : "false");
       el.querySelector(".state").textContent = demoSw[n.key] ? "NEEDED" : "OK";
     });
-    $("boxOcc").textContent = demoOcc;
+    $("dTens").textContent = Math.floor(demoOcc / 10);
+    $("dOnes").textContent = demoOcc % 10;
     $("boxLed").classList.toggle("on", NEEDS.some(n => demoSw[n.key]));
   }
   function flashLed() {
@@ -721,16 +787,23 @@
   }
   function buildDemoControls() {
     $("boxSwitches").innerHTML = NEEDS.map(n =>
-      `<button class="sw" data-sw="${n.key}" aria-pressed="false"><span class="jp" lang="ja">${JP[n.key]}</span><span class="lever"></span><span class="en">${n.label}</span><span class="state">OK</span></button>`).join("");
-    document.querySelector(".box").onclick = e => {
+      `<button class="row" data-sw="${n.key}" aria-pressed="false" aria-label="${n.label}: ${n.desc}">` +
+      `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><br><span class="en">${n.label}</span></span><span class="state">OK</span></span>` +
+      `<span class="toggle" aria-hidden="true"><span class="nut"></span><span class="bat"></span></span></button>`).join("");
+    document.addEventListener("click", e => {
       const b = e.target.closest("button");
       if (!b || !demoOn) return;
       if (b.dataset.sw) { demoSw[b.dataset.sw] = !demoSw[b.dataset.sw]; demoSend(); }
-      else if (b.dataset.occ) { demoOcc = Math.max(0, Math.min(99, demoOcc + Number(b.dataset.occ))); demoSend(); }
+      else if (b.dataset.step) {            // thumbwheel: each digit wraps 0-9 on its own, like the real part
+        const st = Number(b.dataset.step), t = Math.floor(demoOcc / 10), o = demoOcc % 10;
+        demoOcc = Math.abs(st) === 10 ? ((t + Math.sign(st) + 10) % 10) * 10 + o : t * 10 + (o + st + 10) % 10;
+        clearTimeout(occTimer); occTimer = setTimeout(demoSend, 700);   // send once the dial settles
+      }
       else if (b.dataset.prg) { demoSend(); }
       else if (b.dataset.drop) { demoDropUntil = Date.now() + 25000; addEvent("Demo: signal lost for 25 s, so packets are dropped"); }
+      else return;
       paintBox();
-    };
+    });
   }
   function startDemo() {
     if (port) return;
@@ -774,11 +847,15 @@
   render();
   startDemo();          // public demo: always running, no USB receiver
   paintBox();
-  setInterval(() => {   // mirror HQ's verdict next to the switches, so phones don't have to scroll
+  setInterval(() => {   // mirror HQ's verdict next to the box
     const lvl = $("prioLevel"), b = $("boxPrio");
     b.textContent = lvl.textContent; b.style.color = getComputedStyle(lvl).color;
     $("boxWhy").textContent = $("prioWhy").textContent;
+    $("boxSum").textContent = $("summary").textContent;
   }, 300);
+  setInterval(() => {   // idle blip every 4 s, like the firmware's "I'm alive" LED
+    if (!NEEDS.some(n => demoSw[n.key])) flashLed();
+  }, 4000);
 
   // test hook: feed raw serial lines
   window.hq = { feed: parseLine, state: S, priority, summary: () => summary(priority()) };
