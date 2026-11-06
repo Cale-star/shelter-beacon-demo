@@ -238,6 +238,22 @@
     .intro, footer { padding: 0 16px; }
   }
   @media (max-width: 380px) { .encl { padding: 18px 12px 22px; } .title-plate .jp { font-size: 21px; letter-spacing: .02em; } .title-plate { padding: 10px 8px; } .switch-area { grid-template-columns: minmax(0,1fr) 58px; column-gap: 6px; } .row { grid-template-columns: minmax(0,1fr) 58px; } .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 28px minmax(0,1fr); } .toggle { width: 60px; } .knob-face { width: 196px; height: 196px; } .kstep { width: 36px; height: 36px; } }
+  /* ---- HIGH-priority alarm ---- */
+  .alarm {
+    display: none; margin: 16px 24px 0; padding: 14px 16px; border-radius: 10px;
+    background: var(--need); color: #fff; align-items: center; gap: 14px; flex-wrap: wrap;
+    box-shadow: 0 4px 18px rgba(200,53,43,.35);
+  }
+  .alarm.show { display: flex; }
+  .alarm.ringing { animation: alarmPulse 1s steps(1, end) infinite; }
+  @keyframes alarmPulse { 0% { background: var(--need); } 50% { background: #7d1a13; } }
+  .alarm .big { font-size: 20px; font-weight: 800; letter-spacing: .02em; }
+  .alarm .why { font-size: 15px; opacity: .95; flex: 1 1 260px; }
+  .alarm button { background: #fff; color: #7d1a13; border-color: #fff; font-weight: 700; }
+  .alarm.acked { background: var(--need-bg); color: var(--need); box-shadow: none; }
+  .alarm.acked button { display: none; }
+  @media (prefers-reduced-motion: reduce) { .alarm.ringing { animation: none; } }
+  @media (max-width: 900px) { .alarm { margin: 12px 16px 0; } }
 </style>
 </head>
 <body>
@@ -251,6 +267,7 @@
     <button id="btnConnect" class="primary">Connect receiver</button>
     <button id="btnDisconnect" disabled>Disconnect</button>
     <button id="btnDemo">Demo mode</button>
+    <button id="btnSound" title="Alarm sound when a shelter goes HIGH" aria-pressed="true">Alarm sound: on</button>
     <button id="btnTheme" title="Switch light / dark">Light / dark</button>
   </div>
 </header>
@@ -303,6 +320,12 @@
 </div>
 
 <div id="bannerDemo" class="banner">SIMULATED DATA &mdash; no radio here. On the real system these messages arrive over LoRa from the box.</div>
+
+<div id="alarm" class="alarm" role="alert">
+  <span class="big" id="alarmTitle">HIGH PRIORITY</span>
+  <span class="why" id="alarmWhy"></span>
+  <button id="btnAck">Acknowledge</button>
+</div>
 
 <main>
   <section class="panel" id="shelterPanel" aria-live="polite">
@@ -382,6 +405,7 @@
   // ---------- state ----------
   const S = { events: [] };
   function resetState() {
+    if (typeof A !== "undefined") resetAlarm();
     Object.assign(S, {
       name: "Shelter 1",
       needs: Object.fromEntries(NEEDS.map(n => [n.id, { val: null, since: null }])),
@@ -678,6 +702,7 @@
     lv.textContent = p.level === "UNKNOWN" ? "—" : p.level;
     $("prioWhy").textContent = p.why;
     $("summary").textContent = summary(p);
+    checkAlarm(p);
 
     $("stPkt").textContent = S.lastPkt === null ? "–" : "#" + S.lastPkt;
     $("stRx").textContent = S.received;
@@ -693,6 +718,62 @@
     else { $("quality").innerHTML = "&nbsp;"; }
     renderSpark();
   }
+
+  // ---------- HIGH-priority alarm ----------
+  // Goes off when a shelter becomes HIGH, or when a HIGH shelter's score climbs further (a new need).
+  // Flashing banner + a repeating three-tone beep until someone presses Acknowledge.
+  // Clears itself when the shelter drops below HIGH.
+  var A = { level: null, score: 0, ringing: false, acked: false, sound: true, ctx: null, timer: null };
+  function audio() {
+    if (!A.ctx) { try { A.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (A.ctx.state === "suspended") A.ctx.resume();
+    return A.ctx;
+  }
+  // Browsers only allow sound after a click, so unlock audio on the first one
+  document.addEventListener("pointerdown", () => audio(), { once: true });
+  function beepPattern() {
+    const ctx = A.sound && audio();
+    if (!ctx) return;
+    [[0, 988], [0.22, 784], [0.44, 988]].forEach(([t, f]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(), t0 = ctx.currentTime + t;
+      o.type = "square"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
+      o.connect(g).connect(ctx.destination); o.start(t0); o.stop(t0 + 0.2);
+    });
+  }
+  function raiseAlarm(p, reason) {
+    A.ringing = true; A.acked = false;
+    $("alarmTitle").textContent = `${S.name.toUpperCase()} · HIGH PRIORITY`;
+    $("alarmWhy").textContent = reason + " — " + p.why;
+    $("alarm").className = "alarm show ringing";
+    clearInterval(A.timer); beepPattern(); A.timer = setInterval(beepPattern, 3000);
+    addEvent(`<span class="need-txt">ALARM</span> ${escapeHtml(S.name)} is HIGH priority (${escapeHtml(reason.toLowerCase())})`);
+  }
+  function ackAlarm() {
+    if (!A.ringing) return;
+    A.ringing = false; A.acked = true; clearInterval(A.timer);
+    $("alarm").className = "alarm show acked";
+    $("alarmTitle").textContent = `${S.name.toUpperCase()} · HIGH (acknowledged ${fmtTime(new Date())})`;
+    addEvent(`Alarm acknowledged at HQ`);
+  }
+  function clearAlarm(p) {
+    A.ringing = false; A.acked = false; clearInterval(A.timer);
+    $("alarm").className = "alarm";
+    addEvent(`${escapeHtml(S.name)} dropped to ${p.level} &mdash; alarm cleared`);
+  }
+  function checkAlarm(p) {
+    if (p.level === "HIGH") {
+      if (A.level !== "HIGH") raiseAlarm(p, "Just went HIGH");
+      else if (p.score > A.score) raiseAlarm(p, "Got worse");
+      else if (!A.ringing) $("alarmWhy").textContent = p.why;      // keep the reason current
+    } else if (A.level === "HIGH") {
+      clearAlarm(p);
+    }
+    A.level = p.level; A.score = p.score || 0;
+  }
+  function resetAlarm() { clearInterval(A.timer); A.level = null; A.score = 0; A.ringing = A.acked = false; $("alarm").className = "alarm"; }
 
   // ---------- connection chip ----------
   function setConn(kind, text) {
@@ -907,6 +988,13 @@
   $("btnConnect").onclick = connect;
   $("btnDisconnect").onclick = disconnect;
   $("btnDemo").onclick = () => demoOn ? stopDemo() : startDemo();
+  $("btnAck").onclick = ackAlarm;
+  $("btnSound").onclick = () => {
+    A.sound = !A.sound;
+    $("btnSound").textContent = "Alarm sound: " + (A.sound ? "on" : "off");
+    $("btnSound").setAttribute("aria-pressed", String(A.sound));
+    if (A.sound) audio();
+  };
   $("btnTheme").onclick = () => {
     const root = document.documentElement;
     const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
