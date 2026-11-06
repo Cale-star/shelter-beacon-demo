@@ -211,12 +211,13 @@
   .nut { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fafafa, #b8bcbc 55%, #7d8282); box-shadow: 0 1px 3px rgba(0,0,0,.45); position: relative; z-index: 2; }
   .nut::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d9dcdc, #8d9292); }
   .bat { position: absolute; left: 50%; top: 50%; width: 14px; height: 36px; margin-left: -7px; z-index: 3;
-    transform-origin: 50% 100%; transform: translateY(-100%) rotate(180deg) scaleY(.92);
-    transition: transform .3s cubic-bezier(.3,1.6,.55,1), filter .3s;
+    /* a real bat toggle tips toward you and over the pivot: seen head-on it shrinks to a dot, then flips */
+    transform-origin: 50% 100%; transform: translateY(-100%) scaleY(-.92);
+    transition: transform .12s cubic-bezier(.6,0,.25,1), filter .12s;
     background: linear-gradient(90deg, #7c8383, #fdfdfd 38%, #d3d6d6 58%, #858c8c); border-radius: 8px 8px 3px 3px;
     filter: drop-shadow(-1px -3px 2px rgba(0,0,0,.30)); }
   .bat::before { content: ""; position: absolute; left: 3px; right: 3px; top: 3px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.75); }
-  .row.on .bat { transform: translateY(-100%) rotate(0deg) scaleY(1); filter: drop-shadow(1px 4px 2px rgba(0,0,0,.35)); }
+  .row.on .bat { transform: translateY(-100%) scaleY(1); filter: drop-shadow(1px 4px 2px rgba(0,0,0,.35)); }
   .nut.snap { animation: nutSnap .2s ease-out; }
   @keyframes nutSnap { 40% { transform: scale(.9); } 100% { transform: scale(1); } }
   .row .plate { transition: border-color .15s, background .15s, transform .12s; }
