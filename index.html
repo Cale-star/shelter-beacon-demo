@@ -185,7 +185,7 @@ footer p + p { margin-top: 6px; }
 .title-plate { background: #1b1b1b; color: #fff; border-radius: 10px; padding: 10px 14px; display: grid; grid-template-columns: 22px 1fr 22px; align-items: center; text-align: center; margin-bottom: 18px; }
 .title-plate > div:first-child { grid-column: 2; }
 .title-plate .jp { font-size: 26px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
-.title-plate .en { font-size: 12px; font-weight: 700; letter-spacing: .32em; color: #f2b200; margin-top: 2px; }
+.title-plate .en { font-size: 13px; font-weight: 600; color: #b9bdba; margin-top: 1px; }
 .led { grid-column: 3; justify-self: end; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #8a8a84, #4b4b47); border: 2px solid #555; transition: background .08s, box-shadow .08s; }
 .led.on, .led.glow { background: radial-gradient(circle at 35% 35%, #ffe08a, #f2b200); box-shadow: 0 0 12px #f2b200; }
 .led.flash { background: radial-gradient(circle at 35% 35%, #fff, #ffe08a); box-shadow: 0 0 16px #ffd24a; }
@@ -194,7 +194,8 @@ footer p + p { margin-top: 6px; }
 
 .plate { background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0, 0, 0, .18); padding: 6px 10px; }
 .plate .jp { font-size: 22px; font-weight: 800; line-height: 1.05; }
-.plate .en { font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #444; }
+.plate .en { font-size: 13px; font-weight: 600; color: #16181a; }
+.people-plate { background: none; box-shadow: none; }
 .people-plate { text-align: center; padding: 4px 14px; }
 .people-plate .jp { font-size: 20px; }
 .dial-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 14px; }
@@ -217,21 +218,26 @@ footer p + p { margin-top: 6px; }
 .knob-read { font-size: 15px; color: #333; }
 .knob-read b { font-size: 20px; font-weight: 700; color: #1b1b1b; }
 
-.switch-area { display: grid; grid-template-columns: minmax(0, 1fr) 68px; column-gap: 8px; }
-.sw-head { grid-column: 2; text-align: center; font-size: 12px; font-weight: 800; letter-spacing: .04em; line-height: 1.25; color: #a32015; margin-bottom: 6px; }
-.sw-head span { font-size: 13px; }
-.rows { grid-column: 1 / 3; display: flex; flex-direction: column; gap: 10px; }
-.row { display: grid; grid-template-columns: minmax(0, 1fr) 68px; align-items: center; gap: 8px; padding: 0; min-height: 0; border: 0; border-radius: 8px; background: none; text-align: left; color: inherit; font-weight: 400; cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
-.row:hover { border: 0; }
-.row:active { transform: none; }
-.row:focus-visible { outline: 3px solid #1b1b1b; outline-offset: 3px; }
-.row .plate { min-width: 0; display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: center; gap: 8px; min-height: 58px; border: 2px solid transparent; transition: border-color .15s, background .15s, transform .12s; }
-.row:active .plate { transform: scale(.985); }
-.row .ic { font-size: 26px; color: #1b1b1b; display: grid; place-items: center; }
-.row .plate .jp { font-size: 26px; white-space: nowrap; }
-.row .plate .en { font-size: 10px; color: #555; }
-.row.on .plate { border-color: #bf2a1e; background: #fff3f1; }
-.toggle { position: relative; width: 68px; height: 68px; display: grid; place-items: center; }
+/* the five needs: one white panel with thin dividers, the same list HQ shows */
+.switch-area { margin-top: 4px; }
+.sw-head { text-align: center; font-size: 13px; font-weight: 700; line-height: 1.3; color: #16181a; margin: 0 0 8px; }
+.sw-head .up { color: #bf2a1e; }
+.rows { display: flex; flex-direction: column; background: #fff; border: 1px solid #c9ccc8; border-radius: 10px; overflow: hidden; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) 60px 36px; align-items: center; gap: 2px; padding: 2px 4px 2px 10px; min-height: 0; border: 0; border-top: 1px solid #dfe2de; border-radius: 0; background: #fff; text-align: left; color: inherit; font-weight: 400; cursor: pointer; transition: background .15s; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+.row:first-child { border-top: 0; }
+.row:hover { border-color: #dfe2de; }
+.row:active { transform: none; background: #f6f7f5; }
+.row:focus-visible { outline: 3px solid #16181a; outline-offset: -3px; }
+.row .plate { min-width: 0; display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: center; gap: 8px; min-height: 58px; background: none; box-shadow: none; padding: 0; }
+.row .ic { font-size: 24px; color: #16181a; display: grid; place-items: center; }
+.row .plate .jp { font-size: 25px; font-weight: 800; line-height: 1.1; white-space: nowrap; }
+.row .plate .en { font-size: 12px; font-weight: 600; letter-spacing: 0; color: #16181a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.row .plate .en small { font-size: 12px; font-weight: 400; color: #565c5d; margin-left: 5px; }
+.row.on { background: #fbecea; }
+.need-mark { color: #bf2a1e; text-align: center; font-size: 10px; font-weight: 700; line-height: 1.15; }
+.need-mark b { display: block; font-size: 15px; line-height: 1; }
+.need-mark span { display: block; font-size: 11px; }
+.toggle { position: relative; width: 60px; height: 64px; display: grid; place-items: center; }
 .nut { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fafafa, #b8bcbc 55%, #7d8282); box-shadow: 0 1px 3px rgba(0, 0, 0, .45); position: relative; z-index: 2; }
 .nut::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d9dcdc, #8d9292); }
 .bat { position: absolute; left: 50%; top: 50%; width: 14px; height: 36px; margin-left: -7px; z-index: 3;
@@ -275,9 +281,10 @@ footer p + p { margin-top: 6px; }
 @media (max-width: 380px) {
   .encl { padding: 18px 12px 22px; }
   .title-plate { padding: 10px 8px; } .title-plate .jp { font-size: 21px; letter-spacing: .02em; }
-  .switch-area, .row { grid-template-columns: minmax(0, 1fr) 58px; column-gap: 6px; }
-  .row .plate { gap: 6px; padding: 6px 8px; grid-template-columns: 28px minmax(0, 1fr); }
-  .toggle { width: 60px; }
+  .row { grid-template-columns: minmax(0, 1fr) 54px 30px; padding-left: 8px; }
+  .row .plate { gap: 6px; grid-template-columns: 24px minmax(0, 1fr); }
+  .row .plate .en small { display: none; }
+  .toggle { width: 54px; }
   .knob-face { width: 196px; height: 196px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -300,9 +307,9 @@ footer p + p { margin-top: 6px; }
     <div class="hinge h1" aria-hidden="true"></div><div class="hinge h2" aria-hidden="true"></div>
     <div class="latch l1" aria-hidden="true"></div><div class="latch l2" aria-hidden="true"></div>
     <div class="encl">
-      <div class="title-plate"><div><div class="jp" lang="ja">避難所ビーコン</div><div class="en">SHELTER BEACON</div></div><div class="led" id="boxLed" role="img" aria-label="Status light"></div></div>
+      <div class="title-plate"><div><div class="jp" lang="ja">避難所ビーコン</div><div class="en">Shelter Beacon</div></div><div class="led" id="boxLed" role="img" aria-label="Status light"></div></div>
       <div class="dial-wrap">
-        <div class="plate people-plate"><span class="jp" lang="ja">人数</span> <span class="en">PEOPLE</span></div>
+        <div class="plate people-plate"><span class="jp" lang="ja">人数</span> <span class="en">About how many people?</span></div>
         <div class="knob-face" id="knobFace" role="slider" tabindex="0" aria-label="About how many people" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
           <div class="ticks" id="knobTicks"></div>
           <div class="knob" id="knob"><div class="knob-grip"></div><div class="pointer"></div></div>
@@ -310,7 +317,7 @@ footer p + p { margin-top: 6px; }
         <div class="knob-read"><b id="knobVal">20</b> people</div>
       </div>
       <div class="switch-area">
-        <div class="sw-head" aria-hidden="true">&#9650; <span lang="ja">必要</span><br>NEED</div>
+        <p class="sw-head"><span class="up" aria-hidden="true">&#9650;</span> <span class="jp" lang="ja">必要なものはスイッチを上へ</span><br>Flip up what you need</p>
         <div class="rows" id="boxSwitches"></div>
       </div>
     </div>
@@ -923,8 +930,9 @@ footer p + p { margin-top: 6px; }
     buildKnob();
     $("boxSwitches").innerHTML = NEEDS.map(n =>
       `<button class="row" data-sw="${n.key}" aria-pressed="false" aria-label="${n.label}: ${n.desc}">` +
-      `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><br><span class="en">${(n.box || n.label).toUpperCase()}</span></span></span>` +
-      `<span class="toggle" aria-hidden="true"><span class="nut"></span><span class="bat"></span></span></button>`).join("");
+      `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><span class="en">${n.label}</span></span></span>` +
+      `<span class="toggle" aria-hidden="true"><span class="nut"></span><span class="bat"></span></span>` +
+      `<span class="need-mark" aria-hidden="true"><b>&#9650;</b><span class="jp" lang="ja">必要</span>Need</span></button>`).join("");
     document.addEventListener("click", e => {
       const b = e.target.closest("button");
       if (!b) return;
