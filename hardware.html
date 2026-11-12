@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The box · Shelter Beacon</title>
+<meta name="description" content="An interactive exploded view of the Shelter Beacon box: every part, what it does and why it is there.">
+<meta property="og:title" content="The box · Shelter Beacon">
+<meta property="og:description" content="An interactive exploded view of the Shelter Beacon box: every part, what it does and why it is there.">
+<meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
+<meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports": {"three": "./assets/vendor/three.module.min.js", "three/addons/": "./assets/vendor/"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./"><svg viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#bf2a1e"/></svg>Shelter Beacon</a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html" aria-current=page>The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" class=cta>Try it</a></li></ul></div></header>
+<main id="main">
+<div class="page-head"><div class="wrap">
+  <h1 class="display">Everything a person touches is on one face.</h1>
+  <p class="lede">Five switches, one dial, one light, one beeper. No screen, no menu, no app. Drag the box to turn it, pull the slider to take it apart, and pick any part to see what it does.</p>
+</div></div>
+
+<section class="block" style="padding-top:8px"><div class="wrap">
+  <div class="explore">
+    <div class="stage3d dark" id="stage">
+      <p class="fallback" hidden>The 3D view needs WebGL. The parts are listed beside it.</p>
+      <div class="labels" id="labels"></div>
+      <div class="explode-ctl"><label for="explode">Take it apart</label><input id="explode" type="range" min="0" max="100" value="0" aria-label="Exploded view amount"></div>
+    </div>
+    <div>
+      <h2 style="font-size:.9375rem;font-weight:700;margin-bottom:10px">Parts</h2>
+      <ul class="part-list" id="partList"></ul>
+    </div>
+  </div>
+  <p class="small" style="margin-top:12px">Drawn to scale from the real parts' dimensions. It shows the build for the next expo, with the printed face and the people knob.</p>
+</div></section>
+
+<section class="block"><div class="wrap split">
+  <div>
+    <h2 class="say">Why switches and a dial, not a touchscreen.</h2>
+    <div class="prose" style="margin-top:20px">
+      <p>The person using this is probably a community leader, not a radio operator, and in rural Japan probably over 65. It may be dark and cold. They've had no training and have other things on their mind.</p>
+      <ul>
+        <li><b>The state is the switch.</b> You can see what you've asked for from across the room, with the power off.</li>
+        <li><b>Nothing to navigate.</b> Each need has one switch that does one thing.</li>
+        <li><b>It answers back.</b> Two beeps mean headquarters got it. One long beep means it's still trying.</li>
+        <li><b>The people dial is rough on purpose.</b> Its clicks are 0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100+. Nobody counts heads exactly in an emergency, and "about 40" is what a responder needs.</li>
+        <li><b>Japanese first.</b> The big text on every label is Japanese, with English underneath.</li>
+      </ul>
+    </div>
+  </div>
+  <figure>
+    <img class="sheet" src="assets/img/07_wiring_inside.jpg" alt="The real box open on a workbench, showing the battery pack, wiring and the back of the switches." width="900" height="1200" loading="lazy" style="max-height:560px;width:auto">
+    <figcaption>The real one on build day, October 30, before the wiring was tidied.</figcaption>
+  </figure>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">It has to outlast the outage.</h2>
+  <figure style="margin-top:28px">
+    <svg class="diagram" viewBox="0 0 1120 150" role="img" aria-label="Power path: solar panel, charger, battery pack, radio board.">
+      <g font-size="17" font-weight="700" text-anchor="middle">
+        <g fill="none" stroke="var(--ink)" stroke-width="2"><rect x="20" y="36" width="220" height="78" rx="12"/><rect x="310" y="36" width="220" height="78" rx="12"/><rect x="600" y="36" width="220" height="78" rx="12"/><rect x="890" y="36" width="210" height="78" rx="12"/></g>
+        <g stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"><path d="M248 75h52m-10-8 10 8-10 8M538 75h52m-10-8 10 8-10 8M828 75h52m-10-8 10 8-10 8"/></g>
+        <text x="130" y="70">Solar panel</text><text x="420" y="70">Charger</text><text x="710" y="70">Battery pack</text><text x="995" y="70">Radio board</text>
+        <g font-size="15" font-weight="400" class="dim"><text x="130" y="94" class="dim">1 W, 5 V</text><text x="420" y="94" class="dim">MCP73871</text><text x="710" y="94" class="dim">4 × 18650, about 14 Ah</text><text x="995" y="94" class="dim">Heltec V4.3</text></g>
+      </g>
+    </svg>
+  </figure>
+  <div class="split" style="margin-top:28px">
+    <div class="prose">
+      <p>The charger feeds the board and tops up the pack at the same time, so the box runs through the night on what the panel stored during the day.</p>
+      <p>With no sun at all, the pack should last roughly eight days as the firmware stands today. That's an estimate from the parts' rated current, not a measurement yet.</p>
+      <p class="note-box"><b>Known limit.</b> The board's 5 V pin is rated for 4.7 to 6 V, and a lithium pack sits at 3.7 to 4.2 V. It ran a whole expo that way, but the margin shrinks as the pack drains. The next revision adds a small 5 V boost converter.</p>
+    </div>
+    <table class="spec">
+      <tbody>
+        <tr><th>Microcontroller</th><td>ESP32-S3</td></tr>
+        <tr><th>Radio</th><td>Semtech SX1262, LoRa</td></tr>
+        <tr><th>Frequency</th><td>915 MHz (US prototype)</td></tr>
+        <tr><th>Transmit power</th><td>About 22 dBm</td></tr>
+        <tr><th>Enclosure</th><td>290 × 190 × 140 mm ABS</td></tr>
+        <tr><th>Battery</th><td>4 × 18650 in parallel, ≈ 52 Wh</td></tr>
+        <tr><th>Parts cost, one box</th><td>≈ $107</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap split">
+  <div>
+    <h2 class="say">Three parts are printed, not bought.</h2>
+    <div class="prose" style="margin-top:20px">
+      <p>The big people knob, the plate that holds the battery and electronics, and a cover for the charger were designed for this box and 3D printed. The knob is sized for a whole hand: 58 mm across, with a pointer you can read from a few steps away.</p>
+      <p>The design files are in the project repository with the firmware.</p>
+    </div>
+    <div class="btn-row"><a class="btn" href="https://github.com/Cale-star/shelter-beacon/tree/main/hardware">Hardware files on GitHub</a></div>
+  </div>
+  <figure>
+    <img class="sheet" src="assets/img/05_plate_in_box.jpg" alt="The printed mounting plate and battery holder being test-fitted into the enclosure." width="900" height="1200" loading="lazy" style="max-height:480px;width:auto">
+    <figcaption>Test-fitting the printed plate and battery holder.</figcaption>
+  </figure>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">
+<p>Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
+&copy; 2026 Cale French. All rights reserved.</p>
+<nav aria-label="Footer"><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a><a href="demo.html">Try the box</a></nav>
+</div></footer>
+<script>
+(() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
+  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; }; })();
+</script>
+<script type="module" src="assets/js/hardware.js"></script>
+</body>
+</html>

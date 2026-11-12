@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Try it · Shelter Beacon</title>
+<meta name="description" content="Flip the switches on a shelter box and see what headquarters sees.">
+<meta property="og:title" content="Try it · Shelter Beacon">
+<meta property="og:description" content="Flip the switches on a shelter box and see what headquarters sees.">
+<meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
+<meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports": {"three": "./assets/vendor/three.module.min.js", "three/addons/": "./assets/vendor/"}}</script>
+<style>
+/* ---- phone demo only ---- */
+.intro { padding: 28px 0 0; max-width: 40rem; }
+.intro h1 { font-size: 2.125rem; line-height: 1.1; font-weight: 700; letter-spacing: -.015em; }
+.lead { font-size: 1.1875rem; margin-top: 12px; }
+.try { color: var(--ink-2); margin-top: 10px; }
+
+.stage { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 72px; align-items: start; margin-top: 8px; }
+.hq { padding-top: 36px; min-width: 0; }
+.hq-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.hq-head h2.sec { margin: 0; }
+.hq-head button { margin-right: -14px; }
+.how p { color: var(--ink-2); max-width: 36rem; }
+.how p + p { margin-top: 10px; }
+.how button { margin-top: 16px; }
+footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: .875rem; max-width: 44rem; }
+footer p + p { margin-top: 6px; }
+
+/* ---- the box. It is a physical object, so it keeps its own fixed colours in light and dark. ---- */
+.unit { position: sticky; top: 16px; margin: 104px 14px 12px; color: #1b1b1b; }
+.encl {
+  position: relative; background: linear-gradient(160deg, #eef1ee, #dfe3df 60%, #d6dbd6); border-radius: 22px;
+  padding: 22px 20px 26px; border: 1px solid #c9cec9;
+  box-shadow: 0 1px 0 #fff inset, 0 10px 24px rgba(0, 0, 0, .18), 0 2px 4px rgba(0, 0, 0, .12);
+}
+.jp { font-family: "Hiragino Sans", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic", var(--font); }
+.antenna { position: absolute; left: 20%; top: -92px; width: 11px; height: 96px; border-radius: 6px 6px 2px 2px; background: linear-gradient(90deg, #111, #3a3a3a 45%, #111); }
+.antenna::after { content: ""; position: absolute; left: -3px; bottom: -4px; width: 17px; height: 10px; border-radius: 3px; background: #222; }
+.hinge, .latch { position: absolute; width: 12px; height: 64px; background: linear-gradient(90deg, #cfd4cf, #e7eae7); border: 1px solid #bfc5bf; border-radius: 4px; }
+.hinge { left: -13px; } .latch { right: -13px; }
+.h1 { top: 14%; } .h2 { bottom: 14%; } .l1 { top: 16%; } .l2 { bottom: 16%; }
+
+.title-plate { background: #1b1b1b; color: #fff; border-radius: 10px; padding: 10px 14px; display: grid; grid-template-columns: 22px 1fr 22px; align-items: center; text-align: center; margin-bottom: 18px; }
+.title-plate > div:first-child { grid-column: 2; }
+.title-plate .jp { font-size: 26px; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
+.title-plate .en { font-size: 13px; font-weight: 600; color: #b9bdba; margin-top: 1px; }
+.led { grid-column: 3; justify-self: end; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #8a8a84, #4b4b47); border: 2px solid #555; transition: background .08s, box-shadow .08s; }
+.led.on, .led.glow { background: radial-gradient(circle at 35% 35%, #ffe08a, #f2b200); box-shadow: 0 0 12px #f2b200; }
+.led.flash { background: radial-gradient(circle at 35% 35%, #fff, #ffe08a); box-shadow: 0 0 16px #ffd24a; }
+.led.waiting { animation: waiting 2s steps(1, end) infinite; }
+@keyframes waiting { 0%, 15% { background: #f2b200; box-shadow: 0 0 12px #f2b200; } 6%, 21%, 100% { background: #4b4b47; box-shadow: none; } }
+
+.plate { background: #fff; border-radius: 6px; box-shadow: 0 1px 2px rgba(0, 0, 0, .18); padding: 6px 10px; }
+.plate .jp { font-size: 22px; font-weight: 800; line-height: 1.05; }
+.plate .en { font-size: 13px; font-weight: 600; color: #16181a; }
+.people-plate { background: none; box-shadow: none; }
+.people-plate { text-align: center; padding: 4px 14px; }
+.people-plate .jp { font-size: 20px; }
+.dial-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 14px; }
+.knob-face { position: relative; width: 216px; height: 216px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.knob-face:focus-visible { outline: 3px solid #f2b200; outline-offset: 3px; }
+.knob-face.dragging { cursor: grabbing; }
+.ticks { position: absolute; inset: 0; }
+.tick { position: absolute; left: 50%; top: 50%; width: 3px; height: 12px; margin: -6px 0 0 -1.5px; background: #1b1b1b; border-radius: 2px; }
+.tlab { position: absolute; width: 40px; height: 30px; min-height: 0; margin: -15px 0 0 -20px; border: 0; padding: 0; background: none; font: 700 14px/30px var(--font); color: #555; text-align: center; border-radius: 6px; cursor: pointer; transition: color .15s, transform .15s; }
+.tlab:hover { border: 0; color: #1b1b1b; }
+.tlab.sel { color: #1b1b1b; transform: scale(1.22); }
+.knob { position: absolute; left: 50%; top: 50%; width: 112px; height: 112px; margin: -56px 0 0 -56px; border-radius: 50%;
+  background: radial-gradient(circle at 38% 30%, #4a4a4a, #1a1a1a 62%, #0d0d0d);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, .35), 0 2px 3px rgba(0, 0, 0, .4), inset 0 1px 1px rgba(255, 255, 255, .15);
+  transition: transform .42s cubic-bezier(.34, 1.45, .55, 1); }
+.knob-face.dragging .knob { transition: transform .06s linear; }
+.knob-grip { position: absolute; inset: 4px; border-radius: 50%; background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, .10) 0 4deg, rgba(0, 0, 0, 0) 4deg 12deg); }
+.knob::after { content: ""; position: absolute; inset: 20px; border-radius: 50%; background: radial-gradient(circle at 40% 32%, #3a3a3a, #161616); box-shadow: inset 0 1px 2px rgba(255, 255, 255, .12); }
+.pointer { position: absolute; left: 50%; top: 6px; width: 6px; height: 30px; margin-left: -3px; border-radius: 3px; background: #f2b200; z-index: 2; }
+.knob-read { font-size: 15px; color: #333; }
+.knob-read b { font-size: 20px; font-weight: 700; color: #1b1b1b; }
+
+/* the five needs: one white panel with thin dividers, the same list HQ shows */
+.switch-area { margin-top: 4px; }
+.sw-head { text-align: center; font-size: 13px; font-weight: 700; line-height: 1.3; color: #16181a; margin: 0 0 8px; }
+.sw-head .up { color: #bf2a1e; }
+.rows { display: flex; flex-direction: column; background: #fff; border: 1px solid #c9ccc8; border-radius: 10px; overflow: hidden; }
+.row { display: grid; grid-template-columns: minmax(0, 1fr) 60px 36px; align-items: center; gap: 2px; padding: 2px 4px 2px 10px; min-height: 0; border: 0; border-top: 1px solid #dfe2de; border-radius: 0; background: #fff; text-align: left; color: inherit; font-weight: 400; cursor: pointer; transition: background .15s; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+.row:first-child { border-top: 0; }
+.row:hover { border-color: #dfe2de; }
+.row:active { transform: none; background: #f6f7f5; }
+.row:focus-visible { outline: 3px solid #16181a; outline-offset: -3px; }
+.row .plate { min-width: 0; display: grid; grid-template-columns: 30px minmax(0, 1fr); align-items: center; gap: 8px; min-height: 58px; background: none; box-shadow: none; padding: 0; }
+.row .ic { font-size: 24px; color: #16181a; display: grid; place-items: center; }
+.row .plate .jp { font-size: 25px; font-weight: 800; line-height: 1.1; white-space: nowrap; }
+.row .plate .en { font-size: 12px; font-weight: 600; letter-spacing: 0; color: #16181a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.row .plate .en small { font-size: 12px; font-weight: 400; color: #565c5d; margin-left: 5px; }
+.row.on { background: #fbecea; }
+.need-mark { color: #bf2a1e; text-align: center; font-size: 10px; font-weight: 700; line-height: 1.15; }
+.need-mark b { display: block; font-size: 15px; line-height: 1; }
+.need-mark span { display: block; font-size: 11px; }
+.toggle { position: relative; width: 60px; height: 64px; display: grid; place-items: center; }
+.nut { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fafafa, #b8bcbc 55%, #7d8282); box-shadow: 0 1px 3px rgba(0, 0, 0, .45); position: relative; z-index: 2; }
+.nut::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #d9dcdc, #8d9292); }
+.bat { position: absolute; left: 50%; top: 50%; width: 14px; height: 36px; margin-left: -7px; z-index: 3;
+  /* a real toggle flips over its pivot: seen head-on it shrinks to nothing, then points the other way */
+  transform-origin: 50% 100%; transform: translateY(-100%) scaleY(-.92);
+  transition: transform .12s cubic-bezier(.6, 0, .25, 1), filter .12s;
+  background: linear-gradient(90deg, #7c8383, #fdfdfd 38%, #d3d6d6 58%, #858c8c); border-radius: 8px 8px 3px 3px;
+  filter: drop-shadow(-1px -3px 2px rgba(0, 0, 0, .30)); }
+.bat::before { content: ""; position: absolute; left: 3px; right: 3px; top: 3px; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, .75); }
+.row.on .bat { transform: translateY(-100%) scaleY(1); filter: drop-shadow(1px 4px 2px rgba(0, 0, 0, .35)); }
+.nut.snap { animation: nutSnap .2s ease-out; }
+@keyframes nutSnap { 40% { transform: scale(.9); } 100% { transform: scale(1); } }
+
+/* ---- on a phone the box fills the screen, so a strip at the bottom keeps HQ's answer in view ---- */
+.peek { display: none; }
+@media (max-width: 880px) {
+  .intro { padding-top: 20px; }
+  .intro h1 { font-size: 1.875rem; }
+  .stage { grid-template-columns: 1fr; gap: 0; }
+  .unit { position: relative; top: 0; margin: 104px auto 8px; max-width: 420px; width: calc(100% - 28px); }
+  .hq { padding-top: 28px; scroll-margin-top: 12px; }
+  .page { padding-bottom: 120px; }
+  .peek {
+    position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 10;
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 16px; border-radius: 16px;
+    background: var(--ink); color: var(--paper); box-shadow: 0 8px 24px rgba(0, 0, 0, .28);
+    transform: translateY(160%); transition: transform .28s cubic-bezier(.3, .9, .3, 1), background .2s;
+  }
+  .peek[data-show="true"] { transform: none; }
+  .peek-go { flex: 1 1 auto; min-width: 0; text-align: left; background: none; border: 0; color: inherit; padding: 4px 0; font-weight: 400; }
+  .peek-go:hover { border: 0; }
+  .peek-go small { display: block; font-size: .8125rem; opacity: .75; }
+  .peek-go b { display: block; font-size: 1.0625rem; font-weight: 700; line-height: 1.25; }
+  .peek .tag[data-level="LOW"] { box-shadow: inset 0 0 0 1px currentColor; color: inherit; opacity: .8; }
+  .peek #peekAck { display: none; background: #fff; border-color: #fff; color: #8f1d14; }
+  .peek[data-alarm="ringing"] { background: var(--need-fill); color: #fff; animation: ring 1s steps(1, end) infinite; }
+  .peek[data-alarm="ringing"] #peekAck { display: block; }
+  .peek[data-alarm="ringing"] .tag { display: none; }
+  .peek :focus-visible { outline-color: var(--paper); }
+}
+@media (max-width: 380px) {
+  .encl { padding: 18px 12px 22px; }
+  .title-plate { padding: 10px 8px; } .title-plate .jp { font-size: 21px; letter-spacing: .02em; }
+  .row { grid-template-columns: minmax(0, 1fr) 54px 30px; padding-left: 8px; }
+  .row .plate { gap: 6px; grid-template-columns: 24px minmax(0, 1fr); }
+  .row .plate .en small { display: none; }
+  .toggle { width: 54px; }
+  .knob-face { width: 196px; height: 196px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .knob, .bat, .peek { transition: none; }
+  .peek[data-alarm="ringing"], .led.waiting, .nut.snap { animation: none; }
+}
+
+.page { max-width: 1120px; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./"><svg viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#bf2a1e"/></svg>Shelter Beacon</a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" aria-current=page class=cta>Try it</a></li></ul></div></header>
+<main id="main">
+<div class="page">
+<header class="intro">
+  <h1>Try the box</h1>
+  <p class="lead">After an earthquake takes out phones and power, a shelter leader flips a switch for each thing the shelter needs. The box radios it to headquarters. No cell service, no internet, no app.</p>
+  <p class="try">Go ahead and flip a switch. To change the number of people, drag the knob or tap a number.</p>
+</header>
+
+<div class="stage">
+  <section class="unit" aria-label="Shelter box">
+    <div class="antenna" aria-hidden="true"></div>
+    <div class="hinge h1" aria-hidden="true"></div><div class="hinge h2" aria-hidden="true"></div>
+    <div class="latch l1" aria-hidden="true"></div><div class="latch l2" aria-hidden="true"></div>
+    <div class="encl">
+      <div class="title-plate"><div><div class="jp" lang="ja">避難所ビーコン</div><div class="en">Shelter Beacon</div></div><div class="led" id="boxLed" role="img" aria-label="Status light"></div></div>
+      <div class="dial-wrap">
+        <div class="plate people-plate"><span class="jp" lang="ja">人数</span> <span class="en">About how many people?</span></div>
+        <div class="knob-face" id="knobFace" role="slider" tabindex="0" aria-label="About how many people" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+          <div class="ticks" id="knobTicks"></div>
+          <div class="knob" id="knob"><div class="knob-grip"></div><div class="pointer"></div></div>
+        </div>
+        <div class="knob-read"><b id="knobVal">20</b> people</div>
+      </div>
+      <div class="switch-area">
+        <p class="sw-head"><span class="up" aria-hidden="true">&#9650;</span> <span class="jp" lang="ja">必要なものはスイッチを上へ</span><br>Flip up what you need</p>
+        <div class="rows" id="boxSwitches"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="hq" id="hq">
+    <div class="hq-head">
+      <h2 class="sec">What headquarters sees</h2>
+      <button id="btnSound" class="quiet" aria-pressed="true" title="Beep when the shelter becomes high priority">Alarm sound on</button>
+    </div>
+
+    <div id="alarm" class="alarm" role="alert" data-state="off">
+      <div class="txt"><strong id="alarmTitle"></strong><span id="alarmWhy"></span></div>
+      <button id="btnAck">Acknowledge</button>
+    </div>
+
+    <section class="status">
+      <div aria-live="polite">
+        <p class="who"><span id="shelterName">Shelter 1</span><span class="tag" id="prioTag" hidden></span></p>
+        <h2 class="headline" id="headline">Waiting for the first report</h2>
+      </div>
+      <p class="sub" id="subline"></p>
+      <p class="why" id="prioWhy"></p>
+    </section>
+
+    <ul class="needs" id="needs" aria-label="What the shelter has asked for"></ul>
+    <p class="note" id="modeText" hidden></p>
+
+    <h2 class="sec">How it works</h2>
+    <div class="how">
+      <p>Every change is sent up to three times. Headquarters confirms the first copy it hears, and the box beeps twice so the leader knows it arrived. If nothing comes back, the box keeps trying on its own.</p>
+      <p>Each shelter gets a score: medical 3, water 2, and 1 each for food, blankets and fuel. A crowded shelter adds 1 at 25 people and 2 at 50. A score of 3 or more is high priority and sets off the alarm.</p>
+      <button data-drop="1">Lose the signal for 15 seconds</button>
+    </div>
+
+    <h2 class="sec">Log</h2>
+    <ol class="log" id="events"></ol>
+  </div>
+</div>
+
+
+</div>
+
+<div class="peek" id="peek" data-show="false" data-alarm="off">
+  <button class="peek-go" id="peekGo"><small>Headquarters sees</small><b id="peekHead"></b></button>
+  <span class="tag" id="peekTag" hidden></span>
+  <button id="peekAck">Acknowledge</button>
+</div>
+
+</main>
+<footer class="foot"><div class="wrap">
+<p>Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
+&copy; 2026 Cale French. All rights reserved.</p>
+<nav aria-label="Footer"><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a><a href="demo.html">Try the box</a></nav>
+</div></footer>
+<script>
+(() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
+  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; }; })();
+</script>
+<script>
+(() => {
+  "use strict";
+  const PAGE = {"emptyHint": "Flip a switch on the box."};
+  // ---------- configuration ----------
+  const SF9_FLOOR = -12.5;       // lowest SNR the radio can decode at SF9
+  const LEGACY_INTERVAL_S = 2;   // boxes that don't report H<s> send every 2 s
+  const COPIES = 3;              // the box sends each new report up to this many times
+  const HIGH_AT = 3;             // score that makes a shelter high priority
+
+  // One entry per switch on the box, in the box's order.
+  // key = packet field, say = how it reads in a sentence, w = priority weight,
+  // box = the English word printed on the box when it differs from the label here
+  const NEEDS = [
+    { id: "water",   key: "W",  label: "Water",   desc: "Drinking water",           say: "water",        w: 2 },
+    { id: "medical", key: "M",  label: "Medical", desc: "Injured or sick people",   say: "medical help", w: 3 },
+    { id: "food",    key: "FD", label: "Food",    desc: "Food supplies",            say: "food",         w: 1 },
+    { id: "shelter", key: "SH", label: "Blankets", desc: "Bedding and tarps",       say: "blankets",     w: 1 },
+    { id: "fuel",    key: "FU", label: "Fuel",    desc: "Generator or heater fuel", say: "fuel",         w: 1 },
+  ];
+  const OCC = [0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100];   // the 11 clicks of the people knob
+  const ICON = {"W": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 384 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0l1.8 0c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z\"></path></svg>", "M": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 576 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l32 0L96 32 64 32zm64 0l0 448 320 0 0-448L128 32zM512 480c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64l-32 0 0 448 32 0zM256 176c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 48 48 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l48 0 0-48z\"></path></svg>", "FD": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 512 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M176 56c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm24 48l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM56 176l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM0 283.4C0 268.3 12.3 256 27.4 256l457.1 0c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28l-231.5 0c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4zM224 200c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-96 0c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm216 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm120 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM296 32l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z\"></path></svg>", "SH": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 640 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z\"></path></svg>", "FU": "<svg stroke=\"currentColor\" fill=\"currentColor\" stroke-width=\"0\" viewBox=\"0 0 512 512\" aria-hidden=\"true\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M336 448H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h320c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm157.2-340.7l-81-81c-6.2-6.2-16.4-6.2-22.6 0l-11.3 11.3c-6.2 6.2-6.2 16.4 0 22.6L416 97.9V160c0 28.1 20.9 51.3 48 55.2V376c0 13.2-10.8 24-24 24s-24-10.8-24-24v-32c0-48.6-39.4-88-88-88h-8V64c0-35.3-28.7-64-64-64H96C60.7 0 32 28.7 32 64v352h288V304h8c22.1 0 40 17.9 40 40v27.8c0 37.7 27 72 64.5 75.9 43 4.3 79.5-29.5 79.5-71.7V152.6c0-17-6.8-33.3-18.8-45.3zM256 192H96V64h160v128z\"></path></svg>"};
+
+  const hooks = { afterRender: [], onCopy: [], onDemo: [] };   // page-specific extras plug in here
+
+  // ---------- state ----------
+  const S = { events: [] };
+  function resetState() {
+    if (typeof A !== "undefined") resetAlarm();
+    Object.assign(S, {
+      name: "Shelter 1",
+      needs: Object.fromEntries(NEEDS.map(n => [n.id, { val: null, since: null }])),
+      occ: null,
+      hb: null,                 // reported check-in interval in s; 0 = only on change; null = not reported
+      reported: false,
+      lastPkt: null, lastPayload: null,
+      received: 0, copies: 0, lost: 0, crc: 0, acks: 0,
+      lastRxAt: null, rssi: null, snr: null,
+      linkState: "none",        // none | live | stale | offline | event
+      history: [], historyDrawn: -1,
+    });
+  }
+  resetState();
+
+  // ---------- small helpers ----------
+  const $ = id => document.getElementById(id);
+  function setText(id, t) { const el = $(id); if (el && el.textContent !== t) el.textContent = t; }
+  function setAttr(id, k, v) { const el = $(id); if (el && el.getAttribute(k) !== v) el.setAttribute(k, v); }
+  const fmtTime = d => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+  const fmtClock = d => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const listJoin = a => a.length <= 1 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
+  const minus = s => String(s).replace("-", "−");
+  const people = n => n >= 100 ? "100+ people" : n === 1 ? "1 person" : `${n} people`;
+  function fmtDur(s) {
+    s = Math.floor(s);
+    if (s < 60) return `${s} s`;
+    if (s < 3600) return `${Math.floor(s / 60)} min`;
+    return `${Math.floor(s / 3600)} h ${Math.floor(s / 60) % 60} min`;
+  }
+  function ago(s) {                      // calm on purpose: no ticking seconds
+    if (s < 10) return "just now";
+    if (s < 60) return "less than a minute ago";
+    return fmtDur(s) + " ago";
+  }
+  const needsOn = () => [...NEEDS].sort((a, b) => b.w - a.w).filter(n => S.needs[n.id].val);
+
+  // ---------- the needs list ----------
+  function buildNeeds() {
+    $("needs").innerHTML = NEEDS.map(n =>
+      `<li id="need-${n.id}" data-state="unknown"><span class="ic">${ICON[n.key]}</span>` +
+      `<span class="nm"><b>${n.label}</b><small>${n.desc}</small></span>` +
+      `<span class="st"><span class="st-text">No report</span><small class="st-when"></small></span>` +
+      `<svg class="lever" viewBox="0 0 22 44" aria-hidden="true"><circle class="nut" cx="11" cy="22" r="6.5"/><path class="lv" d="M9 22 7.4 6a3.6 3.6 0 0 1 7.2 0L13 22z"/></svg></li>`).join("");
+  }
+  function markChanged(id) { const el = $(id); el.classList.remove("changed"); void el.offsetWidth; el.classList.add("changed"); }
+
+  // ---------- log ----------
+  // lead = the short bold part, rest = plain detail, kind = "need" | "caution" | ""
+  function addEvent(lead, rest, kind) {
+    S.events.unshift({ t: new Date(), lead, rest: rest || "", kind: kind || "" });
+    if (S.events.length > 200) S.events.pop();
+    renderEvents();
+  }
+  function renderEvents() {
+    const ol = $("events");
+    ol.textContent = "";
+    if (!S.events.length) {
+      const li = document.createElement("li"); li.className = "empty"; li.textContent = "Nothing yet.";
+      ol.append(li); return;
+    }
+    for (const e of S.events) {
+      const li = document.createElement("li"), t = document.createElement("time"), s = document.createElement("span"), b = document.createElement("b");
+      if (e.kind) li.dataset.kind = e.kind;
+      t.textContent = fmtTime(e.t); b.textContent = e.lead;
+      s.append(b); if (e.rest) s.append(" " + e.rest);
+      li.append(t, s); ol.append(li);
+    }
+  }
+
+  // ---------- raw receiver output ----------
+  const consoleLines = [];
+  function logRaw(line) {
+    const pre = $("console");
+    if (!pre) return;
+    consoleLines.push(line);
+    if (consoleLines.length > 300) consoleLines.shift();
+    pre.textContent = consoleLines.join("\n");
+    pre.scrollTop = pre.scrollHeight;
+  }
+
+  // ---------- parsing ----------
+  // Receiver CSV: ms,payload,rssi_dbm,snr_db   payload: PKT,12,W1,M0,FD0,SH0,FU0,O37,H0
+  let wrongPortWarned = false;
+  function parseLine(raw) {
+    const line = raw.trim();
+    if (!line) return;
+    logRaw(line);
+    if (line.startsWith("ms,")) return;                       // CSV header
+    if (line.startsWith("[TX]")) {                             // the box is plugged in, not the receiver
+      if (!wrongPortWarned) {
+        wrongPortWarned = true;
+        hooks.onWrongPort && hooks.onWrongPort();
+        addEvent("That port is the shelter box, not the receiver.", "Disconnect and pick the other port.", "need");
+      }
+      return;
+    }
+    if (line.startsWith("[")) {                                // receiver status message
+      if (line.includes("CRC")) S.crc++;
+      if (line.includes("ACK sent")) S.acks++;                 // the receiver confirmed a report back to the box
+      if (line.includes("Starting")) addEvent("Receiver restarted", "", "caution");
+      if (line.includes("init FAILED")) addEvent("The receiver's radio failed to start.", line, "need");
+      render();
+      return;
+    }
+    const parts = line.split(",");
+    if (parts.length < 4) return;
+    const rssi = Number(parts[parts.length - 2]);
+    const snr = Number(parts[parts.length - 1]);
+    if (!/^\d+$/.test(parts[0]) || !Number.isFinite(rssi) || !Number.isFinite(snr)) return;
+    onPacket(parts.slice(1, -2).join(","), rssi, snr);
+  }
+
+  function parsePayload(payload) {
+    const toks = payload.split(",");
+    const out = { pkt: null, f: {}, id: null };
+    if (toks[0] === "PKT" && /^\d+$/.test(toks[1] || "")) out.pkt = Number(toks[1]);
+    for (const t of toks.slice(2)) {
+      const idm = t.match(/^ID([\w-]+)$/);
+      if (idm) { out.id = idm[1]; continue; }
+      const m = t.match(/^([A-Z]+)(\d+)$/);
+      if (m) out.f[m[1]] = Number(m[2]);
+    }
+    return out;
+  }
+
+  function onPacket(payload, rssi, snr) {
+    const { pkt, f, id } = parsePayload(payload);
+    S.rssi = rssi; S.snr = snr; S.lastRxAt = Date.now();
+    S.history.push(snr);
+    if (S.history.length > 90) S.history.shift();
+    S.historyDrawn = -1;
+
+    // A repeat copy of the report we already have: it only tells us about the signal
+    if (pkt !== null && pkt === S.lastPkt && payload === S.lastPayload) {
+      S.copies++;
+      updateLinkState(true);
+      render();
+      return;
+    }
+
+    if (id && "Shelter " + id !== S.name) S.name = "Shelter " + id;
+
+    // Missed reports show up as gaps in the report numbers
+    if (pkt !== null) {
+      if (S.lastPkt !== null) {
+        if (pkt > S.lastPkt + 1) {
+          const gap = pkt - S.lastPkt - 1;
+          S.lost += gap;
+          if (S.hb === 0) addEvent(`${gap} report${gap > 1 ? "s" : ""} missed.`, "Every copy was lost. This report carries the full current state.", "caution");
+        } else if (pkt <= S.lastPkt) {
+          addEvent("Shelter box restarted", "", "caution");
+        }
+      }
+      S.lastPkt = pkt;
+    }
+    S.lastPayload = payload;
+    S.received++;
+
+    // How the box reports
+    if ("H" in f && f.H !== S.hb) {
+      S.hb = f.H;
+      if (f.H !== 0) addEvent(`The box checks in every ${f.H} s`);
+    }
+
+    // Needs and people
+    const hasStatus = NEEDS.some(n => n.key in f) || "O" in f;
+    const first = !S.reported && hasStatus;
+    for (const n of NEEDS) if (n.key in f) setNeed(n, f[n.key] === 1, first);
+    if ("O" in f) setOcc(f.O, first);
+    if (first) {
+      S.reported = true;
+      const on = needsOn();
+      addEvent("First report.", cap(on.length ? "needs " + listJoin(on.map(n => n.say)) : "nothing needed") +
+        (S.occ !== null ? ", " + people(S.occ) : "") + ".", on.length ? "need" : "");
+    } else if (!hasStatus && S.received === 1) {
+      addEvent("Hearing the box,", "but it doesn't report needs (older firmware).", "caution");
+    }
+
+    updateLinkState(true);
+    render();
+  }
+
+  function setNeed(n, val, quiet) {
+    const st = S.needs[n.id];
+    if (st.val === val) return;
+    st.val = val; st.since = Date.now();
+    if (!quiet) {
+      if (val) addEvent(`${cap(n.say)} requested`, "", "need"); else addEvent(`${cap(n.say)} no longer needed`);
+      markChanged("need-" + n.id);
+    }
+  }
+  function setOcc(v, quiet) {
+    if (S.occ === v) return;
+    const prev = S.occ;
+    S.occ = v;
+    if (!quiet) addEvent("People changed", prev === null ? `to ${v >= 100 ? "100+" : v}.` : `from ${prev >= 100 ? "100+" : prev} to ${v >= 100 ? "100+" : v}.`);
+  }
+
+  // ---------- link state ----------
+  function ageSeconds() { return S.lastRxAt === null ? null : (Date.now() - S.lastRxAt) / 1000; }
+  function thresholds() {
+    const i = S.hb === null ? LEGACY_INTERVAL_S : S.hb;
+    return { stale: 3 * i, offline: 10 * i };       // late after 3 missed check-ins, lost after 10
+  }
+  function updateLinkState(fromPacket) {
+    const age = ageSeconds();
+    let st = "none";
+    if (age !== null) {
+      if (S.hb === 0) st = "event";
+      else { const t = thresholds(); st = age < t.stale ? "live" : age < t.offline ? "stale" : "offline"; }
+    }
+    if (st !== S.linkState) {
+      const prev = S.linkState, t = thresholds();
+      S.linkState = st;
+      if (st === "stale") addEvent("Check-ins are late.", `Nothing for ${t.stale} s.`, "caution");
+      if (st === "offline") addEvent("Lost contact.", `No check-in for ${t.offline} s.`, "need");
+      if (st === "live" && (prev === "stale" || prev === "offline")) addEvent("Contact restored");
+      if (!fromPacket) render();
+    }
+  }
+
+  // ---------- priority: a plain score anyone can check by hand ----------
+  function priority() {
+    if (!S.reported && S.linkState === "none") return { level: "UNKNOWN", score: null, why: "" };
+    const parts = []; let score = 0;
+    for (const n of needsOn()) { score += n.w; parts.push(`${n.say} ${n.w}`); }
+    const anyNeed = NEEDS.some(n => S.needs[n.id].val);
+    const noContact = S.linkState === "offline";
+    if (S.occ !== null && (anyNeed || noContact)) {              // more people = more urgent, once something is wrong
+      if (S.occ >= 50) { score += 2; parts.push(`${people(S.occ)} 2`); }
+      else if (S.occ >= 25) { score += 1; parts.push(`${people(S.occ)} 1`); }
+    }
+    if (noContact) { score += 2; parts.push("no contact 2"); }
+    else if (S.linkState === "stale") { score += 1; parts.push("late check-ins 1"); }
+    const level = score >= HIGH_AT ? "HIGH" : score >= 2 ? "MEDIUM" : "LOW";
+    return { level, score, why: (parts.length ? `Score ${score}: ${parts.join(", ")}.` : "Score 0.") + ` High is ${HIGH_AT} or more.` };
+  }
+
+  // ---------- the words ----------
+  function headline() {
+    if (!S.reported) return S.received ? "Hearing the box, but it isn't reporting needs" : "Waiting for the first report";
+    if (S.linkState === "offline") return `Lost contact with ${S.name}`;
+    const on = needsOn();
+    return on.length ? "Needs " + listJoin(on.map(n => n.say)) : "Nothing needed";
+  }
+  function subline() {
+    const age = ageSeconds();
+    if (age === null) return PAGE.emptyHint;
+    const bits = [];
+    if (S.linkState === "offline") {
+      const on = needsOn();
+      bits.push(`No report for ${fmtDur(age)}.`);
+      if (S.reported) bits.push("Last known: " + (on.length ? "needs " + listJoin(on.map(n => n.say)) : "nothing needed") +
+        (S.occ !== null ? ", " + people(S.occ) : "") + ".");
+    } else {
+      if (S.occ !== null) bits.push(cap(people(S.occ)) + ".");
+      bits.push(S.linkState === "stale" ? `Check-ins are late. Last report ${ago(age)}.` : `Last report ${ago(age)}.`);
+    }
+    return bits.join(" ");
+  }
+  // one line for the test hook and screen readers
+  function summary(p) { return `${headline()}. ${subline()} ${p.level === "UNKNOWN" ? "" : cap(p.level.toLowerCase()) + " priority."}`.trim(); }
+
+  // ---------- rendering ----------
+  function renderNeed(n) {
+    const st = S.needs[n.id], el = $("need-" + n.id);
+    const state = st.val === null ? "unknown" : st.val ? "needed" : "ok";
+    if (el.dataset.state !== state) el.dataset.state = state;
+    const text = st.val === null ? (S.reported ? "Not on this box" : "No report") : st.val ? "Needed" : "Not needed";
+    const when = st.val ? "since " + fmtClock(new Date(st.since)) : "";
+    const a = el.querySelector(".st-text"), b = el.querySelector(".st-when");
+    if (a.textContent !== text) a.textContent = text;
+    if (b.textContent !== when) b.textContent = when;
+  }
+  function quality(snr) {
+    const margin = snr - SF9_FLOOR;
+    if (margin >= 15) return ["Strong", "good"];
+    if (margin >= 8) return ["Good", "good"];
+    if (margin >= 3) return ["Weak", "weak"];
+    return ["At the edge of range", "edge"];
+  }
+  function renderSpark() {
+    const svg = $("spark");
+    if (!svg || S.historyDrawn === S.history.length) return;
+    S.historyDrawn = S.history.length;
+    const L = 34, R = 396, T = 10, H = 142, lo = -20, hi = 15;
+    const y = v => H - (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (H - T);
+    const n = S.history.length;
+    const x = i => R - (n - 1 - i) / (90 - 1) * (R - L);     // newest packet at the right edge
+    let h = "";
+    for (const g of [-10, 0, 10]) {
+      h += `<line x1="${L}" x2="${R}" y1="${y(g)}" y2="${y(g)}" stroke="var(--line)" stroke-width="1"/>`;
+      h += `<text x="${L - 6}" y="${y(g) + 4}" text-anchor="end" font-size="12.5" fill="var(--ink-2)">${g > 0 ? "+" + g : g < 0 ? "−" + (-g) : 0}</text>`;
+    }
+    h += `<line x1="${L}" x2="${R}" y1="${y(SF9_FLOOR)}" y2="${y(SF9_FLOOR)}" stroke="var(--ink-2)" stroke-width="1.25" stroke-dasharray="4 4"/>`;
+    h += `<text x="${R}" y="${y(SF9_FLOOR) + 15}" text-anchor="end" font-size="12.5" fill="var(--ink-2)">can't decode below this</text>`;
+    if (n > 1) h += `<polyline points="${S.history.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ")}" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+    if (n > 0) h += `<circle cx="${x(n - 1)}" cy="${y(S.history[n - 1])}" r="4" fill="var(--ink)" stroke="var(--paper)" stroke-width="2"/>`;
+    svg.innerHTML = h;
+  }
+  function render() {
+    setText("shelterName", S.name);
+    NEEDS.forEach(renderNeed);
+
+    const p = priority();
+    const tag = $("prioTag");
+    tag.hidden = p.level === "UNKNOWN";
+    setAttr("prioTag", "data-level", p.level);
+    setText("prioTag", p.level === "UNKNOWN" ? "" : cap(p.level.toLowerCase()) + " priority");
+    setText("headline", headline());
+    setText("subline", subline());
+    setAttr("subline", "data-link", S.linkState);
+    setText("prioWhy", p.why);
+    setText("modeText",
+      S.received === 0 ? "" :
+      S.hb === 0 ? "This box reports only when something changes, so a quiet box is normal." :
+      S.hb === null ? "Older box firmware: it checks in about every 2 seconds." :
+      `This box checks in every ${S.hb} s, and right away when something changes.`);
+    checkAlarm(p);
+
+    // signal and delivery (dashboard only; the phone demo leaves these out)
+    if ($("quality")) {
+      const [word, q] = S.snr === null ? ["No signal yet", "none"] : quality(S.snr);
+      setText("quality", word); setAttr("quality", "data-q", q);
+      setText("rssiVal", S.rssi === null ? "–" : minus(Math.round(S.rssi)) + " dBm");
+      setText("snrVal", S.snr === null ? "–" : minus(S.snr.toFixed(1)) + " dB");
+      const total = S.received + S.lost;
+      setText("stRx", String(S.received));
+      setText("stLost", String(S.lost));
+      setText("stDelivery", total ? Math.round(100 * S.received / total) + "%" : "–");
+      setText("stCopies", String(S.copies));
+      setText("stAcks", String(S.acks));
+      renderSpark();
+    }
+    hooks.afterRender.forEach(f => f(p));
+  }
+
+  // ---------- the alarm ----------
+  // Rings when a shelter becomes high priority, and again if a high shelter gets worse.
+  // Red bar + a repeating three-tone beep until someone presses Acknowledge.
+  // Clears itself when the shelter drops below high.
+  var A = { level: null, score: 0, ringing: false, acked: false, ackedAt: "", sound: true, ctx: null, timer: null };
+  function audio() {
+    if (!A.ctx) { try { A.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; } }
+    if (A.ctx.state === "suspended") A.ctx.resume();
+    return A.ctx;
+  }
+  // Browsers only allow sound after a click or tap, so unlock audio on the first one
+  document.addEventListener("pointerdown", () => audio(), { once: true });
+  function beepPattern() {
+    const ctx = A.sound && audio();
+    if (!ctx) return;
+    [[0, 988], [0.22, 784], [0.44, 988]].forEach(([t, f]) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(), t0 = ctx.currentTime + t;
+      o.type = "square"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.18);
+      o.connect(g).connect(ctx.destination); o.start(t0); o.stop(t0 + 0.2);
+    });
+  }
+  function raiseAlarm(worse) {
+    A.ringing = true; A.acked = false;
+    setAttr("alarm", "data-state", "ringing");
+    clearInterval(A.timer); beepPattern(); A.timer = setInterval(beepPattern, 3000);
+    addEvent(worse ? "Alarm again." : "Alarm.", worse ? `${S.name} got worse.` : `${S.name} is high priority.`);
+  }
+  function ackAlarm() {
+    if (!A.ringing) return;
+    A.ringing = false; A.acked = true; A.ackedAt = fmtClock(new Date()); clearInterval(A.timer);
+    setAttr("alarm", "data-state", "acked");
+    addEvent("Alarm acknowledged");
+    render();
+  }
+  function clearAlarm(p) {
+    A.ringing = false; A.acked = false; clearInterval(A.timer);
+    setAttr("alarm", "data-state", "off");
+    addEvent(`${S.name} is back to ${p.level.toLowerCase()} priority.`, "Alarm cleared.");
+  }
+  function checkAlarm(p) {
+    if (p.level === "HIGH") {
+      if (A.level !== "HIGH") raiseAlarm(false);
+      else if (p.score > A.score) raiseAlarm(true);
+      setText("alarmTitle", `${S.name} is high priority`);
+      setText("alarmWhy", A.acked ? `Acknowledged at ${A.ackedAt}.` : "");
+    } else if (A.level === "HIGH") {
+      clearAlarm(p);
+    }
+    A.level = p.level; A.score = p.score || 0;
+  }
+  function resetAlarm() {
+    clearInterval(A.timer); A.level = null; A.score = 0; A.ringing = A.acked = false;
+    setAttr("alarm", "data-state", "off");
+  }
+  function toggleSound() {
+    A.sound = !A.sound;
+    setText("btnSound", "Alarm sound " + (A.sound ? "on" : "off"));
+    setAttr("btnSound", "aria-pressed", String(A.sound));
+    if (A.sound) audio();
+  }
+
+  // ---------- demo: a pretend box, fed through the same parser as the real radio ----------
+  const demo = { on: false, pkt: 0, sw: {}, occ: 20, dropUntil: 0, start: 0, timers: [] };
+  function demoPayload(n) {
+    return `PKT,${n},` + NEEDS.map(x => x.key + (demo.sw[x.key] ? 1 : 0)).join(",") + `,O${demo.occ},H0`;
+  }
+  // Like the v0.6 firmware: send up to three copies, stop as soon as HQ confirms one,
+  // and if none got through, try again after 5 s, then 15 s more, then 30 s more.
+  const DEMO_ROUNDS = [0, 5000, 20000, 50000];
+  function demoSend() {
+    demo.timers.forEach(clearTimeout); demo.timers = [];
+    const n = demo.pkt++, payload = demoPayload(n);
+    hooks.onWaiting && hooks.onWaiting(false);
+    DEMO_ROUNDS.forEach((base, r) => {
+      for (let k = 0; k < COPIES; k++) {
+        demo.timers.push(setTimeout(() => {
+          if (!demo.on) return;
+          hooks.onCopy.forEach(f => f());
+          if (Date.now() < demo.dropUntil) {                     // lost: the signal is down
+            if (k === COPIES - 1) hooks.onWaiting && hooks.onWaiting(true);
+            return;
+          }
+          const rssi = Math.round(-88 + (Math.random() * 6 - 3));
+          const snr = Math.round((8 + Math.random() * 4 - 2) * 4) / 4;
+          parseLine(`${Date.now() - demo.start},${payload},${rssi.toFixed(2)},${snr.toFixed(2)}`);
+          parseLine(`[RX] ACK sent #${n}`);                      // HQ confirms, so the box stops sending
+          demo.timers.forEach(clearTimeout); demo.timers = [];
+          hooks.onWaiting && hooks.onWaiting(false);
+          hooks.onConfirmed && hooks.onConfirmed(r > 0);
+        }, base + k * 700 + Math.random() * 100));
+      }
+    });
+  }
+  function demoDrop() {
+    demo.dropUntil = Date.now() + 15000;
+    addEvent("Demo: the signal is down for 15 seconds.", "The box will keep trying until headquarters confirms.", "caution");
+  }
+  function startDemo() {
+    Object.assign(demo, { on: true, pkt: 0, sw: {}, occ: 20, dropUntil: 0, start: Date.now() });
+    resetState();
+    hooks.onDemo.forEach(f => f(true));
+    addEvent("Demo started.", "These reports are simulated.");
+    parseLine("ms,payload,rssi_dbm,snr_db");
+    demoSend();                                // the pretend box "boots" and reports
+    render();
+  }
+  function stopDemo() {
+    if (!demo.on) return;
+    demo.on = false;
+    demo.timers.forEach(clearTimeout); demo.timers = [];
+    resetState();
+    hooks.onDemo.forEach(f => f(false));
+    addEvent("Demo ended.", "Demo data cleared.");
+    render();
+  }
+
+  // test hook: feed raw receiver lines
+  window.hq = { feed: parseLine, state: S, priority, summary: () => summary(priority()), headline, demo };
+
+  // ---------- the box ----------
+  const JP = { W: "水", M: "医療", FD: "食料", SH: "毛布", FU: "燃料" };
+  const SWEEP = 300, START = -150;                              // knob travel in degrees, 0 = straight up
+  let kIdx = 4, occTimer = null;
+  const angleOf = i => START + i * SWEEP / (OCC.length - 1);
+  const pct = v => (50 + v * 100).toFixed(2) + "%";
+
+  function buildKnob() {
+    const R = 92 / 216, RT = 72 / 216;                          // label and tick radius, as a share of the dial
+    $("knobTicks").innerHTML = OCC.map((v, i) => {
+      const a = angleOf(i) * Math.PI / 180;
+      return `<button class="tlab" data-kidx="${i}" style="left:${pct(R * Math.sin(a))};top:${pct(-R * Math.cos(a))}" aria-label="${v === 100 ? "100 or more" : v} people">${v === 100 ? "100+" : v}</button>`;
+    }).join("") + OCC.map((v, i) => {
+      const deg = angleOf(i), a = deg * Math.PI / 180;
+      return `<span class="tick" style="left:${pct(RT * Math.sin(a))};top:${pct(-RT * Math.cos(a))};transform:rotate(${deg}deg)"></span>`;
+    }).join("");
+    const face = $("knobFace");
+    let drag = false;
+    const idxFromEvent = e => {
+      const r = face.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      let deg = Math.atan2(dx, -dy) * 180 / Math.PI;                    // 0 = up, clockwise positive
+      deg = Math.max(START, Math.min(START + SWEEP, deg));
+      return Math.round((deg - START) / (SWEEP / (OCC.length - 1)));
+    };
+    face.addEventListener("pointerdown", e => { if (e.target.closest(".tlab")) return; drag = true; face.classList.add("dragging"); face.setPointerCapture(e.pointerId); setKnob(idxFromEvent(e)); });
+    face.addEventListener("pointermove", e => { if (drag) setKnob(idxFromEvent(e)); });
+    const end = () => { drag = false; face.classList.remove("dragging"); };
+    face.addEventListener("pointerup", end); face.addEventListener("pointercancel", end);
+    face.addEventListener("keydown", e => {
+      if (["ArrowRight", "ArrowUp"].includes(e.key)) { setKnob(kIdx + 1); e.preventDefault(); }
+      if (["ArrowLeft", "ArrowDown"].includes(e.key)) { setKnob(kIdx - 1); e.preventDefault(); }
+    });
+  }
+  function setKnob(i) {
+    i = Math.max(0, Math.min(OCC.length - 1, i));
+    if (i === kIdx) return;
+    kIdx = i; demo.occ = OCC[i];
+    paintKnob();
+    navigator.vibrate && navigator.vibrate(8);                       // a click you can feel (Android)
+    clearTimeout(occTimer); occTimer = setTimeout(demoSend, 1500);   // send once the knob rests 1.5 s, like the firmware
+  }
+  function paintKnob() {
+    $("knob").style.transform = `rotate(${angleOf(kIdx)}deg)`;
+    document.querySelectorAll(".tlab").forEach((b, i) => b.classList.toggle("sel", i === kIdx));
+    setText("knobVal", OCC[kIdx] === 100 ? "100+" : String(OCC[kIdx]));
+    setAttr("knobFace", "aria-valuenow", String(OCC[kIdx]));
+    setAttr("knobFace", "aria-valuetext", people(OCC[kIdx]));
+  }
+  function paintBox() {
+    NEEDS.forEach(n => {
+      const el = document.querySelector(`.row[data-sw="${n.key}"]`);
+      el.classList.toggle("on", !!demo.sw[n.key]);
+      el.setAttribute("aria-pressed", demo.sw[n.key] ? "true" : "false");
+    });
+    paintKnob();
+    $("boxLed").classList.toggle("on", NEEDS.some(n => demo.sw[n.key]));
+  }
+
+  // The status light behaves like the real one: a blink per copy sent, a steady glow when HQ
+  // confirms, and a slow double-blink while the box is still waiting for an answer.
+  const led = $("boxLed");
+  function flashLed() { led.classList.add("flash"); setTimeout(() => led.classList.remove("flash"), 120); }
+  hooks.onCopy.push(flashLed);
+  hooks.onWaiting = on => led.classList.toggle("waiting", on);
+  hooks.onConfirmed = () => { led.classList.add("glow"); setTimeout(() => led.classList.remove("glow"), 1500); };
+
+  function buildBox() {
+    buildKnob();
+    $("boxSwitches").innerHTML = NEEDS.map(n =>
+      `<button class="row" data-sw="${n.key}" aria-pressed="false" aria-label="${n.label}: ${n.desc}">` +
+      `<span class="plate"><span class="ic">${ICON[n.key]}</span><span><span class="jp" lang="ja">${JP[n.key]}</span><span class="en">${n.label}</span></span></span>` +
+      `<span class="toggle" aria-hidden="true"><span class="nut"></span><span class="bat"></span></span>` +
+      `<span class="need-mark" aria-hidden="true"><b>&#9650;</b><span class="jp" lang="ja">必要</span>Need</span></button>`).join("");
+    document.addEventListener("click", e => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      if (b.dataset.sw) {
+        demo.sw[b.dataset.sw] = !demo.sw[b.dataset.sw]; demoSend();
+        const nut = b.querySelector(".nut"); nut.classList.remove("snap"); void nut.offsetWidth; nut.classList.add("snap");
+        navigator.vibrate && navigator.vibrate(12);
+        paintBox();
+      }
+      else if (b.dataset.kidx) setKnob(Number(b.dataset.kidx));
+      else if (b.dataset.drop) demoDrop();
+    });
+  }
+
+  // ---------- the strip that follows you on a phone ----------
+  let hqInView = true;
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(es => { hqInView = es[0].isIntersecting; paintPeek(); }, { threshold: 0.6 }).observe($("headline"));
+  }
+  function paintPeek() {
+    setAttr("peek", "data-show", String(!hqInView && S.reported));
+    setAttr("peek", "data-alarm", $("alarm").dataset.state);
+  }
+  hooks.afterRender.push(p => {
+    setText("peekHead", headline());
+    const t = $("peekTag");
+    t.hidden = p.level === "UNKNOWN";
+    setAttr("peekTag", "data-level", p.level);
+    setText("peekTag", p.level === "UNKNOWN" ? "" : cap(p.level.toLowerCase()));
+    paintPeek();
+  });
+  $("peekGo").onclick = () => $("hq").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  $("peekAck").onclick = ackAlarm;
+
+  // ---------- start ----------
+  buildNeeds();
+  buildBox();
+  $("btnAck").onclick = ackAlarm;
+  $("btnSound").onclick = toggleSound;
+  setInterval(() => { updateLinkState(false); render(); }, 500);
+  startDemo();          // the public demo is always running; there is no radio here
+  S.events.length = 0; renderEvents();   // start with a clean log
+  paintBox();
+  setInterval(() => { if (!NEEDS.some(n => demo.sw[n.key])) flashLed(); }, 4000);   // the "I'm alive" blink
+})();
+</script>
+</body>
+</html>

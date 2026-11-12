@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The problem · Shelter Beacon</title>
+<meta name="description" content="Why isolated shelters in rural Japan could not report their needs after the 2024 Noto earthquake, and what that asks of a design.">
+<meta property="og:title" content="The problem · Shelter Beacon">
+<meta property="og:description" content="Why isolated shelters in rural Japan could not report their needs after the 2024 Noto earthquake, and what that asks of a design.">
+<meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
+<meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports": {"three": "./assets/vendor/three.module.min.js", "three/addons/": "./assets/vendor/"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./"><svg viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#bf2a1e"/></svg>Shelter Beacon</a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html" aria-current=page>The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" class=cta>Try it</a></li></ul></div></header>
+<main id="main">
+<div class="page-head"><div class="wrap">
+  <h1 class="display">The shelters that needed help most couldn't say so.</h1>
+  <p class="lede">This project starts from one documented failure: after the 2024 Noto Peninsula earthquake, responders couldn't find out which cut-off community needed what.</p>
+</div></div>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">Noto Peninsula, January 1, 2024.</h2>
+  <ul class="facts">
+    <li><b>M 7.6</b><p>earthquake in Ishikawa Prefecture. The seafloor rose up to four metres in places, which put ports out of use.<small>Nippon.com</small></p></li>
+    <li><b>228 + 397</b><p>people died: 228 directly, and 397 more from disaster-related causes in the months after.<small>Nippon.com, figures as of July 2025</small></p></li>
+    <li><b>12+</b><p>communities were cut off by landslides, some for more than a week. Rescuers reached some hamlets on foot through snow and mud.<small>AFP, Al Jazeera and Malay Mail reporting, January 2024</small></p></li>
+    <li><b>31,800</b><p>people were sheltering across the region at the peak.<small>Contemporary reporting, January 2024</small></p></li>
+    <li><b>72 hours</b><p>is the window that matters most for survival. Lost connectivity hampered confirming who was safe, coordinating rescue and delivering supplies inside it.<small>World Economic Forum analysis</small></p></li>
+  </ul>
+  <div class="prose" style="margin-top:28px">
+    <p>Two independent studies of the response reached the same conclusion: isolated evacuation centres had communication and supply problems, and medical teams were slow to reach remote shelters partly because nobody knew where the need was greatest.</p>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">Japan already has disaster radio. It doesn't reach this far down.</h2>
+  <p class="prose" style="margin-top:20px">It would be wrong to say no two-way system exists. Japan's municipal disaster radio has three parts, and one of them is two-way. The gap is narrower than that, and more specific.</p>
+  <figure style="margin-top:28px">
+    <svg class="diagram" viewBox="0 0 1120 300" role="img" aria-label="Japan's municipal disaster radio has three parts: one-way broadcast, two-way field radio for staffed sites, and sensor telemetry. Small informal shelters are outside all three.">
+      <g fill="none" stroke="var(--ink)" stroke-width="2"><rect x="10" y="20" width="256" height="170" rx="14"/><rect x="290" y="20" width="256" height="170" rx="14"/><rect x="570" y="20" width="256" height="170" rx="14"/></g>
+      <rect x="850" y="20" width="260" height="170" rx="14" fill="none" stroke="var(--need)" stroke-width="2.5" stroke-dasharray="7 6"/>
+      <g font-size="22" font-weight="700" class="jp"><text x="30" y="60">同報系</text><text x="310" y="60">移動系</text><text x="590" y="60">テレメーター系</text></g>
+      <g font-size="17" font-weight="700"><text x="30" y="88">Broadcast</text><text x="310" y="88">Field radio</text><text x="590" y="88">Telemetry</text><text x="870" y="60" style="fill:var(--need)">The gap</text><text x="870" y="88">Small, informal shelters</text></g>
+      <g font-size="15" class="dim">
+        <text x="30" y="118" class="dim">Town hall to residents,</text><text x="30" y="138" class="dim">by loudspeaker.</text><text x="30" y="168" class="dim">One way.</text>
+        <text x="310" y="118" class="dim">Headquarters to staffed</text><text x="310" y="138" class="dim">shelters and vehicles.</text><text x="310" y="168" class="dim">Two way, needs repeaters.</text>
+        <text x="590" y="118" class="dim">River and rain sensors</text><text x="590" y="138" class="dim">reporting automatically.</text><text x="590" y="168" class="dim">Machines only.</text>
+        <text x="870" y="118" class="dim">A community hall, twenty</text><text x="870" y="138" class="dim">homes, no trained operator.</text><text x="870" y="168" class="dim">Nothing reaches here.</text>
+      </g>
+      <text x="418" y="232" text-anchor="middle" font-size="15" class="dim">Landslides and long power cuts took out</text>
+      <text x="418" y="252" text-anchor="middle" font-size="15" class="dim">the repeaters this depends on.</text>
+      <path d="M418 196v14" stroke="var(--ink-2)" stroke-width="1.5"/>
+      <text x="980" y="232" text-anchor="middle" font-size="15" font-weight="700">Shelter Beacon is built for this box.</text>
+      <path d="M980 196v14" stroke="var(--need)" stroke-width="1.5"/>
+    </svg>
+  </figure>
+  <div class="prose" style="margin-top:20px">
+    <p>The two-way field radio is provisioned for official, staffed places: municipal offices, large designated shelters, emergency vehicles. It needs trained people, dedicated equipment and working repeaters. Most of what was cut off in Noto was none of those.</p>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap split">
+  <div>
+    <h2 class="say">The government's fix is more supplies, not better information.</h2>
+    <div class="prose" style="margin-top:20px">
+      <p>Japan's legal reforms after Noto name the problem directly. The revised law calls for stockpiles that account for small communities likely to become isolated.</p>
+      <p>That helps. But more supplies in a warehouse don't tell anyone where to send the first truck when several communities are cut off at once. Knowing which shelter needs what, right now, is the missing layer, and it's the one this project works on.</p>
+    </div>
+  </div>
+  <div>
+    <h2 class="say" style="font-size:clamp(1.5rem,2.6vw,2rem)">And the people affected are getting older.</h2>
+    <ul class="facts" style="margin-top:16px">
+      <li><b>≈50%</b><p>of residents in Wajima, Suzu, Noto Town and Anamizu were 65 or older in 2020. The national figure is about 30%.<small>ICMA PM Magazine, July 2026</small></p></li>
+      <li><b>20,000</b><p>or so "marginal communities" across Japan where more than half the residents are over 65.<small>Ministry of Internal Affairs data, cited in Watanabe, 2024</small></p></li>
+      <li><b>65%</b><p>of deaths in the 2011 Tōhoku earthquake and tsunami were people over 65.<small>ScienceDirect, 2016</small></p></li>
+    </ul>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">It will happen again, somewhere bigger.</h2>
+  <div class="split" style="margin-top:20px">
+    <div class="prose">
+      <p>Earthquakes in Japan aren't getting more frequent. The plates move at the rate they always have. What changed is how well the risk is understood.</p>
+      <p>In September 2025 the government's Earthquake Research Committee revised its estimate for a magnitude 8 to 9 Nankai Trough earthquake in the next 30 years to between 60% and 94.5% or higher. Officials were clear that this reflects better modelling, not a rising hazard. The last one was in 1946, and they come roughly every 90 to 150 years.</p>
+    </div>
+    <ul class="facts" style="margin-top:0">
+      <li><b>60–94.5%</b><p>chance of a Nankai Trough megaquake within 30 years.<small>Earthquake Research Committee, reported by Japan Times, September 2025</small></p></li>
+      <li><b>9.5 million</b><p>people displaced in the government's worst-case model.<small>Government scenario, reported by Fortune/AFP, January 2025</small></p></li>
+    </ul>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">So the box has to work like this.</h2>
+  <ul class="next" style="pointer-events:none">
+    <li><a tabindex="-1"><b>No infrastructure</b><span>No cell network, no internet, no repeaters, no grid power. Radio straight to headquarters, on a battery and a small solar panel.</span></a></li>
+    <li><a tabindex="-1"><b>No training</b><span>Someone who has never seen it has to get it right, in the dark, with cold hands, on the worst day of their year.</span></a></li>
+    <li><a tabindex="-1"><b>Cheap enough to be everywhere</b><span>It only helps if it's already on the wall of the community hall. That means about a hundred dollars, not thousands.</span></a></li>
+    <li><a tabindex="-1"><b>Honest about itself</b><span>It has to tell the person whether headquarters actually heard them.</span></a></li>
+  </ul>
+  <div class="btn-row"><a class="btn primary" href="hardware.html">See how the box answers that</a></div>
+  <p class="small" style="margin-top:40px;max-width:62ch">Sources are named beside each figure. The research brief with fuller notes is in the repository under <a href="https://github.com/Cale-star/shelter-beacon/tree/main/reference/research">reference/research</a>. It covers English-language sources; Japanese government after-action reports would strengthen it.</p>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">
+<p>Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
+&copy; 2026 Cale French. All rights reserved.</p>
+<nav aria-label="Footer"><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a><a href="demo.html">Try the box</a></nav>
+</div></footer>
+<script>
+(() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
+  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; }; })();
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How it works · Shelter Beacon</title>
+<meta name="description" content="What is inside a Shelter Beacon report, how it survives a bad radio link, and how headquarters ranks shelters.">
+<meta property="og:title" content="How it works · Shelter Beacon">
+<meta property="og:description" content="What is inside a Shelter Beacon report, how it survives a bad radio link, and how headquarters ranks shelters.">
+<meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
+<meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports": {"three": "./assets/vendor/three.module.min.js", "three/addons/": "./assets/vendor/"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./"><svg viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#bf2a1e"/></svg>Shelter Beacon</a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html" aria-current=page>How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" class=cta>Try it</a></li></ul></div></header>
+<main id="main">
+<div class="page-head"><div class="wrap">
+  <h1 class="display">A report is 31 bytes, built to survive a bad link.</h1>
+  <p class="lede">The box doesn't stream data. It says one short thing when something changes, says it up to three times, and waits to hear that headquarters got it.</p>
+</div></div>
+
+<section class="block"><div class="wrap split">
+  <div>
+    <h2 class="say">Build a report yourself.</h2>
+    <p class="prose" style="margin-top:20px">Set the switches and the people count. This is the exact text the box transmits. Pick any piece to see what it means.</p>
+    <div class="chips" id="pbSwitches" role="group" aria-label="Needs"></div>
+    <div class="chips" style="align-items:center"><span class="stepper" style="display:inline-flex;align-items:center;gap:6px"><button id="pbLess" aria-label="Fewer people" style="width:44px;padding:0">−</button><output id="pbPeople" style="min-width:6.5em;text-align:center;font-weight:600"></output><button id="pbMore" aria-label="More people" style="width:44px;padding:0">+</button></span></div>
+  </div>
+  <div>
+    <div class="packet" id="packet" role="group" aria-label="The report, piece by piece"></div>
+    <p class="field-note" id="fieldNote" aria-live="polite"></p>
+    <p class="small" style="margin-top:6px">Every report carries the whole state, not just what changed. If one is lost, the next one repairs the picture.</p>
+    <h3 style="margin-top:28px">What headquarters makes of it</h3>
+    <div class="scorebar" id="scorebar" aria-hidden="true"></div>
+    <p style="margin-top:12px"><strong id="pbHead" style="font-size:1.3125rem"></strong> <span class="tag" id="pbTag"></span></p>
+    <p class="small" id="pbWhy" style="margin-top:4px"></p>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">Sent is not the same as received.</h2>
+  <p class="prose" style="margin-top:20px">Radio links drop packets. So the box keeps going until headquarters answers, and it tells the person at the box which of the two has happened.</p>
+  <div class="seq-ctl">
+    <button class="primary" id="seqGo">Send a report</button>
+    <label><input type="checkbox" id="seqBlock"> Block the signal for the first three copies</label>
+  </div>
+  <div class="split wide-left" style="margin-top:20px">
+    <figure><svg class="diagram" id="seq" viewBox="0 0 760 420" role="img" aria-label="Sequence: the box sends copies of a report, headquarters confirms, the box beeps."></svg></figure>
+    <ol class="seq-log" id="seqLog" aria-live="polite"></ol>
+  </div>
+</div></section>
+
+<section class="block"><div class="wrap split">
+  <div>
+    <h2 class="say">The ranking is a score you can check by hand.</h2>
+    <div class="prose" style="margin-top:20px">
+      <p>When several shelters report at once, someone has to decide who gets the first truck. The dashboard adds up a small score per shelter and explains it on screen, so nobody has to trust a black box.</p>
+      <p>A score of 3 or more is high priority and rings an alarm at headquarters until a person acknowledges it. A score of 2 is medium.</p>
+    </div>
+  </div>
+  <table class="spec">
+    <thead><tr><th>What the shelter reports</th><th>Points</th></tr></thead>
+    <tbody>
+      <tr><th>Medical help</th><td>3</td></tr>
+      <tr><th>Water</th><td>2</td></tr>
+      <tr><th>Food, blankets, fuel</th><td>1 each</td></tr>
+      <tr><th>25 to 49 people, if anything is needed</th><td>1</td></tr>
+      <tr><th>50 or more people, if anything is needed</th><td>2</td></tr>
+      <tr><th>Lost contact with a box that checks in</th><td>2</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">Slow on purpose, so it reaches further.</h2>
+  <figure style="margin-top:28px">
+    <svg class="diagram" id="budget" viewBox="0 0 1120 210" role="img" aria-label="Signal strength scale from plus 22 dBm transmitted to minus 129 dBm, the faintest signal the receiver can decode."></svg>
+    <figcaption>The radio trades speed for sensitivity. At these settings it can decode a signal about 150 dB weaker than the one it sends, which is a factor of a million billion.</figcaption>
+  </figure>
+  <div class="split" style="margin-top:28px">
+    <table class="spec">
+      <tbody>
+        <tr><th>Frequency</th><td>915.0 MHz</td></tr>
+        <tr><th>Bandwidth</th><td>125 kHz</td></tr>
+        <tr><th>Spreading factor</th><td>SF9</td></tr>
+        <tr><th>Coding rate</th><td>4/7</td></tr>
+        <tr><th>Time on air, one copy</th><td>≈ 0.31 s</td></tr>
+        <tr><th>Decode limit (calculated)</th><td>≈ −129 dBm</td></tr>
+      </tbody>
+    </table>
+    <div class="prose">
+      <p class="note-box"><b>Not legal to deploy in Japan as built.</b> 915 MHz is a US band. A real deployment needs Japan's 920 MHz band, a certified radio module, and listen-before-talk in the firmware. That's the first item on the roadmap, and I'm not a radio lawyer, so it needs checking against the actual rules.</p>
+      <p>The firmware, the receiver and the dashboard are all in the repository.</p>
+      <div class="btn-row"><a class="btn" href="https://github.com/Cale-star/shelter-beacon">Read the code on GitHub</a></div>
+    </div>
+  </div>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">
+<p>Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
+&copy; 2026 Cale French. All rights reserved.</p>
+<nav aria-label="Footer"><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a><a href="demo.html">Try the box</a></nav>
+</div></footer>
+<script>
+(() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
+  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; }; })();
+</script>
+<script type="module" src="assets/js/system.js"></script>
+</body>
+</html>

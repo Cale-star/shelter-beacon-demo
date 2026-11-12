@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Build log · Shelter Beacon</title>
+<meta name="description" content="The Shelter Beacon build in order: what was made, what broke, and what each failure changed.">
+<meta property="og:title" content="Build log · Shelter Beacon">
+<meta property="og:description" content="The Shelter Beacon build in order: what was made, what broke, and what each failure changed.">
+<meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
+<meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/img/favicon.svg">
+<link rel="stylesheet" href="assets/site.css">
+<script type="importmap">{"imports": {"three": "./assets/vendor/three.module.min.js", "three/addons/": "./assets/vendor/"}}</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./"><svg viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#bf2a1e"/></svg>Shelter Beacon</a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html" aria-current=page>Build log</a></li><li><a href="demo.html" class=cta>Try it</a></li></ul></div></header>
+<main id="main">
+<div class="page-head"><div class="wrap">
+  <h1 class="display">Built, broke, fixed. In that order.</h1>
+  <p class="lede">Most of what's good about the current design came from something going wrong. This is the honest sequence, failures included.</p>
+</div></div>
+
+<section class="block" style="padding-top:24px"><div class="wrap">
+  <ol class="timeline">
+    <li>
+      <div class="body"><time>October 18</time><h3>First range test</h3>
+        <p>Two radio boards, one walking away from the other, sending a packet every 2.2 seconds.</p>
+        <p style="margin-top:8px"><b>What broke:</b> 4.3% of packets vanished at the edge of range, and one stretch of nearly seven minutes lost everything.</p>
+        <p class="fix"><b>What changed:</b> every report is now sent three times with the same number, and headquarters throws away the repeats. <a href="testing.html">The data is on the testing page.</a></p></div>
+    </li>
+    <li>
+      <div class="body"><time>October 20</time><h3>Stopped talking when there's nothing to say</h3>
+        <p>The box had been beaconing every two seconds. That burned battery and airtime to repeat itself.</p>
+        <p class="fix"><b>What changed:</b> it now reports only when a switch or the people count changes.</p></div>
+    </li>
+    <li class="broke">
+      <div class="body"><time>October 30, build day</time><h3>No switch worked</h3>
+        <p>Everything was mounted in the enclosure, wired, and powered. Not one switch registered.</p>
+        <p style="margin-top:8px"><b>What broke:</b> the header pins on the board had never been soldered. They were sitting in the holes, touching nothing. A continuity meter showed an open circuit on every one.</p>
+        <p class="fix"><b>What changed:</b> a pre-soldered board, and checking continuity before software from then on.</p></div>
+      <figure><img src="assets/img/07_wiring_inside.jpg" alt="The open enclosure on build day with the battery pack and loose wiring." width="900" height="1200" loading="lazy"></figure>
+    </li>
+    <li class="broke">
+      <div class="body"><time>October 30</time><h3>It dropped out on battery</h3>
+        <p>On USB it was fine. On the battery pack it reset.</p>
+        <p style="margin-top:8px"><b>What broke:</b> a lithium pack gives 3.7 to 4.2 V, and it was feeding a pin that wants about 5.</p>
+        <p class="fix"><b>What changed:</b> the newer V4.3 board tolerates it and ran a full expo that way. A small boost converter is still planned so it isn't running on margin.</p></div>
+      <figure><img src="assets/img/06_battery_mounted.jpg" alt="The four-cell battery holder mounted on its printed plate inside the enclosure." width="900" height="1200" loading="lazy"></figure>
+    </li>
+    <li class="broke">
+      <div class="body"><time>November 2</time><h3>The new board used my pins for itself</h3>
+        <p>Swapping to the V4.3 board should have been a drop-in. Three of the five switches stopped working.</p>
+        <p style="margin-top:8px"><b>What broke:</b> the V4.3 adds a radio amplifier and uses three of the same pins my switches were on to control it.</p>
+        <p class="fix"><b>What changed:</b> the inputs moved to free pins, and the firmware now switches the amplifier on before it starts the radio.</p></div>
+    </li>
+    <li class="broke">
+      <div class="body"><time>November 2</time><h3>Both people-count wheels snapped</h3>
+        <p>The original design used two small thumbwheels to dial in 00 to 99.</p>
+        <p style="margin-top:8px"><b>What broke:</b> the pins on both, during wiring. Replacements arrived in time and worked at the expo, but it showed how fragile and fiddly they were.</p>
+        <p class="fix"><b>What changed:</b> a note to find something sturdier. It became the knob, four days later.</p></div>
+      <figure><img src="assets/img/01_lid_switch_layout.jpg" alt="The enclosure lid with five toggle switches fitted and calipers measuring the layout." width="900" height="1200" loading="lazy"></figure>
+    </li>
+    <li>
+      <div class="body"><time>November 3</time><h3>First expo</h3>
+        <p>It ran all day on its battery with every switch live. The two things people asked about most were range and how someone would actually use it.</p>
+        <p class="fix"><b>What changed:</b> those two questions set the plan for everything after: a GPS range test, and a rethink of the face of the box.</p></div>
+    </li>
+    <li>
+      <div class="body"><time>November 6</time><h3>The box learned to wait for an answer</h3>
+        <p>Three copies can't cross a long blackout, and the person at the box had no way to know whether anyone heard them.</p>
+        <p class="fix"><b>What changed:</b> headquarters now confirms each report. The box beeps twice when it's confirmed, and keeps retrying by itself when it isn't. Headquarters got an alarm for high-priority shelters.</p></div>
+    </li>
+    <li>
+      <div class="body"><time>November 6</time><h3>A knob replaced the thumbwheels</h3>
+        <p>Nobody in a shelter knows whether there are 37 people or 41, and tiny wheels are hard to turn with cold hands.</p>
+        <p class="fix"><b>What changed:</b> one big knob with eleven clicks: 0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100+. Faster, sturdier, and honest about how precise the number is. It waits a second and a half after you stop turning before it sends.</p></div>
+    </li>
+    <li>
+      <div class="body"><time>November 10</time><h3>One list, on the box and on the screen</h3>
+        <p>The dashboard looked like a dashboard: tiles, colours, jargon. The box had label-maker labels.</p>
+        <p class="fix"><b>What changed:</b> both were redrawn around the same five-row list in the same order, with one red that only means "needed." The switch that used to say "Shelter" now says "Blankets," because a shelter asking for shelter made no sense.</p></div>
+      <figure><img src="assets/img/dashboard_2_needs_water.jpg" alt="The redesigned dashboard reading: Needs water, 20 people, medium priority." width="1600" height="1075" loading="lazy"></figure>
+    </li>
+    <li class="next">
+      <div class="body"><time>Next</time><h3>Still to do</h3>
+        <p>A GPS-tagged range test. The confirm-and-retry firmware on real radios. A new enclosure with the printed face and the knob. Five people trying it cold, timed. After that: a sleep mode for months of battery life, a Japan-legal 920 MHz radio, and repeaters for valleys.</p></div>
+    </li>
+  </ol>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">
+<p>Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
+&copy; 2026 Cale French. All rights reserved.</p>
+<nav aria-label="Footer"><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a><a href="demo.html">Try the box</a></nav>
+</div></footer>
+<script>
+(() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
+  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; }; })();
+</script>
+</body>
+</html>
