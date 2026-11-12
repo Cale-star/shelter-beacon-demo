@@ -58,7 +58,7 @@ paintReport();
 
 // ---------- one report, start to finish ----------
 const seq = $("seq"), log = $("seqLog"), NS = "http://www.w3.org/2000/svg";
-const mq = matchMedia("(max-width: 700px)");
+const mq = matchMedia("all");   // the diagrams live in a column now, so they always use the tall layout
 let BX = 150, HX = 610, FS = 15, narrow = false;
 const TOP = 64;
 let run = 0;
@@ -173,3 +173,8 @@ function budget() {
 }
 budget();
 mq.addEventListener("change", budget);
+
+// The detail panels sit open beside each step on a wide screen, and fold away on a phone.
+const wideMq = matchMedia("(min-width: 901px)");
+const setDeep = () => document.querySelectorAll("details.deep").forEach(d => { d.open = wideMq.matches; });
+setDeep(); wideMq.addEventListener("change", setDeep);

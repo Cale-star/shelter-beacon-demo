@@ -160,7 +160,7 @@ footer p + p { margin-top: 6px; }
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./"><svg viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#bf2a1e"/></svg>Shelter Beacon</a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" aria-current=page class=cta>Try it</a></li></ul></div></header>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" aria-current=page class=cta>Try it</a></li></ul></div></header>
 <main id="main">
 <div class="page">
 <header class="intro">
@@ -236,10 +236,13 @@ footer p + p { margin-top: 6px; }
 </div>
 
 </main>
-<footer class="foot"><div class="wrap">
-<p>Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
+<footer class="foot dark"><div class="wrap">
+<div class="foot-brand"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a>
+<p>A switch box that lets a disaster shelter ask for help with no phones, no internet and no grid power.</p></div>
+<nav aria-label="Footer"><ul><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html">Try it</a></li>
+<li><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a></li></ul></nav>
+<p class="legal">Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
 &copy; 2026 Cale French. All rights reserved.</p>
-<nav aria-label="Footer"><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a><a href="demo.html">Try the box</a></nav>
 </div></footer>
 <script>
 (() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
