@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>How it works · Shelter Beacon</title>
+<title>Shelter Beacon: How it works</title>
 <meta name="description" content="What is inside a Shelter Beacon report, how it survives a bad radio link, and how headquarters ranks shelters.">
-<meta property="og:title" content="How it works · Shelter Beacon">
+<meta property="og:title" content="Shelter Beacon: How it works">
 <meta property="og:description" content="What is inside a Shelter Beacon report, how it survives a bad radio link, and how headquarters ranks shelters.">
 <meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
 <meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
@@ -49,7 +49,7 @@
     <label><input type="checkbox" id="seqBlock"> Block the signal for the first three copies</label>
   </div>
   <div class="split wide-left" style="margin-top:20px">
-    <figure><svg class="diagram" id="seq" viewBox="0 0 760 420" role="img" aria-label="Sequence: the box sends copies of a report, headquarters confirms, the box beeps."></svg></figure>
+    <figure><svg class="diagram" id="seq" role="img" aria-label="Sequence: the box sends copies of a report, headquarters confirms, the box beeps."></svg></figure>
     <ol class="seq-log" id="seqLog" aria-live="polite"></ol>
   </div>
 </div></section>
@@ -78,7 +78,7 @@
 <section class="block"><div class="wrap">
   <h2 class="say">Slow on purpose, so it reaches further.</h2>
   <figure style="margin-top:28px">
-    <svg class="diagram" id="budget" viewBox="0 0 1120 210" role="img" aria-label="Signal strength scale from plus 22 dBm transmitted to minus 129 dBm, the faintest signal the receiver can decode."></svg>
+    <svg class="diagram" id="budget" role="img" aria-label="Signal strength scale from plus 22 dBm transmitted to minus 129 dBm, the faintest signal the receiver can decode."></svg>
     <figcaption>The radio trades speed for sensitivity. At these settings it can decode a signal about 150 dB weaker than the one it sends, which is a factor of a million billion.</figcaption>
   </figure>
   <div class="split" style="margin-top:28px">

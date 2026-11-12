@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The box · Shelter Beacon</title>
+<title>Shelter Beacon: The box</title>
 <meta name="description" content="An interactive exploded view of the Shelter Beacon box: every part, what it does and why it is there.">
-<meta property="og:title" content="The box · Shelter Beacon">
+<meta property="og:title" content="Shelter Beacon: The box">
 <meta property="og:description" content="An interactive exploded view of the Shelter Beacon box: every part, what it does and why it is there.">
 <meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
 <meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
@@ -53,23 +53,19 @@
     </div>
   </div>
   <figure>
-    <img class="sheet" src="assets/img/07_wiring_inside.jpg" alt="The real box open on a workbench, showing the battery pack, wiring and the back of the switches." width="900" height="1200" loading="lazy" style="max-height:560px;width:auto">
+    <img class="cutout" src="assets/img/07_wiring_inside.webp" alt="The real box open, showing the battery pack, wiring and the back of the switches." width="900" height="1056" loading="lazy">
     <figcaption>The real one on build day, October 30, before the wiring was tidied.</figcaption>
   </figure>
 </div></section>
 
 <section class="block"><div class="wrap">
   <h2 class="say">It has to outlast the outage.</h2>
-  <figure style="margin-top:28px">
-    <svg class="diagram" viewBox="0 0 1120 150" role="img" aria-label="Power path: solar panel, charger, battery pack, radio board.">
-      <g font-size="17" font-weight="700" text-anchor="middle">
-        <g fill="none" stroke="var(--ink)" stroke-width="2"><rect x="20" y="36" width="220" height="78" rx="12"/><rect x="310" y="36" width="220" height="78" rx="12"/><rect x="600" y="36" width="220" height="78" rx="12"/><rect x="890" y="36" width="210" height="78" rx="12"/></g>
-        <g stroke="var(--ink)" stroke-width="2" fill="none" stroke-linecap="round"><path d="M248 75h52m-10-8 10 8-10 8M538 75h52m-10-8 10 8-10 8M828 75h52m-10-8 10 8-10 8"/></g>
-        <text x="130" y="70">Solar panel</text><text x="420" y="70">Charger</text><text x="710" y="70">Battery pack</text><text x="995" y="70">Radio board</text>
-        <g font-size="15" font-weight="400" class="dim"><text x="130" y="94" class="dim">1 W, 5 V</text><text x="420" y="94" class="dim">MCP73871</text><text x="710" y="94" class="dim">4 × 18650, about 14 Ah</text><text x="995" y="94" class="dim">Heltec V4.3</text></g>
-      </g>
-    </svg>
-  </figure>
+  <ol class="flow" aria-label="Power path">
+    <li><b>Solar panel</b><span>1 W, 5 V</span></li>
+    <li><b>Charger</b><span>MCP73871</span></li>
+    <li><b>Battery pack</b><span>4 × 18650, about 14 Ah</span></li>
+    <li><b>Radio board</b><span>Heltec V4.3</span></li>
+  </ol>
   <div class="split" style="margin-top:28px">
     <div class="prose">
       <p>The charger feeds the board and tops up the pack at the same time, so the box runs through the night on what the panel stored during the day.</p>
@@ -100,8 +96,8 @@
     <div class="btn-row"><a class="btn" href="https://github.com/Cale-star/shelter-beacon/tree/main/hardware">Hardware files on GitHub</a></div>
   </div>
   <figure>
-    <img class="sheet" src="assets/img/05_plate_in_box.jpg" alt="The printed mounting plate and battery holder being test-fitted into the enclosure." width="900" height="1200" loading="lazy" style="max-height:480px;width:auto">
-    <figcaption>Test-fitting the printed plate and battery holder.</figcaption>
+    <img class="cutout" src="assets/img/05_plate_in_box.webp" alt="The printed mounting plate with the four-cell battery holder on it." width="625" height="742" loading="lazy">
+    <figcaption>The printed plate with the battery holder mounted.</figcaption>
   </figure>
 </div></section>
 

@@ -205,6 +205,7 @@ export function createBox(container, opts = {}) {
   function angleFor(i) { return -(-150 + i * 30) * Math.PI / 180; }
   const target = new THREE.Vector3(0, 28, -30);
   const dir = new THREE.Vector3(mode === "hero" ? -0.36 : -1.25, mode === "hero" ? 0.12 : 0.3, 1).normalize();
+  const dirPortrait = new THREE.Vector3(-0.5, 1.25, 1).normalize();
   camera.position.copy(target).addScaledVector(dir, 900);
   let controls = null;
   if (mode !== "hero") {
@@ -215,24 +216,43 @@ export function createBox(container, opts = {}) {
     controls.addEventListener("change", () => { dirty = true; });
     canvas.style.touchAction = "pan-y";
   }
-  function fitDistance() {
-    const w = container.clientWidth, h = container.clientHeight, aspect = w / h;
-    const spreadZ = 510 * explode, halfH = (mode === "hero" ? 250 : 235) + 30 * explode, halfW = 165 + spreadZ * (mode === "hero" ? 0.6 : 0.38);
-    const vf = THREE.MathUtils.degToRad(camera.fov / 2), hf = Math.atan(Math.tan(vf) * aspect);
-    return Math.max(halfH / Math.tan(vf), halfW / Math.tan(hf)) * 1.0;
-  }
+  // Frame the model by measurement, not by guesswork: project its bounding box and back the camera
+  // off until every corner is inside the view. Works for any explode amount and any screen shape.
+  const fitBox = new THREE.Box3(), tmpBox = new THREE.Box3(), corner = new THREE.Vector3(), off = new THREE.Vector3();
+  let wasPortrait = null;
+  const right = new THREE.Vector3(), up = new THREE.Vector3();
   function placeCamera() {
-    const d = fitDistance();
-    target.set(0, 28 + 22 * explode, -30 + 55 * explode);
-    if (controls) {
-      const off = camera.position.clone().sub(controls.target);
-      if (off.lengthSq() < 1) off.copy(dir);
-      controls.target.copy(target);
-      camera.position.copy(target).add(off.setLength(d));
-    } else {
-      camera.position.copy(target).addScaledVector(dir, d);
-      camera.lookAt(target);
+    const w = container.clientWidth, h = container.clientHeight, portrait = w / h < 0.8;
+    fitBox.makeEmpty();
+    for (const g of pieces) {
+      if (!g.userData.box) g.userData.box = new THREE.Box3().setFromObject(g).translate(g.position.clone().negate());
+      fitBox.union(tmpBox.copy(g.userData.box).translate(g.position));
     }
+    fitBox.getCenter(target);
+    if (controls && wasPortrait === portrait) off.copy(camera.position).sub(controls.target).normalize();
+    else off.copy(mode === "hero" ? dir : portrait ? dirPortrait : dir).normalize();   // a tall screen looks from higher up, so the layers run corner to corner
+    wasPortrait = portrait;
+    const fill = mode === "hero" ? 0.94 : 0.9, padBottom = mode === "hero" ? 0 : 0.14;
+    let d = 1200;
+    const tanH = Math.tan(camera.fov * Math.PI / 360);
+    for (let pass = 0; pass < 4; pass++) {
+      camera.position.copy(target).addScaledVector(off, d); camera.lookAt(target); camera.updateMatrixWorld();
+      let x0 = 9, x1 = -9, y0 = 9, y1 = -9;
+      for (const g of pieces) {                                   // every piece's own corners, so a diagonal layout isn't over-estimated
+        const b = g.userData.box, p = g.position;
+        for (let k = 0; k < 8; k++) {
+          corner.set((k & 1 ? b.max.x : b.min.x) + p.x, (k & 2 ? b.max.y : b.min.y) + p.y + (mode === "hero" && k & 2 ? 40 : 0), (k & 4 ? b.max.z : b.min.z) + p.z).project(camera);
+          x0 = Math.min(x0, corner.x); x1 = Math.max(x1, corner.x); y0 = Math.min(y0, corner.y); y1 = Math.max(y1, corner.y);
+        }
+      }
+      // centre what is actually on screen (the antenna makes the model top-heavy), then scale it to fill
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2 - padBottom * fill;
+      right.setFromMatrixColumn(camera.matrixWorld, 0); up.setFromMatrixColumn(camera.matrixWorld, 1);
+      target.addScaledVector(right, cx * d * tanH * camera.aspect).addScaledVector(up, cy * d * tanH);
+      d *= Math.max((x1 - x0) / 2, (y1 - y0) / 2 / (1 - padBottom)) / fill;
+    }
+    camera.position.copy(target).addScaledVector(off, d);
+    if (controls) controls.target.copy(target); else camera.lookAt(target);
   }
   function resize() {
     const w = container.clientWidth, h = container.clientHeight;
@@ -300,7 +320,7 @@ export function createBox(container, opts = {}) {
   }
   const box3 = new THREE.Box3(), v = new THREE.Vector3();
   function placeLabels() {
-    const w = container.clientWidth, h = container.clientHeight, show = explode > 0.45;
+    const w = container.clientWidth, h = container.clientHeight, show = explode > 0.45, compact = w < 520;
     const pts = [];
     for (const l of labels) {
       box3.makeEmpty();
@@ -320,9 +340,9 @@ export function createBox(container, opts = {}) {
     for (const p of pts) {
       const l = p.l;
       l.el.style.transform = `translate(${Math.max(p.w / 2 + 6, Math.min(w - p.w / 2 - 6, p.x)).toFixed(1)}px, ${Math.max(18, Math.min(h - 78, p.y)).toFixed(1)}px) translate(-50%, -50%)`;
-      l.el.classList.toggle("show", show);
+      l.el.classList.toggle("show", show && (!compact || l.id === selected));       // on a phone only the picked part is labelled
       l.el.classList.toggle("sel", l.id === selected);
-      l.el.tabIndex = show ? 0 : -1;
+      l.el.tabIndex = show && !compact ? 0 : -1;
     }
   }
 

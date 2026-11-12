@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Testing · Shelter Beacon</title>
+<title>Shelter Beacon: Testing</title>
 <meta name="description" content="Field and bench results for Shelter Beacon so far: the first range test, what it changed, and what is still unmeasured.">
-<meta property="og:title" content="Testing · Shelter Beacon">
+<meta property="og:title" content="Shelter Beacon: Testing">
 <meta property="og:description" content="Field and bench results for Shelter Beacon so far: the first range test, what it changed, and what is still unmeasured.">
 <meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
 <meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
@@ -29,7 +29,7 @@
   <div class="chart" id="chartWrap">
     <p class="chart-title">Signal strength of every packet received</p>
     <p class="chart-sub">dBm, over the 41 minutes of the test. Lower is weaker.</p>
-    <svg id="chart" viewBox="0 0 1120 420" role="img" aria-label="Scatter chart of received signal strength over time, with a six-minute gap where no packets arrived."></svg>
+    <svg id="chart" role="img" aria-label="Scatter chart of received signal strength over time, with a six-minute gap where no packets arrived."></svg>
     <div class="tip" id="tip"></div>
   </div>
   <details class="table"><summary>The same test as numbers</summary>
@@ -78,11 +78,11 @@
       <p>That gives three things this page is missing: how far it reaches, how delivery falls off with distance, and whether three copies really behave the way the prediction says.</p>
       <p>This section will be replaced with the coverage map and the measured numbers, whatever they turn out to be.</p>
     </div>
-    <ul class="facts" style="margin-top:0">
-      <li><b>Map</b><p>Every report on a map, coloured by how many of its three copies arrived.</p></li>
-      <li><b>Curve</b><p>Delivery against distance, measured beside predicted.</p></li>
-      <li><b>Raw</b><p>The logs and the analysis script, in the repository with everything else.<small><a href="https://github.com/Cale-star/shelter-beacon/tree/main/data">Data on GitHub</a></small></p></li>
-    </ul>
+    <dl class="reqs" style="margin-top:0">
+      <div><dt>A coverage map</dt><dd>Every report on a map, marked by how many of its three copies arrived.</dd></div>
+      <div><dt>A range curve</dt><dd>Delivery against distance, measured beside predicted.</dd></div>
+      <div><dt>The raw logs</dt><dd>With the analysis script, <a href="https://github.com/Cale-star/shelter-beacon/tree/main/data">in the repository</a> with everything else.</dd></div>
+    </dl>
   </div>
 </div></section>
 

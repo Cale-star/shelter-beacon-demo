@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>The problem · Shelter Beacon</title>
+<title>Shelter Beacon: The problem</title>
 <meta name="description" content="Why isolated shelters in rural Japan could not report their needs after the 2024 Noto earthquake, and what that asks of a design.">
-<meta property="og:title" content="The problem · Shelter Beacon">
+<meta property="og:title" content="Shelter Beacon: The problem">
 <meta property="og:description" content="Why isolated shelters in rural Japan could not report their needs after the 2024 Noto earthquake, and what that asks of a design.">
 <meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
 <meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
@@ -40,25 +40,12 @@
 <section class="block"><div class="wrap">
   <h2 class="say">Japan already has disaster radio. It doesn't reach this far down.</h2>
   <p class="prose" style="margin-top:20px">It would be wrong to say no two-way system exists. Japan's municipal disaster radio has three parts, and one of them is two-way. The gap is narrower than that, and more specific.</p>
-  <figure style="margin-top:28px">
-    <svg class="diagram" viewBox="0 0 1120 300" role="img" aria-label="Japan's municipal disaster radio has three parts: one-way broadcast, two-way field radio for staffed sites, and sensor telemetry. Small informal shelters are outside all three.">
-      <g fill="none" stroke="var(--ink)" stroke-width="2"><rect x="10" y="20" width="256" height="170" rx="14"/><rect x="290" y="20" width="256" height="170" rx="14"/><rect x="570" y="20" width="256" height="170" rx="14"/></g>
-      <rect x="850" y="20" width="260" height="170" rx="14" fill="none" stroke="var(--need)" stroke-width="2.5" stroke-dasharray="7 6"/>
-      <g font-size="22" font-weight="700" class="jp"><text x="30" y="60">同報系</text><text x="310" y="60">移動系</text><text x="590" y="60">テレメーター系</text></g>
-      <g font-size="17" font-weight="700"><text x="30" y="88">Broadcast</text><text x="310" y="88">Field radio</text><text x="590" y="88">Telemetry</text><text x="870" y="60" style="fill:var(--need)">The gap</text><text x="870" y="88">Small, informal shelters</text></g>
-      <g font-size="15" class="dim">
-        <text x="30" y="118" class="dim">Town hall to residents,</text><text x="30" y="138" class="dim">by loudspeaker.</text><text x="30" y="168" class="dim">One way.</text>
-        <text x="310" y="118" class="dim">Headquarters to staffed</text><text x="310" y="138" class="dim">shelters and vehicles.</text><text x="310" y="168" class="dim">Two way, needs repeaters.</text>
-        <text x="590" y="118" class="dim">River and rain sensors</text><text x="590" y="138" class="dim">reporting automatically.</text><text x="590" y="168" class="dim">Machines only.</text>
-        <text x="870" y="118" class="dim">A community hall, twenty</text><text x="870" y="138" class="dim">homes, no trained operator.</text><text x="870" y="168" class="dim">Nothing reaches here.</text>
-      </g>
-      <text x="418" y="232" text-anchor="middle" font-size="15" class="dim">Landslides and long power cuts took out</text>
-      <text x="418" y="252" text-anchor="middle" font-size="15" class="dim">the repeaters this depends on.</text>
-      <path d="M418 196v14" stroke="var(--ink-2)" stroke-width="1.5"/>
-      <text x="980" y="232" text-anchor="middle" font-size="15" font-weight="700">Shelter Beacon is built for this box.</text>
-      <path d="M980 196v14" stroke="var(--need)" stroke-width="1.5"/>
-    </svg>
-  </figure>
+  <ul class="radio-parts">
+    <li><b class="jp" lang="ja">同報系</b><strong>Broadcast</strong><p>Town hall to residents, by loudspeaker.</p><p class="verdict">One way.</p></li>
+    <li><b class="jp" lang="ja">移動系</b><strong>Field radio</strong><p>Headquarters to staffed shelters and vehicles.</p><p class="verdict">Two way, but it needs repeaters, and landslides and long power cuts took those out.</p></li>
+    <li><b class="jp" lang="ja">テレメーター系</b><strong>Telemetry</strong><p>River and rain sensors reporting automatically.</p><p class="verdict">Machines only.</p></li>
+    <li class="gap"><b>The gap</b><strong>Small, informal shelters</strong><p>A community hall, twenty homes, no trained operator.</p><p class="verdict">Nothing reaches here. Shelter Beacon is built for this.</p></li>
+  </ul>
   <div class="prose" style="margin-top:20px">
     <p>The two-way field radio is provisioned for official, staffed places: municipal offices, large designated shelters, emergency vehicles. It needs trained people, dedicated equipment and working repeaters. Most of what was cut off in Noto was none of those.</p>
   </div>
@@ -98,12 +85,12 @@
 
 <section class="block"><div class="wrap">
   <h2 class="say">So the box has to work like this.</h2>
-  <ul class="next" style="pointer-events:none">
-    <li><a tabindex="-1"><b>No infrastructure</b><span>No cell network, no internet, no repeaters, no grid power. Radio straight to headquarters, on a battery and a small solar panel.</span></a></li>
-    <li><a tabindex="-1"><b>No training</b><span>Someone who has never seen it has to get it right, in the dark, with cold hands, on the worst day of their year.</span></a></li>
-    <li><a tabindex="-1"><b>Cheap enough to be everywhere</b><span>It only helps if it's already on the wall of the community hall. That means about a hundred dollars, not thousands.</span></a></li>
-    <li><a tabindex="-1"><b>Honest about itself</b><span>It has to tell the person whether headquarters actually heard them.</span></a></li>
-  </ul>
+  <dl class="reqs">
+    <div><dt>No infrastructure</dt><dd>No cell network, no internet, no repeaters, no grid power. Radio straight to headquarters, on a battery and a small solar panel.</dd></div>
+    <div><dt>No training</dt><dd>Someone who has never seen it has to get it right, in the dark, with cold hands, on the worst day of their year.</dd></div>
+    <div><dt>Cheap enough to be everywhere</dt><dd>It only helps if it's already on the wall of the community hall. That means about a hundred dollars, not thousands.</dd></div>
+    <div><dt>Honest about itself</dt><dd>It has to tell the person whether headquarters actually heard them.</dd></div>
+  </dl>
   <div class="btn-row"><a class="btn primary" href="hardware.html">See how the box answers that</a></div>
   <p class="small" style="margin-top:40px;max-width:62ch">Sources are named beside each figure. The research brief with fuller notes is in the repository under <a href="https://github.com/Cale-star/shelter-beacon/tree/main/reference/research">reference/research</a>. It covers English-language sources; Japanese government after-action reports would strengthen it.</p>
 </div></section>

@@ -307,7 +307,7 @@ details.table summary { cursor: pointer; color: var(--ink-2); padding: 6px 0; }
 .timeline > li.broke::before { background: var(--need); border-color: var(--need); }
 .timeline > li.next::before { border-style: dashed; border-color: var(--ink-2); }
 .timeline time { display: block; font-size: .875rem; color: var(--ink-2); font-weight: 600; }
-.timeline h3 { margin: 2px 0 6px; font-size: 1.3125rem; }
+.timeline h2 { margin: 2px 0 6px; font-size: 1.3125rem; }
 .timeline p { max-width: 58ch; }
 .timeline .fix { margin-top: 8px; padding-left: 14px; border-left: 3px solid var(--ink); }
 .timeline .fix b, .timeline .why b { font-weight: 700; }
@@ -334,3 +334,54 @@ details.table summary { cursor: pointer; color: var(--ink-2); padding: 6px 0; }
   .explore .stage3d { height: 68vh; }
 }
 @media (max-width: 560px) { .wrap { padding: 0 16px; } .hero .stage3d { margin: 0 -16px; } }
+
+/* ---- photos are cut out and sit straight on the page ---- */
+img.cutout { width: auto; max-height: 520px; margin: 0 auto; filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .2)); }
+.timeline img.cutout { border: 0; border-radius: 0; max-height: 300px; }
+img.shot { border-radius: 14px; border: 1px solid var(--line); }
+figure:has(.cutout) figcaption { text-align: center; margin-left: auto; margin-right: auto; }
+
+/* ---- diagrams built from HTML so they reflow, not shrink ---- */
+.flow { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 44px; }
+.flow li { position: relative; border: 2px solid var(--ink); border-radius: 14px; padding: 16px 18px; }
+.flow b { display: block; font-size: 1.1875rem; }
+.flow span { color: var(--ink-2); }
+.flow li + li::before { content: ""; position: absolute; left: -34px; top: 50%; width: 22px; height: 12px; margin-top: -6px; background: var(--ink); clip-path: polygon(0 40%, 62% 40%, 62% 0, 100% 50%, 62% 100%, 62% 60%, 0 60%); }
+.radio-parts { list-style: none; margin: 28px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.radio-parts li { border: 2px solid var(--ink); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 4px; }
+.radio-parts li.gap { border: 2.5px dashed var(--need); }
+.radio-parts b { font-size: 1.375rem; line-height: 1.2; }
+.radio-parts li.gap b { color: var(--need); }
+.radio-parts strong { font-size: 1.0625rem; }
+.radio-parts p { color: var(--ink-2); font-size: .9375rem; }
+.radio-parts .verdict { color: var(--ink); font-weight: 600; margin-top: auto; padding-top: 10px; }
+.reqs { margin: 28px 0 0; border-top: 1px solid var(--line); }
+.reqs div { display: grid; grid-template-columns: minmax(8rem, 15rem) minmax(0, 1fr); gap: 4px 32px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.reqs dt { font-size: 1.1875rem; font-weight: 700; }
+.reqs dd { margin: 0; color: var(--ink-2); max-width: 56ch; }
+
+@media (pointer: coarse) { .part-label { min-height: 36px; padding: 6px 12px; font-size: .9375rem; } }
+@media (max-width: 900px) {
+  .flow { grid-template-columns: 1fr; gap: 34px; }
+  .flow li + li::before { left: 50%; top: -29px; margin: 0 0 0 -6px; width: 12px; height: 22px; clip-path: polygon(40% 0, 60% 0, 60% 62%, 100% 62%, 50% 100%, 0 62%, 40% 62%); }
+  .radio-parts { grid-template-columns: 1fr 1fr; }
+  .reqs div { grid-template-columns: 1fr; }
+  .explore .stage3d { height: 74vh; min-height: 460px; }
+  .seq-log { min-height: 0; }
+}
+@media (max-width: 560px) {
+  .radio-parts { grid-template-columns: 1fr; }
+  .packet button { font-size: 1.125rem; padding: 10px 12px; }
+  .chart, figure:has(.diagram) { margin-left: -8px; margin-right: -8px; }
+}
+
+/* ---- touch targets: 44 px on anything you tap ---- */
+.brand { min-height: 44px; }
+.foot nav a { display: inline-flex; align-items: center; min-height: 44px; }
+.part-list button { min-height: 44px; }
+.explode-ctl input { height: 44px; }
+details.table summary { min-height: 44px; display: flex; align-items: center; gap: 8px; }
+details.table summary::before { content: ""; border: 5px solid transparent; border-left-color: currentColor; border-right: 0; transition: transform .12s; }
+details.table[open] summary::before { transform: rotate(90deg); }
+details.table summary::-webkit-details-marker { display: none; }
+.skip { padding: 12px 14px; }
