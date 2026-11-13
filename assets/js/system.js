@@ -31,7 +31,7 @@ function fields() {
 function paintReport() {
   swBox.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(!!st.on[b.dataset.k])));
   const occ = OCC[st.occ];
-  $("pbPeople").textContent = occ >= 100 ? "100+ people" : occ + " people";
+  $("pbPeople").textContent = occ >= 100 ? "100 or more people" : occ === 0 ? "Nobody yet" : "About " + occ + " people";
   const f = fields(), box = $("packet");
   box.textContent = "";
   f.forEach((x, i) => {
@@ -141,38 +141,52 @@ if ("IntersectionObserver" in window) {
   io.observe(seq);
 } else play();
 
-// ---------- link budget scale: sideways on wide screens, top-to-bottom on phones ----------
+// ---------- the signal drop: what the box sends, what arrives behind the ridge, and how much was left over ----------
 function budget() {
-  const svg = $("budget"), n = mq.matches, hi = 30, lo = -140;
+  const svg = $("budget"), hi = 30, lo = -156, T = 26, B = 640, X = 124, y = v => T + (hi - v) / (hi - lo) * (B - T);
   const tick = v => v > 0 ? "+" + v : v < 0 ? "−" + (-v) : 0;
-  let h = "";
-  if (n) {
-    const X = 78, T = 20, B = 470, y = v => T + (hi - v) / (hi - lo) * (B - T);
-    svg.setAttribute("viewBox", "0 0 400 500");
-    h += `<line x1="${X}" x2="${X}" y1="${T}" y2="${B}" stroke="var(--line)" stroke-width="2"/>`;
-    for (let v = 20; v >= -140; v -= 20) h += `<line x1="${X - 5}" x2="${X + 5}" y1="${y(v)}" y2="${y(v)}" stroke="var(--ink-2)"/><text x="${X - 12}" y="${y(v) + 5}" text-anchor="end" font-size="15" class="dim">${tick(v)}</text>`;
-    h += `<text x="${X - 12}" y="${B + 24}" text-anchor="end" font-size="14" class="dim">dBm</text>`;
-    h += `<rect x="${X - 7}" y="${y(-21)}" width="14" height="${y(-122) - y(-21)}" rx="7" fill="var(--ink)"/>`;
-    h += `<rect x="${X - 7}" y="${y(-122)}" width="14" height="${y(-129) - y(-122)}" rx="7" fill="var(--caution-fill)"/>`;
-    const mark = (v, a, b, dy = 0) => `<line x1="${X + 10}" x2="${X + 30}" y1="${y(v)}" y2="${y(v) + dy}" stroke="var(--ink)" stroke-width="1.5"/><text x="${X + 36}" y="${y(v) + dy + 1}" font-size="16" font-weight="700">${a}</text><text x="${X + 36}" y="${y(v) + dy + 20}" font-size="15" class="dim">${b}</text>`;
-    h += mark(22, "+22 dBm", "the box transmits") + mark(-21, "−21 dBm", "strongest heard, side by side")
-      + mark(-122, "−122 dBm", "weakest decoded in the field", -34) + mark(-129, "−129 dBm", "the calculated limit", 16);
-  } else {
-    const L = 40, R = 1080, y = 104, x = v => L + (hi - v) / (hi - lo) * (R - L);
-    svg.setAttribute("viewBox", "0 0 1120 170");
-    h += `<line x1="${L}" x2="${R}" y1="${y}" y2="${y}" stroke="var(--line)" stroke-width="2"/>`;
-    for (let v = 20; v >= -140; v -= 20) h += `<line x1="${x(v)}" x2="${x(v)}" y1="${y - 5}" y2="${y + 5}" stroke="var(--ink-2)"/><text x="${x(v)}" y="${y + 26}" text-anchor="middle" font-size="14" class="dim">${tick(v)}</text>`;
-    h += `<text x="${R}" y="${y + 50}" text-anchor="end" font-size="14" class="dim">signal strength, dBm</text>`;
-    h += `<rect x="${x(-21)}" y="${y - 7}" width="${x(-122) - x(-21)}" height="14" rx="7" fill="var(--ink)"/>`;
-    h += `<rect x="${x(-122)}" y="${y - 7}" width="${x(-129) - x(-122)}" height="14" rx="7" fill="var(--caution-fill)"/>`;
-    const mark = (v, top, a, b, anchor) => `<line x1="${x(v)}" x2="${x(v)}" y1="${y - 12}" y2="${top + 22}" stroke="var(--ink)" stroke-width="1.5"/><text x="${x(v)}" y="${top}" text-anchor="${anchor}" font-size="15" font-weight="700">${a}</text><text x="${x(v)}" y="${top + 18}" text-anchor="${anchor}" font-size="14" class="dim">${b}</text>`;
-    h += mark(22, 28, "+22 dBm", "the box transmits", "start") + mark(-21, 28, "−21 dBm", "strongest heard, side by side", "middle")
-      + mark(-122, 28, "−122 dBm", "weakest decoded in the field", "end") + mark(-129, 62, "−129", "limit", "start");
-  }
+  svg.setAttribute("viewBox", "0 0 400 670");
+  let h = `<defs><linearGradient id="fall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eef0ed"/><stop offset="1" stop-color="#eef0ed" stop-opacity=".25"/></linearGradient>
+    <pattern id="nope" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#3a1c18"/><line x1="0" y1="0" x2="0" y2="8" stroke="#ff6a5b" stroke-width="2" opacity=".55"/></pattern></defs>`;
+  for (let v = 20; v >= -100; v -= 20) h += `<line x1="${X - 30}" x2="${X - 22}" y1="${y(v)}" y2="${y(v)}" stroke="var(--ink-2)"/><text x="${X - 36}" y="${y(v) + 5}" text-anchor="end" font-size="14" class="dim">${tick(v)}</text>`;
+  h += `<text x="${X - 36}" y="${B + 22}" text-anchor="end" font-size="13" class="dim">dBm</text>`;
+  h += `<rect x="${X - 12}" y="${T}" width="24" height="${B - T}" rx="12" fill="var(--line)"/>`;
+  h += `<rect x="${X - 12}" y="${y(-129)}" width="24" height="${B - y(-129)}" rx="12" fill="url(#nope)"/>`;
+  h += `<rect class="b-fall" x="${X - 12}" y="${y(22)}" width="24" height="${y(-122) - y(22)}" rx="12" fill="url(#fall)"/>`;
+  h += `<rect class="b-margin" x="${X - 12}" y="${y(-122)}" width="24" height="${y(-129) - y(-122)}" rx="6" fill="#f2b200"/>`;
+  // the 144 dB lost on the way
+  h += `<g class="b-loss"><path d="M${X + 26} ${y(22) + 8}v${y(-122) - y(22) - 16}" stroke="var(--ink-2)" stroke-width="1.5" stroke-dasharray="2 5" fill="none"/>
+    <text x="${X + 40}" y="${y(-50) - 10}" font-size="40" font-weight="700">144 dB</text>
+    <text x="${X + 40}" y="${y(-50) + 16}" font-size="15" class="dim">lost between the box</text>
+    <text x="${X + 40}" y="${y(-50) + 35}" font-size="15" class="dim">and headquarters, behind</text>
+    <text x="${X + 40}" y="${y(-50) + 54}" font-size="15" class="dim">a ridge. Still decoded.</text></g>`;
+  const mark = (v, a, b, ev, dy = 0) => `<g class="b-mark"><line x1="${X + 14}" x2="${X + 32}" y1="${y(v)}" y2="${y(v) + dy}" stroke="var(--ink)" stroke-width="1.5"/>
+    <text x="${X + 40}" y="${y(v) + dy + 5}" font-size="16" font-weight="700">${a}</text>
+    <text x="${X + 40}" y="${y(v) + dy + 24}" font-size="14" class="dim">${b}</text>${ev ? `<text x="${X + 40}" y="${y(v) + dy + 42}" font-size="13.5" class="ev-t">${ev}</text>` : ""}</g>`;
+  h += mark(22, "+22 dBm", "what the box sends", "estimated", 4) + mark(-21, "−21 dBm", "strongest heard, side by side", "measured", -4)
+     + mark(-122, "−122 dBm", "weakest decoded in the field", "measured", -18) + mark(-129, "−129 dBm", "the radio's limit", "calculated", 26);
+  h += `<text x="${X - 22}" y="${y(-147) + 5}" text-anchor="end" font-size="14" class="bad">too faint</text>`;
+  h += `<g class="b-gap"><path d="M${X - 18} ${y(-122)}h-6v${y(-129) - y(-122)}h6" stroke="#f2b200" stroke-width="2" fill="none"/><text x="${X - 30}" y="${(y(-122) + y(-129)) / 2 + 5}" text-anchor="end" font-size="14" font-weight="700" class="amb">7 dB spare</text></g>`;
+  h += `<circle class="b-dot" cx="${X}" cy="${y(22)}" r="9" fill="#eef0ed" stroke="#16181a" stroke-width="3"/>`;
   svg.innerHTML = h;
+  const dot = svg.querySelector(".b-dot"), fall = svg.querySelector(".b-fall");
+  svg.querySelectorAll(".b-mark").forEach((m, i) => { if (i >= 2) m.classList.add("late"); });
+  const fire = () => {
+    svg.classList.add("on");
+    if (reduce) { dot.setAttribute("cy", y(-122)); return; }
+    const t0 = performance.now(), D = 1700;
+    (function step(now) {
+      const k = Math.min(1, (now - t0) / D), e = k < .5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      const v = 22 + (-122 - 22) * e;
+      dot.setAttribute("cy", y(v)); fall.setAttribute("height", Math.max(0, y(v) - y(22)));
+      if (k < 1) requestAnimationFrame(step); else svg.classList.add("done");
+    })(t0);
+  };
+  fall.setAttribute("height", 0);
+  if ("IntersectionObserver" in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); fire(); } }, { threshold: 0.45 }); io.observe(svg); }
+  else fire();
 }
 budget();
-mq.addEventListener("change", budget);
 
 // The detail panels sit open beside each step on a wide screen, and fold away on a phone.
 const wideMq = matchMedia("(min-width: 901px)");

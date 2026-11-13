@@ -65,11 +65,11 @@
 
 <section class="block"><div class="wrap">
   <h2 class="say">It has to outlast the outage.</h2>
-  <ol class="flow" aria-label="Power path">
-    <li><b>Solar panel</b><span>1 W, 5 V</span></li>
-    <li><b>Charger</b><span>MCP73871</span></li>
-    <li><b>Battery pack</b><span>4 × 18650, about 14 Ah</span></li>
-    <li><b>Radio board</b><span>Heltec V4.3</span></li>
+  <ol class="flow" aria-label="Power path" data-reveal>
+    <li><span class="tile"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.4M12 19.6V22M2 12h2.4M19.6 12H22M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7"/></svg></span><b>Solar panel</b><span>1 W, 5 V</span></li>
+    <li><span class="tile"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3 6.5 12.5H11l-1 8.5 6.5-9.5H12z"/></svg></span><b>Charger</b><span>MCP73871</span></li>
+    <li><span class="tile"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7.5" width="17" height="9" rx="2.2"/><path d="M22 10.8v2.4M6.5 10.5v3M10 10.5v3"/></svg></span><b>Battery pack</b><span>4 × 18650, about 14 Ah</span></li>
+    <li><span class="tile on"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9.5 3v3M14.5 3v3M9.5 18v3M14.5 18v3M3 9.5h3M3 14.5h3M18 9.5h3M18 14.5h3"/><path d="M9.5 12h5"/></svg></span><b>Radio board</b><span>Heltec V4.3</span></li>
   </ol>
   <div class="split" style="margin-top:28px">
     <div class="prose">
@@ -118,7 +118,14 @@
 </div></footer><script>
 (() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
   b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; };
-  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true)); })();
+  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+  // Graphics marked data-reveal play their entrance once, when they scroll into view.
+  const rv = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    rv.forEach(e => e.classList.add("pre"));
+    const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .35 });
+    rv.forEach(e => io.observe(e));
+  } })();
 </script>
 <script type="module" src="assets/js/hardware.js"></script>
 <script type="module" src="assets/js/tools.js"></script>

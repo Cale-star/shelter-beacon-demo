@@ -31,8 +31,12 @@
       <p class="lede">Shelter Beacon is a wall box with five switches and a dial. A shelter leader flips up what the shelter needs, and it radios headquarters over kilometres with no cell service, no internet and no grid power.</p>
     </div>
     <div class="hero-ctl">
-      <div class="chips" id="heroChips" role="group" aria-label="Flip a switch on the box">
-        <span class="lead">Flip a switch, here or on the box.</span>
+      <p class="lead">Flip a switch and turn the knob, here or on the box.</p>
+      <div class="chips" id="heroChips" role="group" aria-label="Switches"></div>
+      <div class="people-step" role="group" aria-label="About how many people">
+        <button type="button" id="pplLess" aria-label="Fewer people">−</button>
+        <output id="pplOut" aria-live="polite">About 20 people</output>
+        <button type="button" id="pplMore" aria-label="More people">+</button>
       </div>
       <div class="hq-line" aria-live="polite">
         <small>Headquarters sees</small>
@@ -40,7 +44,15 @@
         <span class="tag" id="heroTag" data-level="LOW">Low priority</span>
       </div>
     </div>
-    <div class="stage3d" id="heroStage"><p class="fallback" hidden>The 3D box needs WebGL. <a href="demo.html">Try the flat demo instead.</a></p></div>
+    <div class="stage3d" id="heroStage">
+      <p class="fallback" hidden>The 3D box needs WebGL. <a href="demo.html">Try the flat demo instead.</a></p>
+      <p class="stage-hint" id="heroHint"><span class="fine">Drag to turn it round. Click it, then scroll to zoom.</span><span class="coarse">Swipe sideways to turn it round. Pinch to zoom.</span></p>
+      <div class="stage-tools" role="group" aria-label="View">
+        <button type="button" id="zoomIn" aria-label="Zoom in">+</button>
+        <button type="button" id="zoomOut" aria-label="Zoom out">−</button>
+        <button type="button" id="viewReset" aria-label="Reset the view"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 13.7-4.6L20 8.6M20 4v4.6h-4.6M20 13a8 8 0 0 1-13.7 4.6L4 15.4M4 20v-4.6h4.6"/></svg></button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -85,9 +97,12 @@
 <section class="block">
   <div class="wrap">
     <h2 class="say">Flip a switch. Headquarters knows in about a second.</h2>
-    <figure style="margin-top:28px">
-      <svg class="diagram" id="ridge" role="img" aria-label="A shelter behind a ridge sends a radio report over the hills to headquarters in town."></svg>
-      <figcaption>The box sends each report up to three times and waits for headquarters to confirm. If nothing comes back, it keeps trying by itself.</figcaption>
+    <figure class="ridge" style="margin-top:28px">
+      <div class="ridge-stage" id="ridgeStage" role="img" aria-label="A cut-away of the land: a shelter in a valley sends a radio report over a ridge to headquarters in town, past a landslide and a dead cell tower. Headquarters sends a confirmation back.">
+        <svg class="diagram" id="ridge" hidden></svg>
+      </div>
+      <div class="ridge-steps"><span class="ridge-n" id="ridgeN">1 of 6</span><p id="ridgeSay" aria-live="polite"></p></div>
+      <figcaption>Illustration, not to scale. The box sends each report up to three times and waits for headquarters to confirm. If nothing comes back, it keeps trying by itself.</figcaption>
     </figure>
     <ul class="next">
       <li><a href="hardware.html"><span class="tile"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8 12 3.5 20.5 8v8L12 20.5 3.5 16zM3.5 8 12 12.5 20.5 8M12 12.5v8"/></svg></span><b>The box</b><span>Take it apart in 3D: every part, what it does, and why it's there.</span><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
@@ -138,7 +153,14 @@
 </div></footer><script>
 (() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
   b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; };
-  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true)); })();
+  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+  // Graphics marked data-reveal play their entrance once, when they scroll into view.
+  const rv = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    rv.forEach(e => e.classList.add("pre"));
+    const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .35 });
+    rv.forEach(e => io.observe(e));
+  } })();
 </script>
 <script type="module" src="assets/js/home.js"></script>
 <script type="module" src="assets/js/scenario.js"></script>

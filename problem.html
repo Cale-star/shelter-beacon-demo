@@ -59,7 +59,7 @@
     </div>
   </div>
   <figure>
-    <div class="dots" role="img" aria-label="49 dots, one per cut-off location. 25 are outlined: predicted. 24 are filled red: not predicted."><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i><i class="dot miss"></i></div>
+    <div class="dots" data-reveal role="img" aria-label="49 dots, one per cut-off location. 25 are outlined: predicted. 24 are filled red: not predicted."><i class="dot" style="--k:0"></i><i class="dot" style="--k:1"></i><i class="dot" style="--k:2"></i><i class="dot" style="--k:3"></i><i class="dot" style="--k:4"></i><i class="dot" style="--k:5"></i><i class="dot" style="--k:6"></i><i class="dot" style="--k:7"></i><i class="dot" style="--k:8"></i><i class="dot" style="--k:9"></i><i class="dot" style="--k:10"></i><i class="dot" style="--k:11"></i><i class="dot" style="--k:12"></i><i class="dot" style="--k:13"></i><i class="dot" style="--k:14"></i><i class="dot" style="--k:15"></i><i class="dot" style="--k:16"></i><i class="dot" style="--k:17"></i><i class="dot" style="--k:18"></i><i class="dot" style="--k:19"></i><i class="dot" style="--k:20"></i><i class="dot" style="--k:21"></i><i class="dot" style="--k:22"></i><i class="dot" style="--k:23"></i><i class="dot" style="--k:24"></i><i class="dot miss" style="--k:25"></i><i class="dot miss" style="--k:26"></i><i class="dot miss" style="--k:27"></i><i class="dot miss" style="--k:28"></i><i class="dot miss" style="--k:29"></i><i class="dot miss" style="--k:30"></i><i class="dot miss" style="--k:31"></i><i class="dot miss" style="--k:32"></i><i class="dot miss" style="--k:33"></i><i class="dot miss" style="--k:34"></i><i class="dot miss" style="--k:35"></i><i class="dot miss" style="--k:36"></i><i class="dot miss" style="--k:37"></i><i class="dot miss" style="--k:38"></i><i class="dot miss" style="--k:39"></i><i class="dot miss" style="--k:40"></i><i class="dot miss" style="--k:41"></i><i class="dot miss" style="--k:42"></i><i class="dot miss" style="--k:43"></i><i class="dot miss" style="--k:44"></i><i class="dot miss" style="--k:45"></i><i class="dot miss" style="--k:46"></i><i class="dot miss" style="--k:47"></i><i class="dot miss" style="--k:48"></i></div>
     <figcaption><span class="key"><i class="dot"></i> 25 were on the prefecture's list</span> <span class="key"><i class="dot miss"></i> 24 were not</span><br>Each dot is one location cut off after the earthquake. Source: Hokuriku Chunichi Shimbun.</figcaption>
   </figure>
 </div></section>
@@ -183,7 +183,14 @@
 </div></footer><script>
 (() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
   b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; };
-  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true)); })();
+  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+  // Graphics marked data-reveal play their entrance once, when they scroll into view.
+  const rv = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    rv.forEach(e => e.classList.add("pre"));
+    const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .35 });
+    rv.forEach(e => io.observe(e));
+  } })();
 </script>
 </body>
 </html>

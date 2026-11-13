@@ -1,10 +1,12 @@
 import { createBox } from "./box3d.js";
+import { createRidge } from "./ridge3d.js";
 
 const NEEDS = [
   { label: "Water", say: "water", w: 2 }, { label: "Medical", say: "medical help", w: 3 }, { label: "Food", say: "food", w: 1 },
   { label: "Blankets", say: "blankets", w: 1 }, { label: "Fuel", say: "fuel", w: 1 },
 ];
-const PEOPLE = 20;
+const OCC = [0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100];
+let ppl = 4;                                                  // index into OCC: about 20 people
 const join = a => a.length <= 1 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
 
 const chips = document.getElementById("heroChips");
@@ -20,7 +22,7 @@ function paint(on) {
   state = on;
   buttons.forEach((b, i) => b.setAttribute("aria-pressed", String(on[i])));
   const active = NEEDS.filter((_, i) => on[i]).sort((a, b) => b.w - a.w);
-  const score = active.reduce((s, n) => s + n.w, 0) + (active.length && PEOPLE >= 50 ? 2 : active.length && PEOPLE >= 25 ? 1 : 0);
+  const score = active.reduce((s, n) => s + n.w, 0) + (active.length && OCC[ppl] >= 50 ? 2 : active.length && OCC[ppl] >= 25 ? 1 : 0);
   const level = score >= 3 ? "HIGH" : score >= 2 ? "MEDIUM" : "LOW";
   document.getElementById("heroHead").textContent = active.length ? "Needs " + join(active.map(n => n.say)) : "Nothing needed";
   const tag = document.getElementById("heroTag");
@@ -28,13 +30,29 @@ function paint(on) {
 }
 
 let box = null;
-const stage = document.getElementById("heroStage");
+const stage = document.getElementById("heroStage"), hint = document.getElementById("heroHint");
+const out = document.getElementById("pplOut");
+function setPeople(i, fromButtons) {
+  ppl = Math.max(0, Math.min(OCC.length - 1, i));
+  out.textContent = ppl === 0 ? "Nobody yet" : ppl === OCC.length - 1 ? "100 or more people" : `About ${OCC[ppl]} people`;
+  document.getElementById("pplLess").disabled = ppl === 0;
+  document.getElementById("pplMore").disabled = ppl === OCC.length - 1;
+  if (fromButtons && box) box.setPeople(ppl);
+  paint(state);
+}
+document.getElementById("pplLess").onclick = () => setPeople(ppl - 1, true);
+document.getElementById("pplMore").onclick = () => setPeople(ppl + 1, true);
 try {
-  box = createBox(stage, { mode: "hero", onSwitch: paint });
+  box = createBox(stage, { mode: "hero", people: ppl, onSwitch: paint, onPeople: i => setPeople(i, false), onInteract: () => hint.classList.add("gone") });
   setTimeout(() => box.pulse(), 900);                       // one hello: the box checks in
+  document.getElementById("zoomIn").onclick = () => { box.zoom(0.8); hint.classList.add("gone"); };
+  document.getElementById("zoomOut").onclick = () => box.zoom(1.25);
+  document.getElementById("viewReset").onclick = () => box.resetView();
 } catch (e) {
   stage.querySelector(".fallback").hidden = false;
+  stage.querySelectorAll(".stage-hint, .stage-tools").forEach(e => e.hidden = true);
 }
+setPeople(ppl, false);
 
 // ---- the ridge drawing: a shelter behind the hills, headquarters in town, one report crossing ----
 const svg = document.getElementById("ridge");
@@ -77,4 +95,12 @@ function drawRidge() {
     <text x="${mid}" y="${n ? 40 : 34}" text-anchor="middle" font-size="${fd}" class="dim">${n ? "LoRa radio, no towers" : "LoRa radio, 915 MHz, no towers in between"}</text>`;
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { svg.querySelector("animateMotion").remove(); svg.querySelector("#ridgeDot").setAttribute("transform", `translate(${mid} ${n ? 76 : 62})`); }
 }
-if (svg) { drawRidge(); mq.addEventListener("change", drawRidge); }
+// The 3D cut-away; the flat drawing is only the fallback when WebGL isn't there.
+try {
+  createRidge(document.getElementById("ridgeStage"), {
+    onStep: (i, say, n) => { document.getElementById("ridgeSay").textContent = say; document.getElementById("ridgeN").textContent = `${i + 1} of ${n}`; },
+  });
+} catch (e) {
+  svg.hidden = false; document.querySelector(".ridge-steps").hidden = true;
+  drawRidge(); mq.addEventListener("change", drawRidge);
+}

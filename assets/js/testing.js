@@ -8,7 +8,7 @@ const minus = v => String(v).replace("-", "−");
 let gap = [0, 0];                                                              // the longest silence between two packets
 for (let i = 1; i < pk.length; i++) if (pk[i][0] - pk[i - 1][0] > gap[1] - gap[0]) gap = [pk[i - 1][0], pk[i][0]];
 const weak = pk.reduce((a, b) => b[2] < a[2] ? b : a);
-let G = null;
+let G = null, played = 0, playing = false;
 
 function draw() {
   const n = mq.matches;
@@ -31,7 +31,9 @@ function draw() {
   }
   h += `<line x1="${L}" x2="${R}" y1="${y(FLOOR)}" y2="${y(FLOOR)}" stroke="var(--ink-2)" stroke-width="1.5" stroke-dasharray="5 5"/>`;
   h += `<text x="${R}" y="${y(FLOOR) + (n ? 17 : -7)}" text-anchor="end" font-size="${fs}" fill="var(--ink-2)">${n ? "limit" : "calculated limit"}, −129 dBm</text>`;
-  h += pk.map(p => `<circle cx="${x(p[0]).toFixed(1)}" cy="${y(p[2]).toFixed(1)}" r="${n ? 2 : 2.6}" fill="var(--ink)" fill-opacity=".55"/>`).join("");
+  h += `<defs><clipPath id="reveal"><rect id="revealR" x="0" y="0" width="${played >= 1 ? W : x(played * tMax) + 3}" height="${H}"/></clipPath></defs>`;
+  h += `<g clip-path="url(#reveal)">` + pk.map(p => `<circle cx="${x(p[0]).toFixed(1)}" cy="${y(p[2]).toFixed(1)}" r="${n ? 2 : 2.6}" fill="var(--ink)" fill-opacity=".55"/>`).join("") + `</g>`;
+  h += `<line id="head" x1="0" x2="0" y1="${T}" y2="${B}" stroke="var(--caution-fill)" stroke-width="2" visibility="hidden"/>`;
   h += `<circle cx="${x(weak[0])}" cy="${y(weak[2])}" r="6" fill="none" stroke="var(--ink)" stroke-width="2"/>`;
   const halo = `paint-order="stroke" stroke="var(--paper)" stroke-width="5" stroke-linejoin="round"`;
   h += n ? `<line x1="${x(weak[0])}" y1="${y(weak[2]) - 7}" x2="${x(weak[0]) + 8}" y2="${y(-88) + 26}" stroke="var(--ink)"/><text x="${x(weak[0]) + 10}" y="${y(-88)}" font-size="${fs}" font-weight="700" fill="var(--ink)" ${halo}>weakest decoded</text><text x="${x(weak[0]) + 10}" y="${y(-88) + 19}" font-size="${fs}" font-weight="700" fill="var(--ink)" ${halo}>${minus(weak[2])} dBm</text>`
@@ -41,6 +43,27 @@ function draw() {
 }
 draw();
 mq.addEventListener("change", draw);
+
+// Replay the walk: a playhead sweeps the 41 minutes and packets appear as they arrived.
+const replayBtn = document.getElementById("replay"), clock = document.getElementById("replayClock");
+function replay() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { played = 1; draw(); return; }
+  played = 0; playing = true; replayBtn.disabled = true;
+  const t0 = performance.now(), D = 6500;
+  (function step(now) {
+    played = Math.min(1, (now - t0) / D);
+    const t = played * tMax, X = G.x(t), r = svg.querySelector("#revealR"), head = svg.querySelector("#head");
+    r.setAttribute("width", played >= 1 ? G.W : X + 3);
+    head.setAttribute("x1", X); head.setAttribute("x2", X); head.setAttribute("visibility", played < 1 ? "visible" : "hidden");
+    const got = pk.filter(p => p[0] <= t).length, inGap = t > gap[0] && t < gap[1];
+    clock.textContent = played < 1 ? `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")} into the walk, ${got} packets heard${inGap ? ". Nothing is getting through." : ""}` : `All ${pk.length} packets heard in 41 minutes.`;
+    clock.classList.toggle("bad", inGap && played < 1);
+    if (played < 1) requestAnimationFrame(step); else { playing = false; replayBtn.disabled = false; }
+  })(t0);
+}
+replayBtn.onclick = replay;
+if ("IntersectionObserver" in window) { const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); replay(); } }, { threshold: .5 }); io.observe(svg); }
+else { played = 1; draw(); }
 
 // hover / touch: nearest packet in time
 function show(e) {

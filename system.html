@@ -39,7 +39,7 @@
       <h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="15.5" r="5"/><path d="M10.7 15.5 9.7 4.6a2.3 2.3 0 0 1 4.6 0l-1 10.9z" fill="currentColor" stroke="none"/></svg>Try it</h3>
       <p class="small" style="margin-top:4px">These are the box's controls. Everything below on this page follows what you set here.</p>
       <div class="chips" id="pbSwitches" role="group" aria-label="Needs"></div>
-      <div class="chips" style="align-items:center"><span class="stepper" style="display:inline-flex;align-items:center;gap:6px"><button id="pbLess" aria-label="Fewer people" style="width:44px;padding:0">−</button><output id="pbPeople" style="min-width:6.5em;text-align:center;font-weight:600"></output><button id="pbMore" aria-label="More people" style="width:44px;padding:0">+</button></span></div>
+      <div class="people-step" role="group" aria-label="About how many people"><button type="button" id="pbLess" aria-label="Fewer people">−</button><output id="pbPeople" aria-live="polite"></output><button type="button" id="pbMore" aria-label="More people">+</button></div>
     </div>
   </div>
   <details class="deep"><summary><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.8 4.2a4.6 4.6 0 0 0-4 6.3l-6.3 6.3a2 2 0 0 0 2.8 2.8l6.3-6.3a4.6 4.6 0 0 0 6.2-4.5l-2.9 2.6-2.6-2.6 2.6-2.9a4.6 4.6 0 0 0-2.1-1.7z"/></svg>The detail</summary><div class="deep-body">
@@ -83,10 +83,10 @@
     <p class="plain">The radio is slow on purpose. Sending a few bytes slowly lets headquarters read a signal far too faint for a phone or a walkie-talkie, with no towers or repeaters in between.</p>
   </div></div>
   <div class="step-main">
-    <figure>
-      <svg class="diagram" id="budget" role="img" aria-label="Signal strength scale from plus 22 dBm transmitted to minus 129 dBm, the faintest signal the receiver can decode."></svg>
-      <figcaption>The receiver can decode a signal about 150 dB weaker than the one the box sends. That's a factor of a million billion.</figcaption>
+    <figure class="viz-dark">
+      <svg class="diagram" id="budget" role="img" aria-label="Signal strength scale. The box sends about plus 22 dBm. The weakest packet decoded in the field arrived at minus 122 dBm, 144 dB weaker, and still 7 dB above the radio's calculated limit of minus 129 dBm."></svg>
     </figure>
+    <p class="small" style="margin-top:12px">The receiver can still read a signal about 150 dB weaker than what the box sends: a factor of a million billion.</p>
     <div class="panel tool" data-tool="sf" style="margin-top:24px"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.6 8.6a4.8 4.8 0 0 0 0 6.8M15.4 8.6a4.8 4.8 0 0 1 0 6.8M5.7 5.7a8.9 8.9 0 0 0 0 12.6M18.3 5.7a8.9 8.9 0 0 1 0 12.6"/></svg>Why SF9? Try the others.</h3></div>
   </div>
   <details class="deep"><summary><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.6 8.6a4.8 4.8 0 0 0 0 6.8M15.4 8.6a4.8 4.8 0 0 1 0 6.8M5.7 5.7a8.9 8.9 0 0 0 0 12.6M18.3 5.7a8.9 8.9 0 0 1 0 12.6"/></svg>The detail</summary><div class="deep-body">
@@ -116,7 +116,7 @@
       <button class="primary" id="seqGo">Send a report</button>
       <label><input type="checkbox" id="seqBlock"> Block the signal for the first three copies</label>
     </div>
-    <figure style="margin-top:16px"><svg class="diagram" id="seq" role="img" aria-label="Sequence: the box sends copies of a report, headquarters confirms, the box beeps."></svg></figure>
+    <figure class="viz-dark" style="margin-top:16px"><svg class="diagram" id="seq" role="img" aria-label="Sequence: the box sends copies of a report, headquarters confirms, the box beeps."></svg></figure>
     <ol class="seq-log" id="seqLog" aria-live="polite"></ol>
   </div>
   <details class="deep"><summary><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 13.7-4.6L20 8.6M20 4v4.6h-4.6M20 13a8 8 0 0 1-13.7 4.6L4 15.4M4 20v-4.6h4.6"/></svg>The detail</summary><div class="deep-body">
@@ -188,7 +188,14 @@
 </div></footer><script>
 (() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
   b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; };
-  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true)); })();
+  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true));
+  // Graphics marked data-reveal play their entrance once, when they scroll into view.
+  const rv = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    rv.forEach(e => e.classList.add("pre"));
+    const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .35 });
+    rv.forEach(e => io.observe(e));
+  } })();
 </script>
 <script type="module" src="assets/js/system.js"></script>
 <script type="module" src="assets/js/tools.js"></script>

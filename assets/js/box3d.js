@@ -150,7 +150,7 @@ export function createBox(container, opts = {}) {
       add(g, cylZ(3.4, 3.4, 5, 20), chrome(), SWITCH_X, y, 21);
       const pivot = new THREE.Group(); pivot.position.set(SWITCH_X, y, 20.5); g.add(pivot);
       const lever = new THREE.Mesh(cylZ(3.5, 1.9, 18, 20).translate(0, 0, 9), chrome());
-      lever.scale.set(1, 0.6, 1); pivot.add(lever);
+      lever.scale.set(1, 0.6, 1); lever.userData.leverOf = i; pivot.add(lever);
       const hit = new THREE.Mesh(new THREE.BoxGeometry(26, 22, 30), new THREE.MeshBasicMaterial({ visible: false }));
       hit.position.set(SWITCH_X, y, 30); hit.userData.switch = i; g.add(hit);
       pivot.rotation.x = 0.52;                               // down
@@ -174,6 +174,7 @@ export function createBox(container, opts = {}) {
       m.rotation.z = -a;
     }
     add(knobGroup, cylZ(17, 17, 0.6, 48), black(0.25), 0, 0, 22.2);
+    add(knobGroup, cylZ(40, 40, 30, 32), new THREE.MeshBasicMaterial({ visible: false }), 0, 0, 12);   // a grab area bigger than the knob
     add(knobGroup, new RoundedBoxGeometry(3, 15, 1, 2, 0.5), std(0xf2b200, { roughness: 0.4, emissive: 0xf2b200, emissiveIntensity: 0.25 }), 0, 20.5, 5.3);
     add(knobGroup, new RoundedBoxGeometry(3, 9, 1, 2, 0.5), std(0xf2b200, { roughness: 0.4, emissive: 0xf2b200, emissiveIntensity: 0.25 }), 0, 11, 22.6);
   });
@@ -201,21 +202,26 @@ export function createBox(container, opts = {}) {
   }
   // ---------- state ----------
   let explode = 0, explodeTarget = 0, dirty = true, visible = true, selected = null, ledOn = false, ledFlash = 0, glow = 0;
-  let knobAngle = angleFor(opts.people ?? 4), knobTarget = knobAngle;
+  let knobIdx = opts.people ?? 4, knobAngle = angleFor(knobIdx), knobTarget = knobAngle;
   function angleFor(i) { return -(-150 + i * 30) * Math.PI / 180; }
   const target = new THREE.Vector3(0, 28, -30);
   const dir = new THREE.Vector3(mode === "hero" ? -0.36 : -1.25, mode === "hero" ? 0.12 : 0.3, 1).normalize();
   const dirPortrait = new THREE.Vector3(-0.5, 1.25, 1).normalize();
   camera.position.copy(target).addScaledVector(dir, 900);
-  let controls = null;
-  if (mode !== "hero") {
-    controls = new OrbitControls(camera, canvas);
-    controls.enablePan = false; controls.enableZoom = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
-    controls.minPolarAngle = 0.35; controls.maxPolarAngle = 2.2; controls.rotateSpeed = 0.7;
-    controls.target.copy(target);
-    controls.addEventListener("change", () => { dirty = true; });
-    canvas.style.touchAction = "pan-y";
-  }
+  // Orbit all the way round. Zoom with a pinch, or with the scroll wheel once you've clicked into the box,
+  // so scrolling past it on the way down the page never grabs the page.
+  const controls = new OrbitControls(camera, canvas);
+  controls.enablePan = false; controls.enableDamping = true; controls.dampingFactor = 0.08;
+  controls.minPolarAngle = 0.12; controls.maxPolarAngle = 2.5; controls.rotateSpeed = 0.75; controls.zoomSpeed = 0.9;
+  controls.enableZoom = false;
+  controls.target.copy(target);
+  controls.addEventListener("change", () => { dirty = true; });
+  controls.addEventListener("start", () => { touched = true; if (opts.onInteract) opts.onInteract(); });
+  canvas.style.touchAction = "pan-y";
+  let touched = false, fitD = 900;
+  canvas.addEventListener("pointerdown", () => { controls.enableZoom = true; });
+  canvas.addEventListener("pointerleave", () => { controls.enableZoom = false; });
+  canvas.addEventListener("wheel", e => { if (e.ctrlKey || e.metaKey) { controls.enableZoom = true; } }, { capture: true, passive: true });
   // Frame the model by measurement, not by guesswork: project its bounding box and back the camera
   // off until every corner is inside the view. Works for any explode amount and any screen shape.
   const fitBox = new THREE.Box3(), tmpBox = new THREE.Box3(), corner = new THREE.Vector3(), off = new THREE.Vector3();
@@ -229,7 +235,7 @@ export function createBox(container, opts = {}) {
       fitBox.union(tmpBox.copy(g.userData.box).translate(g.position));
     }
     fitBox.getCenter(target);
-    if (controls && wasPortrait === portrait) off.copy(camera.position).sub(controls.target).normalize();
+    if (touched && wasPortrait === portrait) off.copy(camera.position).sub(controls.target).normalize();
     else off.copy(mode === "hero" ? dir : portrait ? dirPortrait : dir).normalize();   // a tall screen looks from higher up, so the layers run corner to corner
     wasPortrait = portrait;
     const fill = mode === "hero" ? 0.94 : 0.9, padBottom = mode === "hero" ? 0 : 0.14;
@@ -241,7 +247,7 @@ export function createBox(container, opts = {}) {
       for (const g of pieces) {                                   // every piece's own corners, so a diagonal layout isn't over-estimated
         const b = g.userData.box, p = g.position;
         for (let k = 0; k < 8; k++) {
-          corner.set((k & 1 ? b.max.x : b.min.x) + p.x, (k & 2 ? b.max.y : b.min.y) + p.y + (mode === "hero" && k & 2 ? 40 : 0), (k & 4 ? b.max.z : b.min.z) + p.z).project(camera);
+          corner.set((k & 1 ? b.max.x : b.min.x) + p.x, (k & 2 ? b.max.y : b.min.y) + p.y + (mode === "hero" && k & 2 ? 14 : 0), (k & 4 ? b.max.z : b.min.z) + p.z).project(camera);
           x0 = Math.min(x0, corner.x); x1 = Math.max(x1, corner.x); y0 = Math.min(y0, corner.y); y1 = Math.max(y1, corner.y);
         }
       }
@@ -251,8 +257,11 @@ export function createBox(container, opts = {}) {
       target.addScaledVector(right, cx * d * tanH * camera.aspect).addScaledVector(up, cy * d * tanH);
       d *= Math.max((x1 - x0) / 2, (y1 - y0) / 2 / (1 - padBottom)) / fill;
     }
-    camera.position.copy(target).addScaledVector(off, d);
-    if (controls) controls.target.copy(target); else camera.lookAt(target);
+    fitD = d;
+    controls.minDistance = d * 0.32; controls.maxDistance = d * 1.7;
+    const keep = touched && mode === "hero" ? camera.position.distanceTo(controls.target) : d;
+    camera.position.copy(target).addScaledVector(off, Math.min(controls.maxDistance, Math.max(controls.minDistance, keep)));
+    controls.target.copy(target);
   }
   function resize() {
     const w = container.clientWidth, h = container.clientHeight;
@@ -281,31 +290,88 @@ export function createBox(container, opts = {}) {
     ptr.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
     ray.setFromCamera(ptr, camera);
     for (const h of ray.intersectObjects(root.children, true)) {
-      if (wantSwitch) { if (h.object.userData.switch !== undefined) return h.object.userData.switch; continue; }
+      if (wantSwitch) {
+        if (h.object.userData.switch !== undefined) return h.object.userData.switch;
+        if (h.object.userData.knob) return "knob";
+        if (h.object.userData.part === "lid" || h.object.userData.part === "overlay") return null;   // the face is in the way
+        continue;
+      }
       if (h.object.userData.part && h.object.material.visible !== false) return h.object.userData.part;
     }
     return null;
   }
-  let downAt = null;
-  canvas.addEventListener("pointerdown", e => { downAt = [e.clientX, e.clientY]; });
+  let downAt = null, turning = null;
+  // The knob turns like the real one: grab it and drag round its centre. It clicks between 11 positions.
+  const knobCentre = new THREE.Vector3();
+  function knobAngleAt(e) {
+    knobGroup.getWorldPosition(knobCentre); knobCentre.project(camera);
+    const r = canvas.getBoundingClientRect();
+    const cx = (knobCentre.x + 1) / 2 * r.width + r.left, cy = (1 - knobCentre.y) / 2 * r.height + r.top;
+    return Math.atan2(e.clientX - cx, cy - e.clientY) * 180 / Math.PI;        // 0 at twelve o'clock, clockwise
+  }
+  function knobIndexAt(e) { return Math.max(0, Math.min(10, Math.round((knobAngleAt(e) + 150) / 30))); }
+  if (mode === "hero") {
+    // A finger on a switch or the knob shouldn't scroll the page.
+    canvas.addEventListener("touchstart", e => { const t = e.touches[0]; if (e.touches.length === 1 && pick(t, true) !== null) e.preventDefault(); }, { passive: false });
+  }
+  canvas.addEventListener("pointerdown", e => {
+    downAt = [e.clientX, e.clientY];
+    if (mode === "hero" && pick(e, true) === "knob") {
+      turning = { id: e.pointerId, moved: false, start: knobIdx };
+      controls.enabled = false; canvas.setPointerCapture(e.pointerId); touched = true;
+      if (opts.onInteract) opts.onInteract();
+    }
+  });
+  canvas.addEventListener("pointermove", e => {
+    if (!turning || e.pointerId !== turning.id) return;
+    if (Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 4) turning.moved = true;
+    if (turning.moved) setKnobFromUser(knobIndexAt(e));
+  });
+  const endTurn = e => {
+    if (!turning || e.pointerId !== turning.id) return;
+    if (!turning.moved) setKnobFromUser((knobIdx + 1) % 11);                     // a tap clicks it one step on
+    turning = null; controls.enabled = true;
+  };
   canvas.addEventListener("pointerup", e => {
+    if (turning) { endTurn(e); return; }
     if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;      // a drag, not a tap
-    if (mode === "hero") { const i = pick(e, true); if (i !== null) api.setSwitch(i, !levers[i].on, true); }
+    if (mode === "hero") { const i = pick(e, true); if (typeof i === "number") api.setSwitch(i, !levers[i].on, true); }
     else { const id = pick(e, false); api.select(id === selected ? null : id, true); }
   });
+  canvas.addEventListener("pointercancel", endTurn);
+  function setKnobFromUser(i) {
+    if (i === knobIdx) return;
+    knobIdx = i; knobTarget = angleFor(i); dirty = true;
+    if (opts.onPeople) opts.onPeople(i, true);
+  }
   canvas.addEventListener("pointermove", e => {
     if (e.pointerType === "touch") return;
     if (mode === "hero") {
-      canvas.style.cursor = pick(e, true) !== null ? "pointer" : "";
-      const r = canvas.getBoundingClientRect();
-      sway.tx = ((e.clientX - r.left) / r.width - 0.5) * 0.5; sway.ty = ((e.clientY - r.top) / r.height - 0.5) * 0.18;
+      if (turning) return;
+      const hit = pick(e, true);
+      canvas.style.cursor = hit === "knob" ? "grab" : hit !== null ? "pointer" : "grab";
+      hover(hit);
     } else {
       const id = pick(e, false);
       canvas.style.cursor = id ? "pointer" : "grab";
       if (opts.onHover) opts.onHover(id);
     }
   });
-  const sway = { x: 0, y: 0, tx: 0, ty: 0 };
+  canvas.addEventListener("pointerleave", () => { if (mode === "hero") hover(null); });
+  // Hover: the switch or knob under the pointer lights up a little, so it reads as something to press.
+  let hovered = null;
+  function hover(hit) {
+    if (hit === hovered) return; hovered = hit;
+    root.traverse(o => {
+      if (!o.isMesh || !o.material.emissive) return;
+      if (o.userData.leverOf === undefined && !o.userData.knob) return;
+      const mine = hit === "knob" ? !!o.userData.knob : o.userData.leverOf === hit;
+      if (o.userData.hoverBase === undefined) { o.userData.hoverBase = o.material.emissiveIntensity; o.userData.hoverColor = o.material.emissive.getHex(); }
+      o.material.emissive.setHex(mine ? 0xf2b200 : o.userData.hoverColor);
+      o.material.emissiveIntensity = mine ? 0.35 : o.userData.hoverBase;
+    });
+    dirty = true;
+  }
 
   // ---------- labels (hardware page): HTML chips pinned to parts ----------
   const labels = [];
@@ -374,12 +440,13 @@ export function createBox(container, opts = {}) {
     idle += dt; ledFlash = Math.max(0, ledFlash - dt); glow = Math.max(0, glow - dt);
     const want = ledFlash > 0 ? 3.2 : glow > 0 || ledOn ? 1.9 : (!reduce && idle % 4 < 0.09 ? 2.2 : 0.12);
     if (Math.abs(ledMat.emissiveIntensity - want) > 0.01) { ledMat.emissiveIntensity = want; dirty = true; }
-    if (mode === "hero" && !reduce) {
-      const wob = Math.sin(now / 4200) * 0.07;
-      sway.x += (sway.tx + wob - sway.x) * Math.min(1, dt * 3); sway.y += (sway.ty - sway.y) * Math.min(1, dt * 3);
-      if (Math.abs(root.rotation.y - sway.x) > 0.0004) { root.rotation.y = sway.x; root.rotation.x = sway.y; dirty = true; }
+    if (mode === "hero" && !reduce && !touched) {
+      const want = Math.sin(now / 5200) * 0.16;                               // a slow drift until someone takes hold
+      if (Math.abs(root.rotation.y - want) > 0.0004) { root.rotation.y = want; dirty = true; }
+    } else if (mode === "hero" && root.rotation.y !== 0 && touched) {
+      root.rotation.y *= 0.9; if (Math.abs(root.rotation.y) < 0.001) root.rotation.y = 0; dirty = true;
     }
-    if (controls) controls.update();
+    controls.update();
     if (dirty) { renderer.render(scene, camera); if (labels.length) placeLabels(); dirty = false; }
   }
   const easeInOut = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
@@ -394,11 +461,15 @@ export function createBox(container, opts = {}) {
       ledOn = levers.some(l => l.on); api.pulse();
       if (opts.onSwitch) opts.onSwitch(levers.map(l => l.on), !!fromUser);
     },
-    setPeople(i) { knobTarget = angleFor(i); api.pulse(); },
+    setPeople(i) { knobIdx = i; knobTarget = angleFor(i); api.pulse(); },
+    resetView() { touched = false; wasPortrait = null; placeCamera(); dirty = true; },
+    zoom(f) { const d = camera.position.distanceTo(controls.target) * f; touched = true;
+      camera.position.sub(controls.target).setLength(Math.min(controls.maxDistance, Math.max(controls.minDistance, d))).add(controls.target); dirty = true; },
     pulse() { ledFlash = 0.14; glow = 1.4; if (reduce) return; rings.forEach((r, k) => { r.t = -k * 0.22; r.on = true; }); },
     switches: () => levers.map(l => l.on),
   };
   knobGroup.rotation.z = knobAngle;
+  knobGroup.traverse(o => { if (o.isMesh) o.userData.knob = true; });
   resize();
   requestAnimationFrame(frame);
   return api;
