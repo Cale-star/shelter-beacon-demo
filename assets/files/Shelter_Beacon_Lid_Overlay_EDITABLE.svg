@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="182.0mm" height="282.0mm" viewBox="-3.0 -3.0 182.0 282.0">
+<title>Shelter Beacon lid overlay (176 x 276 mm + 3 mm bleed). Units are mm.</title>
+<g id="artwork" inkscape:groupmode="layer" inkscape:label="Artwork" >
+<rect x="-3.0" y="-3.0" width="182.0" height="282.0" fill="#f2f4f1"/>
+<rect x="6" y="6" width="164.0" height="28" rx="4" fill="#16181a"/>
+<text x="88.00" y="20.68" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="10.5" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="0.6">避難所ビーコン</text>
+<text x="88.00" y="28.84" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.4" font-weight="600" fill="#b9bdba" text-anchor="middle" letter-spacing="0.2">Shelter Beacon</text>
+<circle cx="157.0" cy="20.0" r="7.5" fill="none" stroke="#5a5d5b" stroke-width="0.6"/>
+<text x="157.00" y="31.61" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="2.3" font-weight="600" fill="#9da19e" text-anchor="middle" letter-spacing="0">Status</text>
+<circle cx="19.0" cy="20.0" r="9" fill="none" stroke="#3a3d3b" stroke-width="0.6"/>
+<circle cx="19.00" cy="20.00" r="1.25" fill="#000"/>
+<circle cx="22.89" cy="23.89" r="1.25" fill="#000"/>
+<circle cx="15.11" cy="23.89" r="1.25" fill="#000"/>
+<circle cx="15.11" cy="16.11" r="1.25" fill="#000"/>
+<circle cx="22.89" cy="16.11" r="1.25" fill="#000"/>
+<g transform="translate(40.000 40.620) scale(0.01125)"><path fill="#16181a" d="M72 88a56 56 0 1 1 112 0A56 56 0 1 1 72 88zM64 245.7C54 256.9 48 271.8 48 288s6 31.1 16 42.3l0-84.7zm144.4-49.3C178.7 222.7 160 261.2 160 304c0 34.3 12 65.8 32 90.5l0 21.5c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-26.8C26.2 371.2 0 332.7 0 288c0-61.9 50.1-112 112-112l32 0c24 0 46.2 7.5 64.4 20.3zM448 416l0-21.5c20-24.7 32-56.2 32-90.5c0-42.8-18.7-81.3-48.4-107.7C449.8 183.5 472 176 496 176l32 0c61.9 0 112 50.1 112 112c0 44.7-26.2 83.2-64 101.2l0 26.8c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32zm8-328a56 56 0 1 1 112 0A56 56 0 1 1 456 88zM576 245.7l0 84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM320 32a64 64 0 1 1 0 128 64 64 0 1 1 0-128zM240 304c0 16.2 6 31 16 42.3l0-84.7c-10 11.3-16 26.1-16 42.3zm144-42.3l0 84.7c10-11.3 16-26.1 16-42.3s-6-31.1-16-42.3zM448 304c0 44.7-26.2 83.2-64 101.2l0 42.8c0 17.7-14.3 32-32 32l-64 0c-17.7 0-32-14.3-32-32l0-42.8c-37.8-18-64-56.5-64-101.2c0-61.9 50.1-112 112-112l32 0c61.9 0 112 50.1 112 112z"></path></g>
+<text x="50.50" y="45.74" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="6.4" font-weight="800" fill="#16181a" text-anchor="start" letter-spacing="0">人数</text>
+<text x="66.00" y="45.20" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.0" font-weight="600" fill="#16181a" text-anchor="start" letter-spacing="0">About how many people?</text>
+<circle cx="88.0" cy="92.0" r="44" fill="#fff" stroke="#c9ccc8" stroke-width="0.4"/>
+<line x1="72.50" y1="118.85" x2="70.75" y2="121.88" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="68.25" y="127.89" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">0</text>
+<line x1="61.15" y1="107.50" x2="58.12" y2="109.25" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="53.79" y="113.43" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">5</text>
+<line x1="57.00" y1="92.00" x2="53.50" y2="92.00" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="48.50" y="93.68" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">10</text>
+<line x1="61.15" y1="76.50" x2="58.12" y2="74.75" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="53.79" y="73.93" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">15</text>
+<line x1="72.50" y1="65.15" x2="70.75" y2="62.12" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="68.25" y="59.47" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">20</text>
+<line x1="88.00" y1="61.00" x2="88.00" y2="57.50" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="88.00" y="54.18" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">30</text>
+<line x1="103.50" y1="65.15" x2="105.25" y2="62.12" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="107.75" y="59.47" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">40</text>
+<line x1="114.85" y1="76.50" x2="117.88" y2="74.75" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="122.21" y="73.93" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">50</text>
+<line x1="119.00" y1="92.00" x2="122.50" y2="92.00" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="127.50" y="93.68" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">60</text>
+<line x1="114.85" y1="107.50" x2="117.88" y2="109.25" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="122.21" y="113.43" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.8" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">80</text>
+<line x1="103.50" y1="118.85" x2="105.25" y2="121.88" stroke="#16181a" stroke-width="1.1" stroke-linecap="round"/>
+<text x="107.75" y="127.68" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="4.2" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0">100+</text>
+<circle cx="88.0" cy="92.0" r="29" fill="#ebedea"/>
+<text x="88.00" y="132.51" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="2.9" font-weight="600" fill="#565c5d" text-anchor="middle" letter-spacing="0">回す<tspan dx="1.5">Turn</tspan></text>
+<text x="88.00" y="143.00" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="4.0" font-weight="700" fill="#16181a" text-anchor="middle" letter-spacing="0"><tspan fill="#bf2a1e">▲</tspan><tspan dx="1.6">必要なものはスイッチを上へ</tspan><tspan dx="4" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif">Flip up what you need</tspan></text>
+<rect x="6" y="148.0" width="164.0" height="120.0" rx="4" fill="#fff" stroke="#c9ccc8" stroke-width="0.4"/>
+<g transform="translate(13.250 155.000) scale(0.01953)"><path fill="#16181a" d="M192 512C86 512 0 426 0 320C0 228.8 130.2 57.7 166.6 11.7C172.6 4.2 181.5 0 191.1 0l1.8 0c9.6 0 18.5 4.2 24.5 11.7C253.8 57.7 384 228.8 384 320c0 106-86 192-192 192zM96 336c0-8.8-7.2-16-16-16s-16 7.2-16 16c0 61.9 50.1 112 112 112c8.8 0 16-7.2 16-16s-7.2-16-16-16c-44.2 0-80-35.8-80-80z"></path></g>
+<text x="28.00" y="159.79" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="7.4" font-weight="800" fill="#16181a" text-anchor="start" letter-spacing="0">水</text>
+<text x="28.00" y="166.62" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.5" font-weight="600" fill="#16181a" text-anchor="start" letter-spacing="0">Water<tspan dx="2.2" fill="#565c5d" font-weight="400">Drinking water</tspan></text>
+<circle cx="146.0" cy="160.0" r="9.5" fill="none" stroke="#c9ccc8" stroke-width="0.4"/>
+<text x="163.80" y="155.75" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="5.0" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">▲</text>
+<text x="163.80" y="160.56" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="3.3" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">必要</text>
+<text x="163.80" y="164.65" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.0" font-weight="700" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">Need</text>
+<line x1="6" x2="170.0" y1="172.0" y2="172.0" stroke="#c9ccc8" stroke-width="0.35"/>
+<g transform="translate(12.000 179.556) scale(0.01736)"><path fill="#16181a" d="M64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l32 0L96 32 64 32zm64 0l0 448 320 0 0-448L128 32zM512 480c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64l-32 0 0 448 32 0zM256 176c0-8.8 7.2-16 16-16l32 0c8.8 0 16 7.2 16 16l0 48 48 0c8.8 0 16 7.2 16 16l0 32c0 8.8-7.2 16-16 16l-48 0 0 48c0 8.8-7.2 16-16 16l-32 0c-8.8 0-16-7.2-16-16l0-48-48 0c-8.8 0-16-7.2-16-16l0-32c0-8.8 7.2-16 16-16l48 0 0-48z"></path></g>
+<text x="28.00" y="183.79" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="7.4" font-weight="800" fill="#16181a" text-anchor="start" letter-spacing="0">医療</text>
+<text x="28.00" y="190.62" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.5" font-weight="600" fill="#16181a" text-anchor="start" letter-spacing="0">Medical<tspan dx="2.2" fill="#565c5d" font-weight="400">Injured or sick people</tspan></text>
+<circle cx="146.0" cy="184.0" r="9.5" fill="none" stroke="#c9ccc8" stroke-width="0.4"/>
+<text x="163.80" y="179.75" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="5.0" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">▲</text>
+<text x="163.80" y="184.56" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="3.3" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">必要</text>
+<text x="163.80" y="188.65" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.0" font-weight="700" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">Need</text>
+<line x1="6" x2="170.0" y1="196.0" y2="196.0" stroke="#c9ccc8" stroke-width="0.35"/>
+<g transform="translate(12.000 203.000) scale(0.01953)"><path fill="#16181a" d="M176 56c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm24 48l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM56 176l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM0 283.4C0 268.3 12.3 256 27.4 256l457.1 0c15.1 0 27.4 12.3 27.4 27.4c0 70.5-44.4 130.7-106.7 154.1L403.5 452c-2 16-15.6 28-31.8 28l-231.5 0c-16.1 0-29.8-12-31.8-28l-1.8-14.4C44.4 414.1 0 353.9 0 283.4zM224 200c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-96 0c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm216 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zm120 96c0-13.3 10.7-24 24-24l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24zm-24-96l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24zM296 32l16 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-16 0c-13.3 0-24-10.7-24-24s10.7-24 24-24z"></path></g>
+<text x="28.00" y="207.79" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="7.4" font-weight="800" fill="#16181a" text-anchor="start" letter-spacing="0">食料</text>
+<text x="28.00" y="214.62" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.5" font-weight="600" fill="#16181a" text-anchor="start" letter-spacing="0">Food<tspan dx="2.2" fill="#565c5d" font-weight="400">Food supplies</tspan></text>
+<circle cx="146.0" cy="208.0" r="9.5" fill="none" stroke="#c9ccc8" stroke-width="0.4"/>
+<text x="163.80" y="203.75" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="5.0" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">▲</text>
+<text x="163.80" y="208.56" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="3.3" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">必要</text>
+<text x="163.80" y="212.65" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.0" font-weight="700" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">Need</text>
+<line x1="6" x2="170.0" y1="220.0" y2="220.0" stroke="#c9ccc8" stroke-width="0.35"/>
+<g transform="translate(12.000 228.000) scale(0.01562)"><path fill="#16181a" d="M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z"></path></g>
+<text x="28.00" y="231.79" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="7.4" font-weight="800" fill="#16181a" text-anchor="start" letter-spacing="0">毛布</text>
+<text x="28.00" y="238.62" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.5" font-weight="600" fill="#16181a" text-anchor="start" letter-spacing="0">Blankets<tspan dx="2.2" fill="#565c5d" font-weight="400">Bedding and tarps</tspan></text>
+<circle cx="146.0" cy="232.0" r="9.5" fill="none" stroke="#c9ccc8" stroke-width="0.4"/>
+<text x="163.80" y="227.75" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="5.0" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">▲</text>
+<text x="163.80" y="232.56" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="3.3" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">必要</text>
+<text x="163.80" y="236.65" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.0" font-weight="700" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">Need</text>
+<line x1="6" x2="170.0" y1="244.0" y2="244.0" stroke="#c9ccc8" stroke-width="0.35"/>
+<g transform="translate(12.000 251.000) scale(0.01953)"><path fill="#16181a" d="M336 448H16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h320c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zm157.2-340.7l-81-81c-6.2-6.2-16.4-6.2-22.6 0l-11.3 11.3c-6.2 6.2-6.2 16.4 0 22.6L416 97.9V160c0 28.1 20.9 51.3 48 55.2V376c0 13.2-10.8 24-24 24s-24-10.8-24-24v-32c0-48.6-39.4-88-88-88h-8V64c0-35.3-28.7-64-64-64H96C60.7 0 32 28.7 32 64v352h288V304h8c22.1 0 40 17.9 40 40v27.8c0 37.7 27 72 64.5 75.9 43 4.3 79.5-29.5 79.5-71.7V152.6c0-17-6.8-33.3-18.8-45.3zM256 192H96V64h160v128z"></path></g>
+<text x="28.00" y="255.79" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="7.4" font-weight="800" fill="#16181a" text-anchor="start" letter-spacing="0">燃料</text>
+<text x="28.00" y="262.62" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.5" font-weight="600" fill="#16181a" text-anchor="start" letter-spacing="0">Fuel<tspan dx="2.2" fill="#565c5d" font-weight="400">Generator or heater fuel</tspan></text>
+<circle cx="146.0" cy="256.0" r="9.5" fill="none" stroke="#c9ccc8" stroke-width="0.4"/>
+<text x="163.80" y="251.75" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="5.0" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">▲</text>
+<text x="163.80" y="256.56" font-family="'Noto Sans JP','Noto Sans CJK JP','Yu Gothic','Hiragino Sans',sans-serif" font-size="3.3" font-weight="800" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">必要</text>
+<text x="163.80" y="260.65" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="3.0" font-weight="700" fill="#bf2a1e" text-anchor="middle" letter-spacing="0">Need</text>
+<text x="88.00" y="273.50" font-family="'Fira Sans','Liberation Sans',Arial,sans-serif" font-size="2.0" font-weight="400" fill="#9a9e9b" text-anchor="middle" letter-spacing="0">© 2026 Cale French · prototype</text>
+</g>
+<g id="holes-(knock-out,-do-not-print)" inkscape:groupmode="layer" inkscape:label="Holes (knock out, do not print)" >
+<circle cx="157.0" cy="20.0" r="4.0" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/><circle cx="88.0" cy="92.0" r="3.75" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/><circle cx="146.0" cy="160.0" r="6.25" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/><circle cx="146.0" cy="184.0" r="6.25" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/><circle cx="146.0" cy="208.0" r="6.25" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/><circle cx="146.0" cy="232.0" r="6.25" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/><circle cx="146.0" cy="256.0" r="6.25" fill="#fff" stroke="#bf2a1e" stroke-width="0.25" stroke-dasharray="1 0.8"/>
+</g>
+<g id="cut-line" inkscape:groupmode="layer" inkscape:label="Cut line" >
+<rect x="0" y="0" width="176.0" height="276.0" rx="8.0" fill="none" stroke="#ff00ff" stroke-width="0.3" />
+</g>
+</svg>

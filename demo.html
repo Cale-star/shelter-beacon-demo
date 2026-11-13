@@ -7,7 +7,12 @@
 <meta name="description" content="Flip the switches on a shelter box and see what headquarters sees.">
 <meta property="og:title" content="Shelter Beacon: Try it">
 <meta property="og:description" content="Flip the switches on a shelter box and see what headquarters sees.">
-<meta property="og:image" content="assets/img/dashboard_3_high_priority_alarm.jpg">
+<meta property="og:image" content="https://cale-star.github.io/shelter-beacon/assets/img/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:url" content="https://cale-star.github.io/shelter-beacon/demo.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <meta name="theme-color" content="#f2f4f1" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111312" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="assets/img/favicon.svg">
@@ -160,13 +165,14 @@ footer p + p { margin-top: 6px; }
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html" aria-current=page class=cta>Try it</a></li></ul></div></header>
+<header class="nav" id="nav"><div class="wrap"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="build.html">Build one</a></li><li><a href="demo.html" aria-current=page class=cta>Try it</a></li></ul></div></header>
 <main id="main">
 <div class="page">
 <header class="intro">
   <h1>Try the box</h1>
   <p class="lead">After an earthquake takes out phones and power, a shelter leader flips a switch for each thing the shelter needs. The box radios it to headquarters. No cell service, no internet, no app.</p>
   <p class="try">Go ahead and flip a switch. To change the number of people, drag the knob or tap a number.</p>
+  <button id="btnBoxSound" class="quiet sound" aria-pressed="false">Turn on the box's beeps</button>
 </header>
 
 <div class="stage">
@@ -239,14 +245,14 @@ footer p + p { margin-top: 6px; }
 <footer class="foot dark"><div class="wrap">
 <div class="foot-brand"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a>
 <p>A switch box that lets a disaster shelter ask for help with no phones, no internet and no grid power.</p></div>
-<nav aria-label="Footer"><ul><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="demo.html">Try it</a></li>
+<nav aria-label="Footer"><ul><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="build.html">Build one</a></li><li><a href="demo.html">Try it</a></li>
 <li><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a></li></ul></nav>
 <p class="legal">Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
 &copy; 2026 Cale French. All rights reserved.</p>
-</div></footer>
-<script>
+</div></footer><script>
 (() => { const n = document.getElementById("nav"), b = document.getElementById("navToggle");
-  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; }; })();
+  b.onclick = () => { const o = n.classList.toggle("open"); b.setAttribute("aria-expanded", o); b.textContent = o ? "Close" : "Menu"; };
+  addEventListener("beforeprint", () => document.querySelectorAll("details").forEach(d => d.open = true)); })();
 </script>
 <script>
 (() => {
@@ -777,7 +783,7 @@ footer p + p { margin-top: 6px; }
     kIdx = i; demo.occ = OCC[i];
     paintKnob();
     navigator.vibrate && navigator.vibrate(8);                       // a click you can feel (Android)
-    clearTimeout(occTimer); occTimer = setTimeout(demoSend, 1500);   // send once the knob rests 1.5 s, like the firmware
+    clearTimeout(occTimer); occTimer = setTimeout(() => { longDone = false; buzz([60]); demoSend(); }, 1500);   // send once the knob rests 1.5 s, like the firmware
   }
   function paintKnob() {
     $("knob").style.transform = `rotate(${angleOf(kIdx)}deg)`;
@@ -801,8 +807,34 @@ footer p + p { margin-top: 6px; }
   const led = $("boxLed");
   function flashLed() { led.classList.add("flash"); setTimeout(() => led.classList.remove("flash"), 120); }
   hooks.onCopy.push(flashLed);
-  hooks.onWaiting = on => led.classList.toggle("waiting", on);
-  hooks.onConfirmed = () => { led.classList.add("glow"); setTimeout(() => led.classList.remove("glow"), 1500); };
+
+  // The beeper, with the real box's timings (v0.6 firmware): a 60 ms chirp when a message is queued,
+  // 60-90-60 for "headquarters got it", and one 450 ms beep the first time a message goes unconfirmed.
+  // Off until someone turns it on: a page that beeps by itself is rude.
+  let boxSound = false, longDone = false;
+  function buzz(pattern) {
+    const ctx = boxSound && audio();
+    if (!ctx) return;
+    let t = ctx.currentTime + 0.01;
+    pattern.forEach((ms, i) => {
+      if (i % 2 === 0) {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = "square"; o.frequency.value = 2300;              // an active buzzer module sits around 2.3 kHz
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.09, t + 0.004);
+        g.gain.setValueAtTime(0.09, t + ms / 1000 - 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + ms / 1000);
+        o.connect(g).connect(ctx.destination); o.start(t); o.stop(t + ms / 1000 + 0.01);
+      }
+      t += ms / 1000;
+    });
+  }
+  $("btnBoxSound").onclick = () => {
+    boxSound = !boxSound;
+    setAttr("btnBoxSound", "aria-pressed", String(boxSound));
+    setText("btnBoxSound", boxSound ? "Box beeps on" : "Turn on the box's beeps");
+    if (boxSound) buzz([60]);
+  };
+  hooks.onWaiting = on => { led.classList.toggle("waiting", on); if (on && !longDone) { longDone = true; buzz([450]); } };
+  hooks.onConfirmed = () => { led.classList.add("glow"); setTimeout(() => led.classList.remove("glow"), 1500); buzz([60, 90, 60]); };
 
   function buildBox() {
     buildKnob();
@@ -815,7 +847,7 @@ footer p + p { margin-top: 6px; }
       const b = e.target.closest("button");
       if (!b) return;
       if (b.dataset.sw) {
-        demo.sw[b.dataset.sw] = !demo.sw[b.dataset.sw]; demoSend();
+        demo.sw[b.dataset.sw] = !demo.sw[b.dataset.sw]; longDone = false; buzz([60]); demoSend();
         const nut = b.querySelector(".nut"); nut.classList.remove("snap"); void nut.offsetWidth; nut.classList.add("snap");
         navigator.vibrate && navigator.vibrate(12);
         paintBox();
