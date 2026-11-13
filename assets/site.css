@@ -797,3 +797,16 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
 .ridge-ctl button { min-width: 44px; padding: 0 12px; font-size: 1.125rem; }
 .ridge-ctl #ridgePlay { font-size: .9375rem; min-width: 5.5em; }
 @media (max-width: 700px) { .ridge-steps { align-items: flex-start; } }
+.valley-ctl { gap: 8px; }
+.valley-ctl #vBack, .valley-ctl #vNext { min-width: 44px; padding: 0 12px; font-size: 1.125rem; }
+.valley-ctl .v-scrub { margin-left: 8px; }
+
+/* ---- step 4 in 3D ---- */
+.seq3d { position: relative; margin-top: 16px; aspect-ratio: 16 / 10; border-radius: var(--r-l); overflow: hidden; background: radial-gradient(90% 80% at 50% 35%, #1f2322, #0f1110 80%); }
+.s-name, .s-tag, .s-count { position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap; }
+.s-name { font-weight: 700; font-size: .9375rem; color: #eef0ed; }
+.s-tag { font-size: .8125rem; font-weight: 600; color: #eef0ed; padding: 3px 9px; border-radius: 99px; background: rgba(22, 24, 26, .85); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22); }
+.s-tag.bad { color: #ff8a7d; box-shadow: inset 0 0 0 1.5px #ff6a5b; }
+.s-tag.amb { color: #f2b200; box-shadow: inset 0 0 0 1.5px #f2b200; }
+.s-count { font-size: .875rem; font-weight: 700; color: #16181a; background: #f2b200; padding: 5px 12px; border-radius: 99px; font-variant-numeric: tabular-nums; }
+@media (max-width: 700px) { .seq3d { aspect-ratio: 4 / 3.4; margin-left: -8px; margin-right: -8px; } }

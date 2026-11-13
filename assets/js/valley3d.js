@@ -141,6 +141,10 @@ export function createValley(stage, { onTime, onPick } = {}) {
   }
 
   // ---------- time ----------
+  let hold = 0, lastText = "";
+  const HOLD = 4.2, CRAWL = .12, CRUISE = 2.2;          // seconds per caption; hours per second while reading, and between events
+  // every moment a caption changes: an event, or a late report finally getting through
+  const KEYS = [...new Set(EVENTS.flatMap(e => e.late ? [e.t, e.t + e.late] : [e.t]))].sort((a, b) => a - b);
   let T = 0, playing = false, heard = stateAt(0, true), set = stateAt(0, false), dirty = true, visible = true, last = 0, clock = 0;
   function apply(prev) {
     heard = stateAt(T, true); set = stateAt(T, false);
@@ -152,6 +156,7 @@ export function createValley(stage, { onTime, onPick } = {}) {
     }
     let cur = null, text = "The earthquake. Phones, power and roads are down. Every box reports how many people it has.";
     for (const e of EVENTS) { if (e.t <= T) { cur = e; text = e.say; } if (e.late && e.t + e.late <= T && cur === e) text = e.then; }
+    if (text !== lastText) { lastText = text; if (playing) hold = HOLD; }      // a new caption: slow right down so it can be read
     onTime && onTime(T, ranking(), text, cur ? cur.s : 0);
     dirty = true;
   }
@@ -181,7 +186,7 @@ export function createValley(stage, { onTime, onPick } = {}) {
     requestAnimationFrame(frame);
     const dt = Math.min(.05, (now - last) / 1000); last = now; clock += dt;
     if (!visible) return;
-    if (playing) { const p = T; T = Math.min(T_MAX, T + dt * 1.9); apply(p); if (T >= T_MAX) { playing = false; onTime && onTime(T, ranking(), "Seventy-two hours in. Every request was heard and ranked without a phone line or a power line.", 0, true); } }
+    if (playing) { const p = T; const rate = hold > 0 ? CRAWL : CRUISE; hold -= dt; T = Math.min(T_MAX, T + dt * rate); apply(p); if (T >= T_MAX) { playing = false; onTime && onTime(T, ranking(), "Seventy-two hours in. Every request was heard and ranked without a phone line or a power line.", 0, true); } }
     for (const m of marks) {
       const want = m.waiting ? (clock % 1.1 < .16 || (clock % 1.1 > .3 && clock % 1.1 < .46) ? C.MEDIUM : 0x3a3f3d) : C[m.level];
       if (m.lamp.material.color.getHex() !== want) { m.lamp.material.color.setHex(want); dirty = true; }
@@ -208,6 +213,11 @@ export function createValley(stage, { onTime, onPick } = {}) {
     get playing() { return playing; },
     play() { if (T >= T_MAX) { T = 0; apply(); } playing = true; },
     pause() { playing = false; },
+    jump(d) {                                                 // to the previous or next event, paused there
+      playing = false;
+      const k = d > 0 ? KEYS.find(t => t > T + .01) : [...KEYS].reverse().find(t => t < T - .3);
+      const to = k === undefined ? (d > 0 ? T_MAX : 0) : k + .05, p = T; T = to; apply(to > p && to - p < 12 ? p : undefined);
+    },
     seek(t) { const p = T; T = Math.max(0, Math.min(T_MAX, t)); apply(t > p && t - p < 3 ? p : undefined); },
     highlight(id) { marks.forEach(m => m.el.classList.toggle("sel", m.s.id === id)); },
   };

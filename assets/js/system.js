@@ -132,14 +132,44 @@ async function play() {
   side(y, "two quick beeps");
   addLog((tSend + 0.5).toFixed(1) + " s", "Two quick beeps and a steady glow: headquarters got it.");
 }
-$("seqGo").onclick = play;
-$("seqBlock").onchange = play;
+// The 3D version, when the browser can draw it. It tells the same story at a pace you can read.
+let S3 = null;
+try {
+  const { createSeq } = await import("./seq3d.js");
+  const host = document.createElement("div"); host.className = "seq3d"; host.id = "seq3d";
+  seq.closest("figure").before(host); S3 = createSeq(host);
+  seq.closest("figure").hidden = true;
+} catch (e) { S3 = null; console.error("seq3d", e); document.getElementById("seq3d")?.remove(); }
+async function play3d() {
+  const me = ++run, blocked = $("seqBlock").checked, alive = () => me === run;
+  S3.reset(blocked); log.textContent = "";
+  addLog("0.0 s", "Someone flips Water up. The box chirps once."); await S3.flip(); if (!alive()) return;
+  if (blocked) {
+    for (let k = 1; k <= 3; k++) {
+      addLog((0.1 + (k - 1) * 0.7).toFixed(1) + " s", `Copy ${k} is sent and never arrives.`);
+      await S3.copy(k, true); if (!alive()) return;
+    }
+    addLog("2.4 s", "No answer. The box gives one long beep and its light starts double-blinking.");
+    await S3.longBeep(); if (!alive()) return;
+    await S3.retry(5); if (!alive()) return;
+  }
+  const tSend = blocked ? 7.4 : 0.1;
+  addLog(tSend.toFixed(1) + " s", "A copy arrives. Headquarters updates the dashboard.");
+  await S3.copy(1, false); if (!alive()) return;
+  addLog((tSend + 0.4).toFixed(1) + " s", "Headquarters confirms. The box stops sending the other copies.");
+  await S3.ack(); if (!alive()) return;
+  addLog((tSend + 0.5).toFixed(1) + " s", "Two quick beeps and a steady glow: headquarters got it.");
+  await S3.twoBeeps();
+}
+const go = () => (S3 ? play3d() : play());
+$("seqGo").onclick = go;
+$("seqBlock").onchange = go;
 mq.addEventListener("change", play);
 baseSeq(false);
 if ("IntersectionObserver" in window) {
-  const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); play(); } }, { threshold: 0.5 });
-  io.observe(seq);
-} else play();
+  const io = new IntersectionObserver(es => { if (es[0].isIntersecting) { io.disconnect(); go(); } }, { threshold: 0.5 });
+  io.observe(S3 ? $("seq3d") : seq);
+} else go();
 
 // ---------- the signal drop: what the box sends, what arrives behind the ridge, and how much was left over ----------
 function budget() {
