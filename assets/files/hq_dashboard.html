@@ -716,9 +716,11 @@ details.raw pre {
           if (!demo.on) return;
           hooks.onCopy.forEach(f => f());
           if (Date.now() < demo.dropUntil) {                     // lost: the signal is down
+            hooks.onCopyOutcome && hooks.onCopyOutcome(true);
             if (k === COPIES - 1) hooks.onWaiting && hooks.onWaiting(true);
             return;
           }
+          hooks.onCopyOutcome && hooks.onCopyOutcome(false);
           const rssi = Math.round(-88 + (Math.random() * 6 - 3));
           const snr = Math.round((8 + Math.random() * 4 - 2) * 4) / 4;
           parseLine(`${Date.now() - demo.start},${payload},${rssi.toFixed(2)},${snr.toFixed(2)}`);

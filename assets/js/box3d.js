@@ -201,7 +201,7 @@ export function createBox(container, opts = {}) {
     root.add(m); rings.push({ m, t: 0, on: false });
   }
   // ---------- state ----------
-  let explode = 0, explodeTarget = 0, dirty = true, visible = true, selected = null, ledOn = false, ledFlash = 0, glow = 0;
+  let explode = 0, explodeTarget = 0, dirty = true, visible = true, selected = null, ledOn = false, ledFlash = 0, glow = 0, waiting = false;
   let knobIdx = opts.people ?? 4, knobAngle = angleFor(knobIdx), knobTarget = knobAngle;
   function angleFor(i) { return -(-150 + i * 30) * Math.PI / 180; }
   const target = new THREE.Vector3(0, 28, -30);
@@ -438,7 +438,8 @@ export function createBox(container, opts = {}) {
     }
     // status light: steady when a need is on, a blink when sending, a slow "alive" blip otherwise
     idle += dt; ledFlash = Math.max(0, ledFlash - dt); glow = Math.max(0, glow - dt);
-    const want = ledFlash > 0 ? 3.2 : glow > 0 || ledOn ? 1.9 : (!reduce && idle % 4 < 0.09 ? 2.2 : 0.12);
+    const wph = idle % 2, dbl = wph < 0.12 || (wph > 0.26 && wph < 0.38);        // double-blink while still waiting for an answer
+    const want = ledFlash > 0 ? 3.2 : glow > 0 ? 2.4 : waiting ? (dbl ? 2.4 : 0.12) : ledOn ? 1.9 : (!reduce && idle % 4 < 0.09 ? 2.2 : 0.12);
     if (Math.abs(ledMat.emissiveIntensity - want) > 0.01) { ledMat.emissiveIntensity = want; dirty = true; }
     if (mode === "hero" && !reduce && !touched) {
       const want = Math.sin(now / 5200) * 0.16;                               // a slow drift until someone takes hold
@@ -458,10 +459,13 @@ export function createBox(container, opts = {}) {
     setSwitch(i, on, fromUser) {
       const L = levers[i]; if (L.on === on) return;
       L.on = on; L.from = L.pivot.rotation.x; L.to = on ? -0.52 : 0.52; L.t = 0;
-      ledOn = levers.some(l => l.on); api.pulse();
+      ledOn = levers.some(l => l.on); if (!opts.driven) api.pulse();
       if (opts.onSwitch) opts.onSwitch(levers.map(l => l.on), !!fromUser);
     },
-    setPeople(i) { knobIdx = i; knobTarget = angleFor(i); api.pulse(); },
+    setPeople(i) { knobIdx = i; knobTarget = angleFor(i); if (!opts.driven) api.pulse(); },
+    flash() { ledFlash = 0.14; if (reduce) return; rings.forEach((r, k) => { r.t = -k * 0.22; r.on = true; }); },
+    confirm() { glow = 1.5; waiting = false; },
+    setWaiting(on) { waiting = on; },
     resetView() { touched = false; wasPortrait = null; placeCamera(); dirty = true; },
     zoom(f) { const d = camera.position.distanceTo(controls.target) * f; touched = true;
       camera.position.sub(controls.target).setLength(Math.min(controls.maxDistance, Math.max(controls.minDistance, d))).add(controls.target); dirty = true; },
