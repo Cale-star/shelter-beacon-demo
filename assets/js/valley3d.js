@@ -171,8 +171,24 @@ export function createValley(stage, { onTime, onPick } = {}) {
     const w = stage.clientWidth, h = stage.clientHeight; if (!w || !h) return;
     renderer.setSize(w, h, false); renderer.domElement.style.cssText = "position:absolute;inset:0;width:100%;height:100%";
     camera.aspect = w / h;
-    const dist = Math.max(150, 128 / (2 * Math.tan(camera.fov * Math.PI / 360) * camera.aspect) * 1.02);   // fit the valley's width
-    camera.position.set(-18, 0, 0).add(new THREE.Vector3(-.12, .62, .78).normalize().multiplyScalar(dist)); camera.lookAt(tgt);
+    // Fit by measurement: every shelter's light (with room for its label), headquarters, and the land's corners
+    // must land inside the frame, whatever shape the screen is.
+    const narrow = camera.aspect < 1.25;
+    const dir = new THREE.Vector3(-.12, narrow ? .9 : .62, narrow ? .62 : .78).normalize();
+    const pts = [...marks.map(m => m.top.clone().add(new THREE.Vector3(0, 7, 0))), hqTop.clone().add(new THREE.Vector3(0, 7, 0))];
+    for (const x of [-58, -30, 0, 30, 58]) for (const z of [-38, 0, 30]) pts.push(new THREE.Vector3(x, Math.max(0, height(x, z)), z));
+    const tanH = Math.tan(camera.fov * Math.PI / 360), right = new THREE.Vector3(), upv = new THREE.Vector3(), q = new THREE.Vector3();
+    const fill = narrow ? .84 : .9;
+    tgt.set(-4, 0, 0); let d = 200;
+    for (let pass = 0; pass < 5; pass++) {
+      camera.position.copy(tgt).addScaledVector(dir, d); camera.lookAt(tgt); camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+      let x0 = 9, x1 = -9, y0 = 9, y1 = -9;
+      for (const p of pts) { q.copy(p).project(camera); x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y); }
+      right.setFromMatrixColumn(camera.matrixWorld, 0); upv.setFromMatrixColumn(camera.matrixWorld, 1);
+      tgt.addScaledVector(right, (x0 + x1) / 2 * d * tanH * camera.aspect).addScaledVector(upv, (y0 + y1) / 2 * d * tanH);
+      d *= Math.max((x1 - x0) / 2, (y1 - y0) / 2) / fill;
+    }
+    camera.position.copy(tgt).addScaledVector(dir, d); camera.lookAt(tgt);
     camera.updateProjectionMatrix(); dirty = true;
   }
   new ResizeObserver(resize).observe(stage);
