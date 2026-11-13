@@ -5,13 +5,13 @@ import * as THREE from "three";
 
 const STEPS = [
   { t: 0.0, say: "Someone at the shelter flips Water up. The box chirps once." },
-  { t: 1.0, say: "Copy 1 leaves the antenna. It's on air for about a third of a second." },
-  { t: 2.3, say: "It clears the ridge. No towers, no repeaters: the cell tower in the valley is down anyway." },
-  { t: 3.0, say: "Headquarters hears it. The dashboard now reads \"needs water\"." },
-  { t: 3.6, say: "Headquarters answers \"got report 42\", and the box stops sending the other copies." },
-  { t: 5.0, say: "Two quick beeps at the shelter. The person who flipped the switch knows it arrived." },
+  { t: 4.0, say: "Copy 1 leaves the antenna. It's on air for about a third of a second." },
+  { t: 7.5, say: "It clears the ridge. No towers, no repeaters: the cell tower in the valley is down anyway." },
+  { t: 10.5, say: "Headquarters hears it. The dashboard now reads \"needs water\"." },
+  { t: 14, say: "Headquarters answers \"got report 42\", and the box stops sending the other copies." },
+  { t: 17, say: "Two quick beeps at the shelter. The person who flipped the switch knows it arrived." },
 ];
-const LOOP = 9.5;
+const LOOP = 22;   // each caption gets three to four seconds
 
 const W = 170, D = 34, BASE = -14;
 const g = (x, c, w) => Math.exp(-(((x - c) / w) ** 2));
@@ -167,7 +167,7 @@ export function createRidge(stage, { onStep } = {}) {
     camera.position.copy(target).addScaledVector(dir, dist); camera.lookAt(target);
     camera.updateProjectionMatrix(); dirty = true;
   }
-  let dirty = true, visible = true, clock = reduce ? 6.2 : 0, last = 0, step = -1;
+  let dirty = true, visible = true, clock = reduce ? 17.9 : 0, last = 0, step = -1;
   new ResizeObserver(resize).observe(stage);
   new IntersectionObserver(es => { visible = es[0].isIntersecting; }, { threshold: .2 }).observe(stage);
 
@@ -175,20 +175,20 @@ export function createRidge(stage, { onStep } = {}) {
   const ease = t => t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
   function show(t) {
     // shelter light: on once the switch flips; a double blink for "headquarters got it"
-    const beep = t > 5 && t < 5.6 && ((t - 5) % .3) < .15;
-    shMast.lamp.material.color.setHex(t < .2 ? OFF : beep ? WHITE : AMBER);
+    const beep = t > 17 && t < 17.6 && ((t - 17) % .3) < .15;
+    shMast.lamp.material.color.setHex(t < .3 ? OFF : beep ? WHITE : AMBER);
     shMast.lamp.scale.setScalar(beep ? 1.5 : 1);
-    // copy 1 out: 1.0 to 3.0 s
-    const a = Math.min(1, Math.max(0, (t - 1) / 2)), n = Math.floor(ease(a) * 120);
+    // copy 1 out: 4.0 to 10.5 s
+    const a = Math.min(1, Math.max(0, (t - 4) / 6.5)), n = Math.floor(ease(a) * 120);
     out.line.geometry.setDrawRange(0, a > 0 ? n + 1 : 0); out.dot.visible = a > 0 && a < 1; out.dot.position.copy(up[n]);
-    out.line.material.opacity = t > 6.5 ? Math.max(0, .9 - (t - 6.5)) : .9;
-    rings.forEach((r, k) => { const q = (t - 1 - k * .18) / 1.2; r.material.opacity = q > 0 && q < 1 ? .7 * (1 - q) : 0; r.scale.setScalar(2 + q * 12); r.lookAt(camera.position); });
+    out.line.material.opacity = t > 20.5 ? Math.max(0, .9 - (t - 20.5)) : .9;
+    rings.forEach((r, k) => { const q = (t - 4 - k * .18) / 1.2; r.material.opacity = q > 0 && q < 1 ? .7 * (1 - q) : 0; r.scale.setScalar(2 + q * 12); r.lookAt(camera.position); });
     // headquarters lights at 3.0
-    hqMast.lamp.material.color.setHex(t > 3 ? AMBER : OFF); hqMast.lamp.scale.setScalar(t > 3 && t < 3.4 ? 1.6 : 1);
+    hqMast.lamp.material.color.setHex(t > 10.5 ? AMBER : OFF); hqMast.lamp.scale.setScalar(t > 10.5 && t < 11.1 ? 1.6 : 1);
     // the confirmation back: 3.6 to 5.0
-    const b = Math.min(1, Math.max(0, (t - 3.6) / 1.4)), m = Math.floor(ease(b) * 120);
+    const b = Math.min(1, Math.max(0, (t - 14) / 3)), m = Math.floor(ease(b) * 120);
     ack.line.geometry.setDrawRange(0, b > 0 ? m + 1 : 0); ack.dot.visible = b > 0 && b < 1; ack.dot.position.copy(back[m]);
-    ack.line.material.opacity = t > 6.5 ? Math.max(0, .9 - (t - 6.5)) : .9;
+    ack.line.material.opacity = t > 20.5 ? Math.max(0, .9 - (t - 20.5)) : .9;
     let s = 0; STEPS.forEach((x, i) => { if (t >= x.t) s = i; });
     if (s !== step) { step = s; onStep && onStep(s, STEPS[s].say, STEPS.length); }
     dirty = true;
@@ -197,10 +197,18 @@ export function createRidge(stage, { onStep } = {}) {
     requestAnimationFrame(frame);
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     if (!visible) return;
-    if (!reduce) { clock = (clock + dt) % LOOP; show(clock); }
+    if (!reduce && !paused) { clock = (clock + dt) % LOOP; show(clock); }
     if (!dirty) return; dirty = false;
     renderer.render(scene, camera); placeLabels();
   }
   resize(); show(clock); requestAnimationFrame(frame);
-  return { steps: STEPS, seek(i) { clock = STEPS[i].t + .01; show(clock); } };
+  let paused = false;
+  // Stepping by hand shows the end of a step, so its result is on screen while you read it.
+  const settle = i => i < STEPS.length - 1 ? STEPS[i + 1].t - .05 : 17.9;
+  return {
+    steps: STEPS,
+    get paused() { return paused; },
+    pause() { paused = true; }, play() { paused = false; },
+    step(d) { paused = true; const i = (step + d + STEPS.length) % STEPS.length; clock = settle(i); show(clock); },
+  };
 }

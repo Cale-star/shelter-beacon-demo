@@ -97,9 +97,15 @@ function drawRidge() {
 }
 // The 3D cut-away; the flat drawing is only the fallback when WebGL isn't there.
 try {
-  createRidge(document.getElementById("ridgeStage"), {
+  const ridge = createRidge(document.getElementById("ridgeStage"), {
     onStep: (i, say, n) => { document.getElementById("ridgeSay").textContent = say; document.getElementById("ridgeN").textContent = `${i + 1} of ${n}`; },
   });
+  const rp = document.getElementById("ridgePlay");
+  const setPlay = () => { rp.textContent = ridge.paused ? "Play" : "Pause"; };
+  rp.onclick = () => { ridge.paused ? ridge.play() : ridge.pause(); setPlay(); };
+  document.getElementById("ridgeBack").onclick = () => { ridge.step(-1); setPlay(); };
+  document.getElementById("ridgeNext").onclick = () => { ridge.step(1); setPlay(); };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { ridge.pause(); setPlay(); }
 } catch (e) {
   svg.hidden = false; document.querySelector(".ridge-steps").hidden = true;
   drawRidge(); mq.addEventListener("change", drawRidge);

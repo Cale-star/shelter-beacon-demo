@@ -791,3 +791,9 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
   .demo3d { position: static; }
   .demo3d .stage3d { height: 62vh; min-height: 380px; margin: 0 -8px; }
 }
+.ridge-steps { align-items: center; }
+.ridge-steps p { flex: 1; }
+.ridge-ctl { display: flex; gap: 6px; flex: none; }
+.ridge-ctl button { min-width: 44px; padding: 0 12px; font-size: 1.125rem; }
+.ridge-ctl #ridgePlay { font-size: .9375rem; min-width: 5.5em; }
+@media (max-width: 700px) { .ridge-steps { align-items: flex-start; } }
