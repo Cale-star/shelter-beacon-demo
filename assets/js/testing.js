@@ -5,8 +5,14 @@ const svg = document.getElementById("chart"), tip = document.getElementById("tip
 const mq = matchMedia("(max-width: 700px)");
 const tMax = pk[pk.length - 1][0], yHi = -10, yLo = -135, FLOOR = -129;
 const minus = v => String(v).replace("-", "−");
-let gap = [0, 0];                                                              // the longest silence between two packets
-for (let i = 1; i < pk.length; i++) if (pk[i][0] - pk[i - 1][0] > gap[1] - gap[0]) gap = [pk[i - 1][0], pk[i][0]];
+// Silences over a minute. If the packet number went backwards across one, the carried board restarted:
+// that's a reboot, not the radio, so it's drawn and labelled differently.
+const gaps = [];
+for (let i = 1; i < pk.length; i++) if (pk[i][0] - pk[i - 1][0] > 60) gaps.push({ a: pk[i - 1][0], b: pk[i][0], reset: pk[i][1] < pk[i - 1][1], lost: pk[i][1] - pk[i - 1][1] - 1 });
+const gap = (() => { const g = gaps.filter(g => !g.reset).sort((p, q) => (q.b - q.a) - (p.b - p.a))[0]; return [g.a, g.b, g.lost]; })();
+const restart = gaps.find(g => g.reset);
+// short dropouts: missing numbers between packets less than a minute apart
+const drops = []; for (let i = 1; i < pk.length; i++) { const m = pk[i][1] - pk[i - 1][1] - 1; if (m > 0 && pk[i][0] - pk[i - 1][0] <= 60) drops.push(m); }
 const weak = pk.reduce((a, b) => b[2] < a[2] ? b : a);
 let G = null, played = 0, playing = false;
 
@@ -24,10 +30,16 @@ function draw() {
   const mins = ((gap[1] - gap[0]) / 60).toFixed(1);
   if (n) {
     h += `<text x="${x(gap[1]) + 8}" y="${T + 20}" font-size="${fs}" font-weight="700" fill="var(--ink)">${mins} min of nothing</text>`;
-    h += `<text x="${x(gap[1]) + 8}" y="${T + 40}" font-size="${fs}" fill="var(--ink-2)">186 lost in a row</text>`;
+    h += `<text x="${x(gap[1]) + 8}" y="${T + 40}" font-size="${fs}" fill="var(--ink-2)">${gap[2]} lost in a row</text>`;
   } else {
     h += `<text x="${(x(gap[0]) + x(gap[1])) / 2}" y="${T + 26}" text-anchor="middle" font-size="15" font-weight="700" fill="var(--ink)">nothing for ${mins} minutes</text>`;
-    h += `<text x="${(x(gap[0]) + x(gap[1])) / 2}" y="${T + 46}" text-anchor="middle" font-size="14" fill="var(--ink-2)">186 packets lost in a row</text>`;
+    h += `<text x="${(x(gap[0]) + x(gap[1])) / 2}" y="${T + 46}" text-anchor="middle" font-size="14" fill="var(--ink-2)">${gap[2]} packets lost in a row</text>`;
+  }
+  if (restart) {
+    const rx = x(restart.a), rw = x(restart.b) - rx, rm = ((restart.b - restart.a) / 60).toFixed(1);
+    h += `<rect x="${rx}" y="${T}" width="${rw}" height="${B - T}" fill="var(--ink)" fill-opacity=".08"/>`;
+    h += `<text x="${rx - 8}" y="${T + (n ? 20 : 26)}" text-anchor="end" font-size="${n ? fs : 15}" font-weight="700" fill="var(--ink)">board restarted</text>`;
+    h += `<text x="${rx - 8}" y="${T + (n ? 40 : 46)}" text-anchor="end" font-size="${n ? fs : 14}" fill="var(--ink-2)">${rm} min, not the radio</text>`;
   }
   h += `<line x1="${L}" x2="${R}" y1="${y(FLOOR)}" y2="${y(FLOOR)}" stroke="var(--ink-2)" stroke-width="1.5" stroke-dasharray="5 5"/>`;
   h += `<text x="${R}" y="${y(FLOOR) + (n ? 17 : -7)}" text-anchor="end" font-size="${fs}" fill="var(--ink-2)">${n ? "limit" : "calculated limit"}, −129 dBm</text>`;
@@ -55,8 +67,8 @@ function replay() {
     const t = played * tMax, X = G.x(t), r = svg.querySelector("#revealR"), head = svg.querySelector("#head");
     r.setAttribute("width", played >= 1 ? G.W : X + 3);
     head.setAttribute("x1", X); head.setAttribute("x2", X); head.setAttribute("visibility", played < 1 ? "visible" : "hidden");
-    const got = pk.filter(p => p[0] <= t).length, inGap = t > gap[0] && t < gap[1];
-    clock.textContent = played < 1 ? `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")} into the walk, ${got} packets heard${inGap ? ". Nothing is getting through." : ""}` : `All ${pk.length} packets heard in 41 minutes.`;
+    const got = pk.filter(p => p[0] <= t).length, inGap = t > gap[0] && t < gap[1], inRestart = restart && t > restart.a && t < restart.b;
+    clock.textContent = played < 1 ? `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")} into the walk, ${got} packets heard${inGap ? ". Nothing is getting through." : inRestart ? ". The carried board is restarting." : ""}` : `All ${pk.length} packets heard in 41 minutes.`;
     clock.classList.toggle("bad", inGap && played < 1);
     if (played < 1) requestAnimationFrame(step); else { playing = false; replayBtn.disabled = false; }
   })(t0);
@@ -84,11 +96,13 @@ function hide() { tip.classList.remove("on"); const d = svg.querySelector("#hove
 svg.addEventListener("pointermove", show); svg.addEventListener("pointerdown", show); svg.addEventListener("pointerleave", hide);
 
 // the table view
-const lost = pk.slice(1).reduce((s, p, i) => s + Math.max(0, p[1] - pk[i][1] - 1), 0);
 const rows = [
-  ["Packets received", pk.length], ["Packets missed (gaps in the numbering)", lost],
+  ["Packets received", pk.length],
+  ["Missed in short dropouts", `${drops.reduce((a, b) => a + b, 0)}, in ${drops.length} dropouts (longest ${Math.max(...drops)} in a row)`],
+  ["Missed in the long blackout", gap[2]],
   ["Length of the test", Math.round(tMax / 60) + " min"], ["Strongest signal", minus(Math.max(...pk.map(p => p[2]))) + " dBm"],
   ["Weakest signal decoded", minus(weak[2]) + " dBm"], ["Lowest signal-to-noise decoded", minus(Math.min(...pk.map(p => p[3]))) + " dB"],
   ["Longest silence", Math.round((gap[1] - gap[0]) / 60 * 10) / 10 + " min"],
+  ...(restart ? [["Board restart (count went back to zero)", Math.round((restart.b - restart.a) / 60 * 10) / 10 + " min"]] : []),
 ];
 document.getElementById("statRows").innerHTML = rows.map(r => `<tr><th>${r[0]}</th><td>${r[1]}</td></tr>`).join("");

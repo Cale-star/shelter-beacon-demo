@@ -34,7 +34,7 @@
   <div class="chart" id="chartWrap">
     <p class="chart-title">Signal strength of every packet received</p>
     <p class="chart-sub">dBm, over the 41 minutes of the test. Lower is weaker.</p>
-    <svg id="chart" role="img" aria-label="Scatter chart of received signal strength over time, with a six-minute gap where no packets arrived."></svg>
+    <svg id="chart" role="img" aria-label="Scatter chart of received signal strength over time, with a 6.8-minute gap where no packets arrived and a 3.7-minute gap where the carried board restarted."></svg>
     <div class="tip" id="tip"></div>
     <div class="replay-row"><button type="button" id="replay"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11a8 8 0 0 1 13.7-4.6L20 8.6M20 4v4.6h-4.6M20 13a8 8 0 0 1-13.7 4.6L4 15.4M4 20v-4.6h4.6"/></svg>Replay the walk</button><p id="replayClock" aria-live="off"></p></div>
   </div>
@@ -46,8 +46,9 @@
 <section class="block"><div class="wrap">
   <h2 class="say">What it showed.</h2>
   <ul class="facts">
-    <li><b>4.3%</b><p>of packets vanished at random once the signal dropped below −100 dBm: 26 of 602. No pattern, no warning. One lost packet could have been the one that said "medical."<small>Outside the long gap</small></p></li>
-    <li><b>6.8 min</b><p>with nothing at all. Behind terrain the link didn't fade, it stopped, and 186 packets in a row were lost.<small>The shaded band in the chart</small></p></li>
+    <li><b>7.5%</b><p>of packets vanished once the signal got down to −100 dBm or weaker: 49 of 651. They went missing in 26 dropouts, most of them one packet, the longest ten in a row. No warning. One lost packet could have been the one that said "medical."<small>Outside the two long gaps</small></p></li>
+    <li><b>6.8 min</b><p>with nothing at all. Behind terrain the link didn't fade, it stopped, and 186 packets in a row were lost.<small>The red band in the chart</small></p></li>
+    <li><b>3.7 min</b><p>of silence later in the walk, but this one wasn't the radio. The carried board restarted: its packet count went back to zero. Why it restarted wasn't logged.<small>The grey band in the chart</small></p></li>
     <li><b>−122 dBm</b><p>was the weakest packet still decoded, about 7 dB above the calculated limit of −129 dBm. The radio performs close to what the maths predicts.<small>Sensitivity = −174 + 10·log₁₀(125 kHz) + 6 dB noise figure − 12.5 dB</small></p></li>
   </ul>
 </div></section>
@@ -56,13 +57,13 @@
   <div>
     <h2 class="say">What changed because of it.</h2>
     <div class="prose" style="margin-top:20px">
-      <p><b>Every report is now sent three times.</b> If losses are independent, the chance of losing all three copies is 0.043 × 0.043 × 0.043, about 1 in 12,500. That takes delivery from 95.7% to roughly 99.99% for three times the airtime.</p>
-      <p><b>Then headquarters started answering.</b> Copies can't cross a seven-minute blackout. So the box now waits for a confirmation, and if none comes it retries after 5, 15 and 30 seconds, then every minute, until it gets through.</p>
+      <p><b>Every report is now sent three times.</b> Eighteen of the 26 dropouts were a single packet, and a second copy half a second later should get past those. But losses came in bunches, so the copies don't fail independently, and I won't put a percentage on it until a test counts them.</p>
+      <p><b>Then headquarters started answering.</b> Copies can't cross a 22-second dropout, let alone a seven-minute blackout. So the box now waits for a confirmation, and if none comes it retries after 5, 15 and 30 seconds, then every minute, until it gets through.</p>
       <p><b>The box only talks when something changes.</b> A packet every two seconds wasted battery and airtime to say nothing new.</p>
     </div>
   </div>
   <div>
-    <p class="note-box"><b>What this test can't tell you.</b> It didn't record distance, so there's no range figure here and I won't quote one. The "99.99%" is a prediction that assumes losses are independent. The confirm-and-retry firmware compiles and passes its simulated tests, and still needs time on real radios.</p>
+    <p class="note-box"><b>What this test can't tell you.</b> It didn't record distance, so there's no range figure here and I won't quote one. How often three copies get through is still unmeasured. The confirm-and-retry firmware compiles and passes its simulated tests, and still needs time on real radios.</p>
     <table class="spec" style="margin-top:24px">
       <thead><tr><th>Checked so far</th><th>Result</th></tr></thead>
       <tbody>
@@ -81,7 +82,7 @@
   <div class="split" style="margin-top:20px">
     <div class="prose">
       <p>The box will send a full three-copy report every five seconds while a phone riding with it records a GPS track. Afterwards a script joins every packet to a position.</p>
-      <p>That gives three things this page is missing: how far it reaches, how delivery falls off with distance, and whether three copies really behave the way the prediction says.</p>
+      <p>That gives three things this page is missing: how far it reaches, how delivery falls off with distance, and how often three copies get through when single packets don't.</p>
       <p>This section will be replaced with the coverage map and the measured numbers, whatever they turn out to be.</p>
     </div>
     <dl class="reqs" style="margin-top:0">

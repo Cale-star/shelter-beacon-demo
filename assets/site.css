@@ -235,8 +235,8 @@ table.spec { width: 100%; border-collapse: collapse; font-size: .9375rem; }
 .spec thead th { color: var(--ink); font-weight: 700; }
 
 /* ---- home hero ---- */
-.hero { position: relative; overflow: hidden; }
-.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "copy stage" "ctl stage"; grid-template-rows: auto auto; column-gap: 24px; align-content: center; min-height: min(86vh, 820px); padding-top: 40px; padding-bottom: 40px; }
+.hero { position: relative; overflow: hidden; overflow: clip; }
+.hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "copy stage" "ctl stage" "hq stage"; grid-template-rows: auto auto 1fr; column-gap: 24px; align-content: center; min-height: min(86vh, 820px); padding-top: 40px; padding-bottom: 40px; }
 .hero-copy { grid-area: copy; position: relative; z-index: 2; align-self: end; }
 .hero-ctl { grid-area: ctl; position: relative; z-index: 2; align-self: start; }
 .hero .stage3d { grid-area: stage; align-self: center; }
@@ -244,6 +244,7 @@ table.spec { width: 100%; border-collapse: collapse; font-size: .9375rem; }
 .stage3d { position: relative; height: min(78vh, 720px); min-height: 460px; }
 .stage3d canvas { position: absolute; inset: 0; outline: none; }
 .stage3d .fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--ink-2); padding: 24px; }
+.hero .hq-line { grid-area: hq; align-self: start; position: relative; z-index: 2; }
 .hq-line { margin-top: 30px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); max-width: 30rem; }
 .hq-line small { display: block; color: var(--ink-2); font-size: .875rem; }
 .hq-line strong { display: block; font-size: 1.5rem; line-height: 1.2; margin-top: 2px; }
@@ -323,7 +324,7 @@ details.table summary { cursor: pointer; color: var(--ink-2); padding: 6px 0; }
 
 @media (max-width: 900px) {
   .split, .split.wide-right, .split.wide-left, .explore { grid-template-columns: 1fr; gap: 32px; }
-  .hero .wrap { grid-template-columns: 1fr; grid-template-areas: "copy" "stage" "ctl"; min-height: 0; padding-top: 36px; padding-bottom: 36px; }
+  .hero .wrap { grid-template-columns: 1fr; grid-template-areas: "copy" "stage" "ctl" "hq"; grid-template-rows: none; min-height: 0; padding-top: 36px; padding-bottom: 36px; }
   .hero .stage3d { height: 56vh; min-height: 400px; margin: 0 -24px; }
   .hero .chips { margin-top: 0; }
   .page-head { padding-top: 48px; }
@@ -409,9 +410,9 @@ details.table summary::-webkit-details-marker { display: none; }
 .logo-words .jp { font-size: .6875rem; font-weight: 600; letter-spacing: .06em; color: var(--ink-2); }
 
 /* ---- page heads: a dark plate, the hillside behind, the mark sending from it ---- */
-.page-head { position: relative; overflow: hidden; padding: 88px 0 80px; }
+.page-head { position: relative; overflow: hidden; padding: 56px 0 48px; }
 .page-head .wrap { position: relative; z-index: 1; }
-.page-head .display { max-width: 16ch; font-size: clamp(2.5rem, 5.4vw, 4.125rem); }
+.page-head .display { max-width: 22ch; font-size: clamp(2.25rem, 4.4vw, 3.375rem); }
 .page-head .lede { max-width: 46ch; }
 .head-art { position: absolute; inset: 0 0 0 auto; width: min(60%, 820px); pointer-events: none; }
 .head-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--paper), transparent 55%); }
@@ -505,7 +506,7 @@ section.block + section.block > .wrap { border-top: 1px solid var(--line); paddi
 .hero .wrap { z-index: 1; }
 
 @media (max-width: 900px) {
-  .page-head { padding: 56px 0 52px; }
+  .page-head { padding: 40px 0 36px; }
   .head-art { width: 100%; }
   .head-art::after { background: linear-gradient(180deg, transparent, var(--paper) 85%); opacity: .6; }
   .head-art .beacon { width: 84px; right: 16px; top: 22px; transform: none; opacity: .9; }
@@ -816,3 +817,20 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
   .valley-ctl #vPlay { flex: 1; }
   .valley-ctl .v-scrub { flex: 1 1 100%; margin-left: 0; }
 }
+.sheet-logo .sheet-title { display: block; font-size: 20pt; line-height: 1.05; letter-spacing: -.01em; margin: 0; font-weight: 700; }
+
+/* phones: what headquarters sees stays pinned to the bottom of the screen while the box is on screen */
+@media (max-width: 880px) {
+  .hero .hq-line { position: sticky; bottom: 12px; background: #1f2224; margin-top: 18px; padding: 10px 14px; display: grid; grid-template-columns: 1fr auto; column-gap: 12px; align-items: center; box-shadow: 0 6px 24px rgba(0, 0, 0, .35); max-width: none; }
+  .hero .hq-line small { grid-column: 1 / -1; font-size: .8125rem; }
+  .hero .hq-line strong { font-size: 1.125rem; margin: 0; }
+  .hero .hq-line .tag { margin: 0; }
+  /* zoom buttons go in a row under the box, off the switch labels */
+  .hero .stage3d { overflow: visible; }
+  .hero .stage-tools { flex-direction: row; right: 50%; transform: translateX(50%); bottom: -52px; }
+  .hero .hero-ctl { padding-top: 52px; }
+}
+/* a fact list in a narrow column stacks the number over the text instead of squeezing the text */
+.facts { container-type: inline-size; }
+@container (max-width: 540px) { .facts li { grid-template-columns: 1fr; gap: 6px; } }
+.demo3d .drop-btn { display: block; margin-top: 12px; min-height: 44px; }

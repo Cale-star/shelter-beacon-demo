@@ -96,6 +96,8 @@ function drawRidge() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { svg.querySelector("animateMotion").remove(); svg.querySelector("#ridgeDot").setAttribute("transform", `translate(${mid} ${n ? 76 : 62})`); }
 }
 // The 3D cut-away; the flat drawing is only the fallback when WebGL isn't there.
+// Built only when it's about to scroll into view.
+function initRidge() {
 try {
   const ridge = createRidge(document.getElementById("ridgeStage"), {
     onStep: (i, say, n) => { document.getElementById("ridgeSay").textContent = say; document.getElementById("ridgeN").textContent = `${i + 1} of ${n}`; },
@@ -109,4 +111,10 @@ try {
 } catch (e) {
   svg.hidden = false; document.querySelector(".ridge-steps").hidden = true;
   drawRidge(); mq.addEventListener("change", drawRidge);
+}
+}
+{
+  const st = document.getElementById("ridgeStage");
+  if ("IntersectionObserver" in window && st) new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); initRidge(); } }, { rootMargin: "600px 0px" }).observe(st);
+  else initRidge();
 }

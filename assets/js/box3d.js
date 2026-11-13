@@ -197,7 +197,7 @@ export function createBox(container, opts = {}) {
     const seal = roundedRect(184, 284, 11); seal.holes.push(roundedRect(176, 276, 8));                        // the rubber seal
     add(g, new THREE.ExtrudeGeometry(seal, { depth: 2.4, bevelEnabled: false, curveSegments: 8 }), black(0.9), 0, 0, -0.9);
   });
-  const tex = new THREE.TextureLoader().load(opts.texture || "assets/img/lid_overlay.jpg", () => { dirty = true; });
+  const tex = new THREE.TextureLoader().load(opts.texture || "assets/img/lid_overlay.webp", () => { dirty = true; });
   tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
   piece("overlay", [0, 0, 195], g => {
     const geo = new THREE.ShapeGeometry(roundedRect(176, 276, 8), 10);
@@ -525,8 +525,13 @@ export function createBox(container, opts = {}) {
     const w = container.clientWidth, h = container.clientHeight, show = explode > 0.45, compact = w < 520;
     const pts = [];
     for (const l of labels) {
+      // anchor on the pieces that travel furthest, so a part with bits left behind (a knob's pot on the lid)
+      // is labelled where the eye goes, not halfway between
       box3.makeEmpty();
-      for (const g of pieces) if (g.userData.part === l.id) box3.expandByObject(g);
+      const mine = pieces.filter(g => g.userData.part === l.id && !g.userData.empty);
+      const far = Math.max(0, ...mine.map(g => g.userData.explode ? g.userData.explode.length() : 0));
+      for (const g of mine) if (!g.userData.explode || g.userData.explode.length() >= far * 0.8) box3.expandByObject(g);
+      if (box3.isEmpty()) for (const g of mine) box3.expandByObject(g);
       box3.getCenter(v);
       const below = ["battery", "plate", "toggles", "base"].includes(l.id);       // label under the part; the rest sit above it
       v.y = below ? box3.min.y - 16 : box3.max.y + 16;

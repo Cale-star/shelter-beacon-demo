@@ -8,7 +8,7 @@ const join = a => a.length <= 1 ? a.join("") : a.slice(0, -1).join(", ") + " and
 
 const SHELTERS = [
   { id: 1, kind: "Community hall", x: -12, z: 4, people: 40 },
-  { id: 2, kind: "School gym", x: 10, z: -18, people: 100 },
+  { id: 2, kind: "School gym", x: 6, z: -9, people: 100 },
   { id: 3, kind: "Temple hall", x: -40, z: -20, people: 15 },
   { id: 4, kind: "Fishing co-op", x: -28, z: 23, people: 30 },
   { id: 5, kind: "Hamlet meeting room", x: -51, z: 3, people: 10 },

@@ -28,7 +28,7 @@
   <div class="wrap">
     <div class="hero-copy">
       <h1 class="display">When the phones go down, a shelter can still ask for help.</h1>
-      <p class="lede">Shelter Beacon is a wall box with five switches and a dial. A shelter leader flips up what the shelter needs, and it radios headquarters over kilometres with no cell service, no internet and no grid power.</p>
+      <p class="lede">Shelter Beacon is a wall box with five switches and a dial. A shelter leader flips up what the shelter needs, and it radios headquarters with no cell service, no internet and no grid power.</p>
     </div>
     <div class="hero-ctl">
       <p class="lead">Flip a switch and turn the knob, here or on the box.</p>
@@ -38,12 +38,12 @@
         <output id="pplOut" aria-live="polite">About 20 people</output>
         <button type="button" id="pplMore" aria-label="More people">+</button>
       </div>
-      <div class="hq-line" aria-live="polite">
+    </div>
+      <div class="hq-line" id="heroHq" aria-live="polite">
         <small>Headquarters sees</small>
         <strong id="heroHead">Nothing needed</strong>
         <span class="tag" id="heroTag" data-level="LOW">Low priority</span>
       </div>
-    </div>
     <div class="stage3d" id="heroStage">
       <p class="fallback" hidden>The 3D box needs WebGL. <a href="demo.html">Try the flat demo instead.</a></p>
       <p class="stage-hint" id="heroHint"><span class="fine">Drag to turn it round. Click it, then scroll to zoom.</span><span class="coarse">Swipe sideways to turn it round. Pinch to zoom.</span></p>
@@ -68,7 +68,7 @@
     </div>
     <ul class="facts" style="margin-top:0">
       <li><b>49</b><p>locations cut off by landslides, some for more than a week. Fewer than half had been predicted.<small>Ishikawa Prefecture tally; Hokuriku Chunichi Shimbun</small></p></li>
-      <li><b>31,800</b><p>people sheltering across the region at the peak.<small>Contemporary reporting, January 2024</small></p></li>
+      <li><b>34,173</b><p>people in Ishikawa's shelters at the peak, on January 4.<small>Ishikawa Prefecture figures, via The Yomiuri Shimbun</small></p></li>
       <li><b>≈50%</b><p>of residents in the four hardest-hit towns were 65 or older.<small>ICMA PM Magazine, July 2026</small></p></li>
     </ul>
   </div>
@@ -125,7 +125,7 @@
       <div class="btn-row"><a class="btn primary" href="demo.html">Try the box and the dashboard</a></div>
     </div>
     <figure>
-      <picture><source media="(max-width: 700px)" srcset="assets/img/dashboard_phone.jpg"><img class="shot" src="assets/img/dashboard_3_high_priority_alarm.jpg" alt="The headquarters dashboard showing a shelter's needs as one sentence, with its priority and the list of five needs." width="1600" height="1125" loading="lazy"></picture>
+      <picture><img class="shot" src="assets/img/dashboard_crop.jpg" alt="The headquarters dashboard: an alarm bar reading Shelter 1 is high priority, the headline Needs medical help and water, and the list of five needs with water and medical marked needed." width="765" height="853" loading="lazy"></picture>
       <figcaption>The real dashboard, running its built-in demo.</figcaption>
     </figure>
   </div>
@@ -135,10 +135,10 @@
   <div class="wrap">
     <h2 class="say">What's proven so far, and what isn't.</h2>
     <ul class="facts">
-      <li><b>95.7%</b><p>of single packets arrived at the edge of range in the first field test. Sending each report three times should lift that to about 99.99%, which the next test will check.<small>Range test 1, October 18, 2026: 602 packets below −100 dBm</small></p></li>
+      <li><b>92.5%</b><p>of single packets arrived at the edge of range in the first field test. Losses came in bunches, so the box now sends three copies and keeps retrying until headquarters confirms.<small>Range test 1, October 18, 2026: 602 of 651 packets at −100 dBm or weaker</small></p></li>
       <li><b>−122 dBm</b><p>was the weakest signal still decoded, 7 dB above the radio's calculated limit.<small>Range test 1</small></p></li>
       <li><b>≈ $107</b><p>in parts for one shelter box, bought at single-unit prices.<small>Project parts list</small></p></li>
-      <li><b>Not yet</b><p>measured: range against distance. The first test didn't log GPS. A GPS-tagged test is next.<small><a href="testing.html">See the testing page</a></small></p></li>
+      <li><b>Range</b><p>against distance isn't measured yet. The first test didn't log GPS, so no distance is claimed. A GPS-tagged test is next.<small><a href="testing.html">See the testing page</a></small></p></li>
     </ul>
   </div>
 </section>

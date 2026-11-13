@@ -36,13 +36,18 @@ function paint(T, ranking, text, who, done) {
   });
 }
 
-valley = createValley($("valleyStage"), { onTime: paint, onPick: id => { rows.get(id)?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }); valley.highlight(id); } });
-if (!valley) { play.hidden = true; $("vBack").hidden = $("vNext").hidden = true; time.closest("label").hidden = true; }
-else {
-  play.onclick = () => { if (valley.playing) { valley.pause(); play.textContent = "Play"; } else { valley.play(); play.textContent = "Pause"; } };
-  $("vBack").onclick = () => { valley.jump(-1); play.textContent = "Play"; };
-  $("vNext").onclick = () => { valley.jump(1); play.textContent = "Play"; };
-  time.oninput = () => { valley.pause(); play.textContent = "Play"; valley.seek(+time.value); };
-  if (reduce) valley.seek(31);
-  else new IntersectionObserver((es, io) => { if (es[0].isIntersecting && !started) { started = true; io.disconnect(); valley.play(); play.textContent = "Pause"; } }, { threshold: .45 }).observe($("valleyStage"));
+// Build the scene only when it's about to scroll into view: three WebGL scenes at once is a lot for an old phone.
+function init() {
+  valley = createValley($("valleyStage"), { onTime: paint, onPick: id => { rows.get(id)?.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }); valley.highlight(id); } });
+  if (!valley) { play.hidden = true; $("vBack").hidden = $("vNext").hidden = true; time.closest("label").hidden = true; }
+  else {
+    play.onclick = () => { if (valley.playing) { valley.pause(); play.textContent = "Play"; } else { valley.play(); play.textContent = "Pause"; } };
+    $("vBack").onclick = () => { valley.jump(-1); play.textContent = "Play"; };
+    $("vNext").onclick = () => { valley.jump(1); play.textContent = "Play"; };
+    time.oninput = () => { valley.pause(); play.textContent = "Play"; valley.seek(+time.value); };
+    if (reduce) valley.seek(31);
+    else new IntersectionObserver((es, io) => { if (es[0].isIntersecting && !started) { started = true; io.disconnect(); valley.play(); play.textContent = "Pause"; } }, { threshold: .45 }).observe($("valleyStage"));
+  }
 }
+if ("IntersectionObserver" in window) new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); init(); } }, { rootMargin: "600px 0px" }).observe($("valleyStage"));
+else init();
