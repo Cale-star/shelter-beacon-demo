@@ -810,3 +810,9 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
 .s-tag.amb { color: #f2b200; box-shadow: inset 0 0 0 1.5px #f2b200; }
 .s-count { font-size: .875rem; font-weight: 700; color: #16181a; background: #f2b200; padding: 5px 12px; border-radius: 99px; font-variant-numeric: tabular-nums; }
 @media (max-width: 700px) { .seq3d { aspect-ratio: 4 / 3.4; margin-left: -8px; margin-right: -8px; } }
+@media (max-width: 900px) {
+  .valley { grid-template-columns: minmax(0, 1fr); }
+  .valley-ctl { flex-wrap: wrap; }
+  .valley-ctl #vPlay { flex: 1; }
+  .valley-ctl .v-scrub { flex: 1 1 100%; margin-left: 0; }
+}
