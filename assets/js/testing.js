@@ -38,8 +38,8 @@ function draw() {
   if (restart) {
     const rx = x(restart.a), rw = x(restart.b) - rx, rm = ((restart.b - restart.a) / 60).toFixed(1);
     h += `<rect x="${rx}" y="${T}" width="${rw}" height="${B - T}" fill="var(--ink)" fill-opacity=".08"/>`;
-    h += `<text x="${rx - 8}" y="${T + (n ? 20 : 26)}" text-anchor="end" font-size="${n ? fs : 15}" font-weight="700" fill="var(--ink)">board restarted</text>`;
-    h += `<text x="${rx - 8}" y="${T + (n ? 40 : 46)}" text-anchor="end" font-size="${n ? fs : 14}" fill="var(--ink-2)">${rm} min, not the radio</text>`;
+    h += `<text x="${rx - 8}" y="${T + (n ? 64 : 26)}" text-anchor="end" font-size="${n ? fs : 15}" font-weight="700" fill="var(--ink)">board restarted</text>`;
+    h += `<text x="${rx - 8}" y="${T + (n ? 84 : 46)}" text-anchor="end" font-size="${n ? fs : 14}" fill="var(--ink-2)">${rm} min, not the radio</text>`;
   }
   h += `<line x1="${L}" x2="${R}" y1="${y(FLOOR)}" y2="${y(FLOOR)}" stroke="var(--ink-2)" stroke-width="1.5" stroke-dasharray="5 5"/>`;
   h += `<text x="${R}" y="${y(FLOOR) + (n ? 17 : -7)}" text-anchor="end" font-size="${fs}" fill="var(--ink-2)">${n ? "limit" : "calculated limit"}, −129 dBm</text>`;

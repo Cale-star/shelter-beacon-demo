@@ -37,7 +37,7 @@ function sfTool(el) {
     $("#sfSens", el).textContent = minus(SENS[sf]) + " dBm";
     $("#sfReach", el).textContent = sf === 9 ? "the baseline" : "about ×" + fmt(k, 1);
     $("#sfSay", el).textContent =
-      sf < 9 ? `Faster and kinder to the battery. But the weakest signal in the first range test was −122 dBm, and SF${sf} would read that with only ${fmt(-122 - SENS[sf], 0)} dB to spare. A wet tree line costs more than that.`
+      sf < 9 ? `Faster and kinder to the battery. But the weakest signal decoded in the field was −122 dBm, and SF${sf} would read that with only ${fmt(-122 - SENS[sf], 0)} dB to spare. A wet tree line costs more than that.`
       : sf === 9 ? "The middle of the range. Each copy is about a third of a second, and the receiver still has about 7 dB in hand below the weakest signal measured in the field."
       : `${fmt(d * -1, 1)} dB more reach, at ${fmt(a / airtime(9), 1)} times the time on air. Every box keeps the channel busy that much longer, so neighbours collide more and each report costs more battery.`;
     inp.setAttribute("aria-valuetext", "SF" + sf);

@@ -43,7 +43,7 @@ if (D && unit) {
     host.querySelector("#dMore").onclick = () => D.setKnob(D.knob() + 1);
     // the same control as the one under "How it works", brought up beside the switches
     const drop = document.querySelector("[data-drop]");
-    if (drop) host.querySelector("#dDrop").onclick = () => drop.click(); else host.querySelector("#dDrop").remove();
+    if (drop) { host.querySelector("#dDrop").onclick = () => drop.click(); drop.hidden = true; } else host.querySelector("#dDrop").remove();
     const sync = () => {
       const on = D.on(), k = D.knob(), v = D.OCC[k];
       D.NEEDS.forEach((n, i) => { box.setSwitch(i, !!on[n.key], false); btns[i].setAttribute("aria-pressed", String(!!on[n.key])); });

@@ -835,3 +835,82 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
 .demo3d .drop-btn { display: block; margin-top: 12px; min-height: 44px; }
 /* narrow screens: keep the contours at a readable scale instead of shrinking the whole map into the band */
 @media (max-width: 900px) { .topo { -webkit-mask-size: auto max(100%, 560px); mask-size: auto max(100%, 560px); } }
+
+/* ---- field day: paths, spots, margin tool ---- */
+.fine-print { font-size: .8125rem; color: var(--ink-2); max-width: 70ch; }
+.fine-print .ev { margin-right: 6px; }
+.paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 28px; }
+.path { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-l); padding: 20px 22px 22px; }
+.path figcaption { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 1.125rem; }
+.path figcaption span { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.path.bad figcaption { color: var(--need); }
+.path svg { display: block; width: 100%; height: auto; margin: 10px 0 6px; font-family: var(--font); overflow: visible; }
+.path svg text { font-size: 21px; fill: var(--ink-2); }
+.path svg text.len { font-weight: 700; fill: var(--ink); font-size: 23px; }
+.path .ground { fill: color-mix(in srgb, var(--ink) 8%, transparent); stroke: var(--ink); stroke-width: 2; stroke-linejoin: round; }
+.path .beam { stroke: var(--ink); stroke-width: 3; stroke-dasharray: 10 8; }
+.path .beam.dead { stroke: var(--need); stroke-width: 2.5; stroke-dasharray: 3 9; opacity: .6; }
+.path .tx { fill: var(--caution-fill); stroke: var(--ink); stroke-width: 2; }
+.path .rx { fill: var(--ink); }
+.path .pulse { fill: var(--caution-fill); stroke: var(--ink); stroke-width: 1.5; }
+.path .stop { stroke: var(--need); stroke-width: 5; stroke-linecap: round; fill: none; }
+.path p { color: var(--ink-2); max-width: 46ch; }
+.path p b { color: var(--ink); }
+@media (prefers-reduced-motion: reduce) { .path .pulse { display: none; } }
+
+.spots { margin-top: 28px; border-top: 1px solid var(--line); }
+.spot { display: grid; grid-template-columns: minmax(0, 15rem) 5.5rem minmax(0, 1fr) 8.5rem; gap: 6px 24px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+.spot.head { font-size: .8125rem; color: var(--ink-2); padding: 10px 0; }
+.spot small { display: block; font-size: .8125rem; color: var(--ink-2); }
+.spot .barcell { display: flex; align-items: center; gap: 10px; }
+.spot .bar { display: block; height: 14px; border-radius: 0 4px 4px 0; background: var(--ink); min-width: 2px; flex: 0 0 auto; max-width: calc(100% - 7.5rem); position: relative; overflow: hidden; }
+.spot .bar.blocked { background: color-mix(in srgb, var(--ink) 45%, transparent); }
+.spot .bar > i { position: absolute; inset: 0 auto 0 0; background: var(--ink); }
+.spot .bar.none { width: 2px; background: var(--need); }
+.spot em { font-style: normal; font-weight: 600; white-space: nowrap; }
+.spot.star b::after { content: "furthest"; margin-left: 8px; font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; background: var(--caution-fill); color: #16181a; vertical-align: .1em; }
+.spot.dead b, .spot.dead em, .spot.dead > span:last-child { color: var(--need); }
+.spot > span:last-child { font-weight: 600; }
+@media (max-width: 760px) {
+  .paths { grid-template-columns: 1fr; }
+  .spot { grid-template-columns: minmax(0, 1fr) auto; }
+  .spot.head { display: none; }
+  .spot > span:nth-child(2) { text-align: right; color: var(--ink-2); }
+  .spot .barcell { grid-column: 1; }
+  .spot > span:last-child { text-align: right; }
+}
+
+.costs { display: grid; gap: 8px; }
+.cost { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 8px 14px; border: 1px solid var(--line); border-radius: var(--r-s); cursor: pointer; }
+.cost:has(input:checked) { border-color: var(--ink); background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.cost input { width: 20px; height: 20px; accent-color: var(--ink); flex: none; }
+.cost small { display: block; font-size: .8125rem; color: var(--ink-2); }
+.meter { position: relative; height: 16px; margin-top: 20px; border-radius: 4px; background: color-mix(in srgb, var(--ink) 10%, transparent); overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--ink); border-radius: 4px; transition: width .35s ease; }
+#margin[data-state="edge"] .meter i { background: var(--caution-fill); }
+#margin[data-state="lost"] #mLeft { color: var(--need); }
+#margin .tool-say { min-height: 3.2em; }
+@media (prefers-reduced-motion: reduce) { .meter i { transition: none; } }
+
+/* ---- page heads: one figure that belongs to the page, in place of the repeated mark ---- */
+.head-fig { display: none; }
+@media (min-width: 900px) {
+  .page-head .wrap:has(.head-fig) { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 56px; align-items: center; }
+  .page-head .wrap:has(.head-fig) > * { grid-column: 1; }
+  .page-head .wrap > .head-fig { display: block; grid-column: 2; grid-row: 1 / span 3; text-align: right; }
+  .head-fig b { display: block; font-size: clamp(3.25rem, 6vw, 4.75rem); line-height: .95; letter-spacing: -.035em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .head-fig span { display: block; max-width: 16rem; margin: 10px 0 0 auto; color: var(--ink-2); font-size: 1rem; line-height: 1.35; }
+  .page-head:has(.head-fig) .beacon { display: none; }
+}
+
+/* ---- moving between pages: a short cross-fade where the browser supports it ---- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root) { animation: vt-out .14s ease both; }
+  ::view-transition-new(root) { animation: vt-in .22s ease both; }
+  .nav { view-transition-name: nav; }
+}
+@keyframes vt-out { to { opacity: 0; } }
+@keyframes vt-in { from { opacity: 0; } }
+.path figcaption { flex-wrap: wrap; }
+@media (max-width: 760px) { .path svg text { font-size: 28px; } .path svg text.len { font-size: 30px; } .path { padding: 16px 16px 18px; } }
