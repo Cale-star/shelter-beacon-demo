@@ -914,3 +914,24 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
 @keyframes vt-in { from { opacity: 0; } }
 .path figcaption { flex-wrap: wrap; }
 @media (max-width: 760px) { .path svg text { font-size: 28px; } .path svg text.len { font-size: 30px; } .path { padding: 16px 16px 18px; } }
+
+/* ---- the box, told by scrolling ---- */
+/* Base state (no WebGL, or reduced motion): the captions are an ordinary list. */
+.story { background: var(--plate); color: #eef0ed; }
+.story-stage, .story-bar { display: none; }
+.story-caps { list-style: none; margin: 0 auto; padding: 8px 24px 64px; max-width: var(--wrap, 1120px); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px 40px; }
+.story-caps b { display: block; font-size: 1.375rem; line-height: 1.2; letter-spacing: -.01em; }
+.story-caps span { display: block; margin-top: 6px; color: #b9beba; }
+/* Live: a tall section with a pinned stage. Scroll distance is the timeline. */
+.story.live { height: 560vh; }
+.story.live .story-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.story.live .story-stage { display: block; position: absolute; inset: 56px 0 19vh; }
+.story.live .story-pin { background: radial-gradient(70% 60% at 50% 40%, #262b2a, #16181a 72%); }
+.story.live .story-stage canvas { display: block; }
+.story.live .story-caps { position: absolute; inset: auto 0 0; display: block; max-width: none; padding: 0; height: 34vh; min-height: 200px; pointer-events: none; background: linear-gradient(transparent, rgba(22, 24, 26, .94) 42%); }
+.story.live .story-caps li { position: absolute; inset: auto 0 7vh; padding: 0 24px; text-align: center; opacity: 0; will-change: opacity, transform; }
+.story.live .story-caps b { font-size: clamp(1.75rem, 4.2vw, 3.25rem); line-height: 1.08; letter-spacing: -.025em; text-wrap: balance; }
+.story.live .story-caps span { margin: 12px auto 0; max-width: 44ch; font-size: clamp(1rem, 1.5vw, 1.1875rem); text-wrap: balance; }
+.story.live .story-bar { display: block; position: absolute; inset: auto 0 0; height: 3px; background: rgba(255, 255, 255, .08); }
+.story.live .story-bar i { display: block; height: 100%; background: var(--signal); transform-origin: 0 50%; transform: scaleX(0); }
+.page-head:has(+ .story) { padding-bottom: 28px; }

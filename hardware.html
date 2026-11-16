@@ -25,11 +25,28 @@
 <main id="main">
 <div class="page-head dark"><div class="head-art" aria-hidden="true"><div class="topo" aria-hidden="true"></div><svg class="beacon" viewBox="0 0 200 200" fill="none" stroke-linecap="round"><path class="arc a3" d="M52 62a68 68 0 0 1 96 0" stroke="currentColor" stroke-width="3"/><path class="arc a2" d="M66 78a48 48 0 0 1 68 0" stroke="currentColor" stroke-width="3"/><path class="arc a1" d="M80 94a28 28 0 0 1 40 0" stroke="currentColor" stroke-width="3"/><circle cx="100" cy="150" r="20" stroke="currentColor" stroke-width="6"/><path d="M94.5 150 90 108a10 10 0 0 1 20 0l-4.500 42z" fill="#ff6a5b"/></svg></div><div class="wrap">
   <h1 class="display">Every control is on one face.</h1>
-  <p class="lede">Five switches, one knob, one status light, one beeper. No screen, no menu, no app. Drag the box to turn it, pull the slider to take it apart, and pick any part to see what it does.</p>
+  <p class="lede">Five switches, one knob, one status light, one beeper. No screen, no menu, no app.</p>
   <p class="head-fig"><b>5 + 1</b><span>switches and one knob. No screen, no menu.</span></p>
 </div></div>
 
-<section class="block" style="padding-top:8px"><div class="wrap">
+<section class="story" id="story" aria-label="The box, step by step">
+  <div class="story-pin">
+    <div class="story-stage" id="storyStage" aria-hidden="true"></div>
+    <ol class="story-caps" id="storyCaps">
+      <li><b>One box on the wall.</b><span>Solar-charged, and in place before it is needed.</span></li>
+      <li><b>Five switches. One for each need.</b><span>Water, medical, food, blankets, fuel. Up means needed.</span></li>
+      <li><b>One knob for how many people.</b><span>Eleven positions, from nobody to 100 or more.</span></li>
+      <li><b>It confirms.</b><span>The status light glows and the box beeps twice when headquarters has the report.</span></li>
+      <li><b>Inside: a radio, a battery and a charger.</b><span>Thirteen parts in all, and no screen.</span></li>
+      <li><b>Powered by the sun.</b><span>A 1 W panel charges four 18650 cells, about 52 Wh.</span></li>
+    </ol>
+    <div class="story-bar" aria-hidden="true"><i id="storyBar"></i></div>
+  </div>
+</section>
+
+<section class="block"><div class="wrap">
+  <h2 class="say">Take it apart yourself.</h2>
+  <p class="prose" style="margin:16px 0 24px">Drag the box to turn it, pull the slider to open it, and pick any part to see what it does.</p>
   <div class="explore">
     <div class="stage3d dark" id="stage">
       <p class="fallback" hidden>The 3D view needs WebGL. The parts are listed beside it.</p>
@@ -128,6 +145,7 @@
     rv.forEach(e => io.observe(e));
   } })();
 </script>
+<script type="module" src="assets/js/story.js"></script>
 <script type="module" src="assets/js/hardware.js"></script>
 <script type="module" src="assets/js/tools.js"></script>
 </body>

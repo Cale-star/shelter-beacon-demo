@@ -353,7 +353,8 @@ export function createBox(container, opts = {}) {
   controls.addEventListener("change", () => { dirty = true; });
   controls.addEventListener("start", () => { touched = true; if (opts.onInteract) opts.onInteract(); });
   canvas.style.touchAction = "pan-y";
-  let touched = false, fitD = 900;
+  let touched = false, fitD = 900, storyView = null;
+  if (opts.story) { controls.enabled = false; canvas.style.pointerEvents = "none"; }
   canvas.addEventListener("pointerdown", () => { controls.enableZoom = true; });
   canvas.addEventListener("pointerleave", () => { controls.enableZoom = false; });
   canvas.addEventListener("wheel", e => { if (e.ctrlKey || e.metaKey) { controls.enableZoom = true; } }, { capture: true, passive: true });
@@ -371,7 +372,8 @@ export function createBox(container, opts = {}) {
     }
     fitBox.getCenter(target);
     if (touched && wasPortrait === portrait) off.copy(camera.position).sub(controls.target).normalize();
-    else off.copy(mode === "hero" ? dir : portrait ? dirPortrait : dir).normalize();   // a tall screen looks from higher up, so the layers run corner to corner
+    else off.copy(mode === "hero" ? dir : portrait ? dirPortrait : dir).normalize();
+    if (storyView) off.copy(storyView.dir);                    // a scroll-driven story sets the view itself   // a tall screen looks from higher up, so the layers run corner to corner
     wasPortrait = portrait;
     const fill = mode === "hero" ? 0.94 : 0.9, padBottom = mode === "hero" ? 0 : 0.14;
     let d = 1200;
@@ -398,6 +400,13 @@ export function createBox(container, opts = {}) {
     const keep = touched && mode === "hero" ? camera.position.distanceTo(controls.target) : d;
     camera.position.copy(target).addScaledVector(off, Math.min(controls.maxDistance, Math.max(controls.minDistance, keep)));
     controls.target.copy(target);
+    if (storyView) {                                           // closer or further than the fitted distance, and off-centre toward a detail
+      camera.position.copy(target).addScaledVector(off, d * storyView.zoom); camera.lookAt(target); camera.updateMatrixWorld();
+      right.setFromMatrixColumn(camera.matrixWorld, 0); up.setFromMatrixColumn(camera.matrixWorld, 1);
+      target.addScaledVector(right, storyView.sx).addScaledVector(up, storyView.sy);
+      camera.position.addScaledVector(right, storyView.sx).addScaledVector(up, storyView.sy);
+      controls.target.copy(target); controls.minDistance = 0; controls.maxDistance = Infinity;
+    }
   }
   function resize() {
     const w = container.clientWidth, h = container.clientHeight;
@@ -610,6 +619,10 @@ export function createBox(container, opts = {}) {
     flash() { ledFlash = 0.14; if (reduce) return; rings.forEach((r, k) => { r.t = -k * 0.22; r.on = true; }); },
     confirm() { glow = 1.5; waiting = false; },
     setWaiting(on) { waiting = on; },
+    setView(dx, dy, dz, zoom = 1, sx = 0, sy = 0) {
+      if (!storyView) storyView = { dir: new THREE.Vector3(), zoom: 1, sx: 0, sy: 0 };
+      storyView.dir.set(dx, dy, dz).normalize(); storyView.zoom = zoom; storyView.sx = sx; storyView.sy = sy; placeCamera(); dirty = true;
+    },
     resetView() { touched = false; wasPortrait = null; placeCamera(); dirty = true; },
     zoom(f) { const d = camera.position.distanceTo(controls.target) * f; touched = true;
       camera.position.sub(controls.target).setLength(Math.min(controls.maxDistance, Math.max(controls.minDistance, d))).add(controls.target); dirty = true; },
