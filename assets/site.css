@@ -940,3 +940,4 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
 .story.live .story-bar { display: block; position: absolute; inset: auto 0 0; height: 3px; background: rgba(255, 255, 255, .08); }
 .story.live .story-bar i { display: block; height: 100%; background: var(--signal); transform-origin: 0 50%; transform: scaleX(0); }
 .page-head:has(+ .story) { padding-bottom: 28px; }
+@media (max-width: 760px) { .story.live { height: 400vh; } }

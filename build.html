@@ -7,9 +7,9 @@
 <meta name="description" content="Everything needed to build a Shelter Beacon box and receiver: printable files, firmware, parts, wiring, assembly steps and the firmware history.">
 <meta property="og:title" content="Shelter Beacon: Build one">
 <meta property="og:description" content="Everything needed to build a Shelter Beacon box and receiver: printable files, firmware, parts, wiring, assembly steps and the firmware history.">
-<meta property="og:image" content="https://cale-star.github.io/shelter-beacon/assets/img/og.png">
+<meta property="og:image" content="https://cale-star.github.io/shelter-beacon-demo/assets/img/og.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:url" content="https://cale-star.github.io/shelter-beacon/build.html">
+<meta property="og:url" content="https://cale-star.github.io/shelter-beacon-demo/build.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -26,12 +26,12 @@
 <div class="page-head dark"><div class="head-art" aria-hidden="true"><div class="topo" aria-hidden="true"></div><svg class="beacon" viewBox="0 0 200 200" fill="none" stroke-linecap="round"><path class="arc a3" d="M52 62a68 68 0 0 1 96 0" stroke="currentColor" stroke-width="3"/><path class="arc a2" d="M66 78a48 48 0 0 1 68 0" stroke="currentColor" stroke-width="3"/><path class="arc a1" d="M80 94a28 28 0 0 1 40 0" stroke="currentColor" stroke-width="3"/><circle cx="100" cy="150" r="20" stroke="currentColor" stroke-width="6"/><path d="M94.5 150 90 108a10 10 0 0 1 20 0l-4.500 42z" fill="#ff6a5b"/></svg></div><div class="wrap">
   <h1 class="display">Build one yourself.</h1>
   <p class="lede">Every file, part and wire for the box and the headquarters receiver. It's a class prototype, so treat this as a starting point, not a certified kit.</p>
-  <p class="head-fig"><b>≈ $107</b><span>in parts for the first box</span></p>
+  <p class="head-fig"><b>≈ $157</b><span>in parts for one box</span></p>
 </div></div>
 
-<section class="block"><div class="wrap">
+<section class="block" id="files"><div class="wrap">
   <h2 class="say">The files.</h2>
-  <p class="prose" style="margin-top:16px">Everything here is also in the repository, with its source, so you can change it.</p>
+  <p class="prose" style="margin-top:16px">Everything needed to build one box, from the print files to the firmware.</p>
   <ul class="files">
     <li><a href="assets/files/Shelter_Beacon_Spec_Sheet.pdf" download><span class="tile on"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6zM14 3v4h4M9 12h6M9 16h6"/></svg></span><span><b>Spec sheet</b><small>One page: what it is, what's in it, what it does. PDF, 76 KB</small></span><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg></a></li>
     <li><a href="assets/files/Shelter_Beacon_Lid_Template_and_Overlay.pdf" download><span class="tile"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="15.5" r="5"/><path d="M10.7 15.5 9.7 4.6a2.3 2.3 0 0 1 4.6 0l-1 10.9z" fill="currentColor" stroke="none"/></svg></span><span><b>Lid overlay and drill template</b><small>Print at 100% on US Legal. Page 1 is the drill guide, page 2 the face. PDF, 189 KB</small></span><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg></a></li>
@@ -83,8 +83,8 @@
         </tbody>
       </table>
       <div class="panel" style="margin-top:24px">
-        <p style="font-size:1.75rem;font-weight:700;line-height:1.1">≈ $107</p>
-        <p class="small" style="margin-top:6px">Parts for the first box, at August 2026 street prices. The second build's knob, light, beeper and overlay add roughly $75 more.</p>
+        <p style="font-size:1.75rem;font-weight:700;line-height:1.1">≈ $157</p>
+        <p class="small" style="margin-top:6px">Parts for one shelter box at single-unit 2026 prices, including the knob, status light, beeper and printed face. Headquarters reuses a laptop and adds one receiver board.</p>
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@
     <li><span class="ver">v0.2</span><time>Before field day 1</time><div><b>A visible status light.</b><p>The board's LED blinks on every send and stays on while a need is switched on.</p></div></li>
     <li><span class="ver">v0.1</span><time>The start</time><div><b>Two switches over radio.</b><p>Water and medical, sent every two seconds as <code>PKT,n,W1,M0</code>.</p></div></li>
   </ol>
-  <p class="small" style="margin-top:14px">Every version is still in <a href="https://github.com/Cale-star/shelter-beacon/tree/main/firmware">the firmware folder</a>.</p>
+  <p class="small" style="margin-top:14px">Every version is still in the firmware folder.</p>
 </div></section>
 
 </main>
@@ -146,7 +146,7 @@
 <div class="foot-brand"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a>
 <p>A switch box that lets a disaster shelter ask for help with no phones, no internet and no grid power.</p></div>
 <nav aria-label="Footer"><ul><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="build.html">Build one</a></li><li><a href="demo.html">Try it</a></li>
-<li><a href="https://github.com/Cale-star/shelter-beacon">Code and files on GitHub</a></li></ul></nav>
+<li><a href="build.html#files">Download the files</a></li></ul></nav>
 <p class="legal">Shelter Beacon is a working class prototype by Cale French (ENGR 1113, Fall 2026). It is not certified for emergency use.
 &copy; 2026 Cale French. All rights reserved.</p>
 </div></footer><script>

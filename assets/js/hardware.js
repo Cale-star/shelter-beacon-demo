@@ -24,6 +24,8 @@ function setExplode(v) { slider.value = v; if (box) box.setExplode(v / 100); }
 slider.addEventListener("input", () => box && box.setExplode(slider.value / 100));
 
 const stage = document.getElementById("stage");
+// The explorer sits below the scroll story, so its 3D scene is built only as it comes near the screen.
+function init() {
 try {
   box = createBox(stage, {
     mode: "explore", labels: document.getElementById("labels"),
@@ -37,3 +39,6 @@ try {
   stage.querySelector(".fallback").hidden = false;
   slider.closest(".explode-ctl").hidden = true;
 }
+}
+if ("IntersectionObserver" in window) new IntersectionObserver((es, io) => { if (es[0].isIntersecting) { io.disconnect(); init(); } }, { rootMargin: "600px 0px" }).observe(stage);
+else init();
