@@ -73,23 +73,6 @@
   <p class="fine-print" style="margin-top:14px"><span class="ev" data-k="measured">Measured</span> One trial per spot, 10 to 60 packets each, read off the receiver's screen. Treat single dB figures as approximate; the pass and fail results are firm.</p>
 </div></section>
 
-<section class="block"><div class="wrap split wide-left">
-  <div>
-    <h2 class="say">How the 44 dB of spare signal gets used up.</h2>
-    <p class="prose" style="margin-top:20px">Start from the 1.41 km link and switch on the losses measured during the day. Each one was measured once, at that distance or close to it.</p>
-    <div class="panel tool" id="margin" style="margin-top:24px"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.6 8.6a4.8 4.8 0 0 0 0 6.8M15.4 8.6a4.8 4.8 0 0 1 0 6.8M5.7 5.7a8.9 8.9 0 0 0 0 12.6M18.3 5.7a8.9 8.9 0 0 1 0 12.6"/></svg>What's left at 1.41 km?</h3></div>
-  </div>
-  <div>
-    <ul class="facts" style="margin-top:0">
-      <li><b>30 dB</b><p>lost by laying the antenna flat instead of upright. The biggest single loss of the day, and the easiest to cause by accident.</p></li>
-      <li><b>28 dB</b><p>lost when a spur of hillside blocked the view in a valley, at the same distance as a spot that could see the box.</p></li>
-      <li><b>10–18 dB</b><p>lost with the box inside a vehicle. It cost more at 1.41 km than at 302 m.</p></li>
-      <li><b>6–13 dB</b><p>lost with the box on the ground instead of at shoulder height.</p></li>
-    </ul>
-    <p class="note-box" style="margin-top:20px"><b>So the box mounts high, with its antenna fixed upright and outside any metal.</b> And relays belong on ridges, where they can see into the valleys the shelters are in.</p>
-  </div>
-</div></section>
-
 <section class="block"><div class="wrap">
   <h2 class="say">The one continuous log: 41 minutes, every packet.</h2>
   <p class="prose" style="margin-top:20px">That morning one board stayed put and logged to a laptop while the other was carried away, behind the two ridges and back up onto a hilltop. Each dot is one packet that arrived. The red band is the walk behind the ridges.</p>
@@ -121,6 +104,7 @@
     <div class="prose" style="margin-top:20px">
       <p><b>Every report is now sent three times.</b> Eighteen of the 26 dropouts were a single packet, and a second copy a moment later should get past those. But losses came in bunches, so the copies don't fail independently, so no delivery percentage is claimed until a test counts them.</p>
       <p><b>Then headquarters started confirming.</b> Copies can't cross a 22-second dropout, let alone a seven-minute blackout. So the box now waits for a confirmation, and if none comes it retries after 5, 15 and 30 seconds, then every minute, until it gets through.</p>
+      <p><b>The box mounts high, with its antenna upright and outside any metal.</b> Laying the antenna flat cost up to 30 dB, more than any hill except a full blockage. Relays belong on ridges, where they can see into the valleys.</p>
       <p><b>The box only talks when something changes.</b> A packet every two seconds wasted battery and airtime to say nothing new.</p>
     </div>
   </div>
