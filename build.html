@@ -61,7 +61,7 @@
         <tbody>
           <tr><th>Radio board</th><td>Heltec WiFi LoRa 32 V4.3, 915 MHz<small>ESP32-S3 and an SX1262 radio on one board</small></td></tr>
           <tr><th>Antenna</th><td>915 MHz, mounted outside the box</td></tr>
-          <tr><th>Switches</th><td>5 panel-mount toggle switches<small>Any on-off toggle with a chunky lever works</small></td></tr>
+          <tr><th>Switches</th><td>5 panel-mount toggle switches<small>Any on-off toggle with a large lever works</small></td></tr>
           <tr><th>People knob</th><td>Alpha 9 mm pot, 10 kΩ linear, 11 detents<small>R-VAV-B10K-11DET, from Amplified Parts. Any linear pot works without code changes; it just won't click.</small></td></tr>
           <tr><th>Status light</th><td>5 mm diffused amber LED, chrome holder, 100 Ω resistor</td></tr>
           <tr><th>Beeper</th><td>Active buzzer module, 3.3 V</td></tr>
@@ -69,7 +69,7 @@
           <tr><th>Charger</th><td>MCP73871 solar charger board</td></tr>
           <tr><th>Solar panel</th><td>1 W, 5 V</td></tr>
           <tr><th>Enclosure</th><td>QILIPSU hinged junction box, 290 × 190 × 140 mm</td></tr>
-          <tr><th>Odds and ends</th><td>Dupont jumpers, heat shrink, M3 set screws and nuts</td></tr>
+          <tr><th>Small parts</th><td>Dupont jumpers, heat shrink, M3 set screws and nuts</td></tr>
         </tbody>
       </table>
       <p class="note-box" style="margin-top:16px"><b>915 MHz is a US band.</b> It's legal to test with in the US, but not in Japan. A box for Japan needs the 920 MHz version of the radio and has to follow Japan's 20 mW limit and listen-before-talk rule.</p>
@@ -110,7 +110,7 @@
       </tbody>
     </table>
     <div class="prose">
-      <p class="note-box"><b>Leave GPIO 2, 5 and 7 alone.</b> On the V4.3 they run the radio's amplifier. The first V4 build put switches there and the radio fought them.</p>
+      <p class="note-box"><b>Leave GPIO 2, 5 and 7 alone.</b> On the V4.3 they run the radio's amplifier. The first V4 build put switches there and they conflicted with the radio.</p>
       <p>Power the beeper from 3.3 V, not 5 V. If it beeps without stopping, your module triggers on low: set <code>BUZZER_ACTIVE_LOW</code> to 1 in the firmware.</p>
       <p>In the Arduino IDE choose "ESP32S3 Dev Module" and turn on USB CDC On Boot, or the serial monitor stays blank.</p>
     </div>
@@ -133,11 +133,11 @@
 <section class="block"><div class="wrap">
   <h2 class="say">How the firmware got here.</h2>
   <ol class="changes">
-    <li><span class="ver">v0.6</span><time>November 6</time><div><b>The box waits for an answer.</b><p>Headquarters replies to every report. Two quick beeps mean it arrived; one long beep means the box is still trying, and it keeps trying by itself after 5, 15 and 30 seconds, then every minute. Needs receiver v0.4-ack. Not yet tested on the real boards.</p></div></li>
-    <li><span class="ver">v0.5</span><time>November 6</time><div><b>A knob, a light and a beeper.</b><p>One 11-click knob replaces the two thumbwheels. A front status light and a beeper give the person feedback without a screen.</p></div></li>
+    <li><span class="ver">v0.6</span><time>November 6</time><div><b>The box waits for confirmation.</b><p>Headquarters confirms every report. Two quick beeps mean it arrived; one long beep means the box is still trying, and it retries automatically after 5, 15 and 30 seconds, then every minute. Needs receiver v0.4-ack. Not yet tested on the real boards.</p></div></li>
+    <li><span class="ver">v0.5</span><time>November 6</time><div><b>A knob, a light and a beeper.</b><p>One 11-click knob replaces the two thumbwheels. A front status light and a beeper give the shelter leader feedback without a screen.</p></div></li>
     <li><span class="ver">v0.4</span><time>November 2</time><div><b>Moved to the V4.3 board.</b><p>Three switches moved off pins the new board's amplifier needs. A range-test build also sends a report every 5 seconds so a walk logs plenty of data.</p></div></li>
-    <li><span class="ver">v0.3</span><time>October 20</time><div><b>Quiet until something changes.</b><p>The box stopped sending every two seconds and only speaks when a switch moves, which saves battery and airtime. Five needs and a people count in one report.</p></div></li>
-    <li><span class="ver">v0.2</span><time>Before the range test</time><div><b>A light you can see.</b><p>The board's LED blinks on every send and stays on while a need is switched on.</p></div></li>
+    <li><span class="ver">v0.3</span><time>October 20</time><div><b>Reports only on change.</b><p>The box stopped sending every two seconds and only sends when a switch moves, which saves battery and airtime. Five needs and a people count in one report.</p></div></li>
+    <li><span class="ver">v0.2</span><time>Before field day 1</time><div><b>A visible status light.</b><p>The board's LED blinks on every send and stays on while a need is switched on.</p></div></li>
     <li><span class="ver">v0.1</span><time>The start</time><div><b>Two switches over radio.</b><p>Water and medical, sent every two seconds as <code>PKT,n,W1,M0</code>.</p></div></li>
   </ol>
   <p class="small" style="margin-top:14px">Every version is still in <a href="https://github.com/Cale-star/shelter-beacon/tree/main/firmware">the firmware folder</a>.</p>

@@ -8,10 +8,10 @@ import { RoundedBoxGeometry } from "three/addons/RoundedBoxGeometry.js";
 export const PARTS = [
   { id: "overlay", name: "Printed face", note: "One sheet of laminated vinyl. Labels in Japanese and English, the same list headquarters sees." },
   { id: "toggles", name: "Five need switches", note: "Chrome toggles: water, medical, food, blankets, fuel. Up means needed. Works with cold or gloved hands." },
-  { id: "knob", name: "People knob", note: "An 11-click dial for about how many people are sheltering: 0 to 100+. The big knob is 3D printed." },
+  { id: "knob", name: "People knob", note: "An 11-position knob for about how many people are sheltering: 0 to 100+. The knob is 3D printed." },
   { id: "led", name: "Status light", note: "Blinks when sending, glows when headquarters confirms, double-blinks while the box is still trying." },
-  { id: "buzzer", name: "Beeper", note: "Two quick beeps mean headquarters got it. One long beep means not yet." },
-  { id: "lid", name: "Lid", note: "Hinged and latched. Everything a person touches is on this one surface." },
+  { id: "buzzer", name: "Beeper", note: "Two quick beeps mean headquarters received the report. One long beep means not yet." },
+  { id: "lid", name: "Lid", note: "Hinged and latched. Every control is on this one surface." },
   { id: "board", name: "Radio board", note: "Heltec V4.3: an ESP32-S3 microcontroller and an SX1262 LoRa radio on one small board." },
   { id: "battery", name: "Battery pack", note: "Four 18650 cells in parallel, about 14 Ah. Roughly eight days with no sun at all." },
   { id: "charger", name: "Solar charger", note: "Charges the pack from the panel and powers the board at the same time." },

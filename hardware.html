@@ -24,8 +24,8 @@
 <header class="nav" id="nav"><div class="wrap"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html" aria-current=page>The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="build.html">Build one</a></li><li><a href="demo.html" class=cta>Try it</a></li></ul></div></header>
 <main id="main">
 <div class="page-head dark"><div class="head-art" aria-hidden="true"><div class="topo" aria-hidden="true"></div><svg class="beacon" viewBox="0 0 200 200" fill="none" stroke-linecap="round"><path class="arc a3" d="M52 62a68 68 0 0 1 96 0" stroke="currentColor" stroke-width="3"/><path class="arc a2" d="M66 78a48 48 0 0 1 68 0" stroke="currentColor" stroke-width="3"/><path class="arc a1" d="M80 94a28 28 0 0 1 40 0" stroke="currentColor" stroke-width="3"/><circle cx="100" cy="150" r="20" stroke="currentColor" stroke-width="6"/><path d="M94.5 150 90 108a10 10 0 0 1 20 0l-4.500 42z" fill="#ff6a5b"/></svg></div><div class="wrap">
-  <h1 class="display">Everything a person touches is on one face.</h1>
-  <p class="lede">Five switches, one dial, one light, one beeper. No screen, no menu, no app. Drag the box to turn it, pull the slider to take it apart, and pick any part to see what it does.</p>
+  <h1 class="display">Every control is on one face.</h1>
+  <p class="lede">Five switches, one knob, one status light, one beeper. No screen, no menu, no app. Drag the box to turn it, pull the slider to take it apart, and pick any part to see what it does.</p>
   <p class="head-fig"><b>5 + 1</b><span>switches and one knob. No screen, no menu.</span></p>
 </div></div>
 
@@ -46,14 +46,14 @@
 
 <section class="block"><div class="wrap split">
   <div>
-    <h2 class="say">Why switches and a dial, not a touchscreen.</h2>
+    <h2 class="say">Why switches and a knob, not a touchscreen.</h2>
     <div class="prose" style="margin-top:20px">
-      <p>The person using this is probably a community leader, not a radio operator, and in rural Japan probably over 65. It may be dark and cold. They've had no training and have other things on their mind.</p>
+      <p>The person using this is probably a community leader, not a radio operator, and in rural Japan probably over 65. It may be dark and cold. They have had no training and are under stress.</p>
       <ul>
-        <li><b>The state is the switch.</b> You can see what you've asked for from across the room, with the power off.</li>
+        <li><b>The switch shows the state.</b> What has been requested is visible from across the room, even with the power off.</li>
         <li><b>Nothing to navigate.</b> Each need has one switch that does one thing.</li>
-        <li><b>It answers back.</b> Two beeps mean headquarters got it. One long beep means it's still trying.</li>
-        <li><b>The people dial is rough on purpose.</b> Its clicks are 0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100+. Nobody counts heads exactly in an emergency, and "about 40" is what a responder needs.</li>
+        <li><b>It confirms.</b> Two beeps mean headquarters received the report. One long beep means the box is still trying.</li>
+        <li><b>The people knob is approximate on purpose.</b> Its clicks are 0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100+. Nobody counts heads exactly in an emergency, and "about 40" is what a responder needs.</li>
         <li><b>Japanese first.</b> The big text on every label is Japanese, with English underneath.</li>
       </ul>
     </div>
@@ -75,7 +75,7 @@
   <div class="split" style="margin-top:28px">
     <div class="prose">
       <p>The charger feeds the board and tops up the pack at the same time, so the box runs through the night on what the panel stored during the day.</p>
-      <p>With no sun at all, the pack should last roughly eight days as the firmware stands today. That's an estimate from the parts' rated current, not a measurement yet. The calculator below shows why sleep mode is the next big job.</p>
+      <p>With no sun at all, the pack should last roughly eight days as the firmware stands today. That's an estimate from the parts' rated current, not a measurement yet. The calculator below shows why a sleep mode is the next priority.</p>
       <p class="note-box"><b>Known limit.</b> The board's 5 V pin is rated for 4.7 to 6 V, and a lithium pack sits at 3.7 to 4.2 V. It ran a whole expo that way, but the margin shrinks as the pack drains. The next revision adds a small 5 V boost converter.</p>
     </div>
     <table class="spec">
@@ -97,7 +97,7 @@
   <div>
     <h2 class="say">Three parts are printed, not bought.</h2>
     <div class="prose" style="margin-top:20px">
-      <p>The big people knob, the plate that holds the battery and electronics, and a cover for the charger were designed for this box and 3D printed. The knob is sized for a whole hand: 58 mm across, with a pointer you can read from a few steps away.</p>
+      <p>The big people knob, the plate that holds the battery and electronics, and a cover for the charger were designed for this box and 3D printed. The knob is sized for a whole hand: 58 mm across, with a pointer that can be read from a few steps away.</p>
       <p>The design files are in the project repository with the firmware.</p>
     </div>
     <div class="btn-row"><a class="btn" href="https://github.com/Cale-star/shelter-beacon/tree/main/hardware">Hardware files on GitHub</a></div>

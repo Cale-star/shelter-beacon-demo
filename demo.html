@@ -167,9 +167,9 @@ footer p + p { margin-top: 6px; }
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav" id="nav"><div class="wrap"><a class="brand" href="./" aria-label="Shelter Beacon, home"><span class="logo-plate"><svg class="mark" viewBox="0 0 16 30" aria-hidden="true"><circle cx="8" cy="19" r="6" fill="none" stroke="#eef0ed" stroke-width="2"/><path d="M6.3 19 5 4.2a3 3 0 0 1 6 0L9.7 19z" fill="#ff6a5b"/></svg></span><span class="logo-words"><b>Shelter Beacon</b><span class="jp" lang="ja" aria-hidden="true">避難所ビーコン</span></span></a><button class="nav-toggle quiet" id="navToggle" aria-expanded="false" aria-controls="navList">Menu</button><ul id="navList"><li><a href="./">Overview</a></li><li><a href="problem.html">The problem</a></li><li><a href="hardware.html">The box</a></li><li><a href="system.html">How it works</a></li><li><a href="testing.html">Testing</a></li><li><a href="buildlog.html">Build log</a></li><li><a href="build.html">Build one</a></li><li><a href="demo.html" aria-current=page class=cta>Try it</a></li></ul></div></header>
 <main id="main">
-<div class="page-head dark"><div class="head-art" aria-hidden="true"><div class="topo" aria-hidden="true"></div><svg class="beacon" viewBox="0 0 200 200" fill="none" stroke-linecap="round"><path class="arc a3" d="M52 62a68 68 0 0 1 96 0" stroke="currentColor" stroke-width="3"/><path class="arc a2" d="M66 78a48 48 0 0 1 68 0" stroke="currentColor" stroke-width="3"/><path class="arc a1" d="M80 94a28 28 0 0 1 40 0" stroke="currentColor" stroke-width="3"/><circle cx="100" cy="150" r="20" stroke="currentColor" stroke-width="6"/><path d="M94.5 150 90 108a10 10 0 0 1 20 0l-4.500 42z" fill="#ff6a5b"/></svg></div><div class="wrap"><h1 class="display">Flip a switch. Watch headquarters.</h1><p class="lede">After an earthquake takes out phones and power, a shelter leader flips a switch for each thing the shelter needs. The box radios it to headquarters. No cell service, no internet, no app.</p></div></div>
+<div class="page-head dark"><div class="head-art" aria-hidden="true"><div class="topo" aria-hidden="true"></div><svg class="beacon" viewBox="0 0 200 200" fill="none" stroke-linecap="round"><path class="arc a3" d="M52 62a68 68 0 0 1 96 0" stroke="currentColor" stroke-width="3"/><path class="arc a2" d="M66 78a48 48 0 0 1 68 0" stroke="currentColor" stroke-width="3"/><path class="arc a1" d="M80 94a28 28 0 0 1 40 0" stroke="currentColor" stroke-width="3"/><circle cx="100" cy="150" r="20" stroke="currentColor" stroke-width="6"/><path d="M94.5 150 90 108a10 10 0 0 1 20 0l-4.500 42z" fill="#ff6a5b"/></svg></div><div class="wrap"><h1 class="display">Flip a switch and watch headquarters respond.</h1><p class="lede">After an earthquake takes out phones and power, a shelter leader sets a switch for each thing the shelter needs. The box reports it to headquarters by radio, with no cell service, no internet and no app.</p></div></div>
 <div class="page">
-<div class="demo-try"><p class="try">Go ahead and flip a switch. To change the number of people, drag the knob or tap a number.</p><button id="btnBoxSound" class="quiet sound" aria-pressed="false">Turn on the box's beeps</button></div>
+<div class="demo-try"><p class="try">Flip a switch. To change the number of people, drag the knob or tap a number.</p><button id="btnBoxSound" class="quiet sound" aria-pressed="false">Turn on the box's beeps</button></div>
 
 <div class="stage">
   <section class="unit" aria-label="Shelter box">
@@ -218,7 +218,7 @@ footer p + p { margin-top: 6px; }
 
     <h2 class="sec">How it works</h2>
     <div class="how">
-      <p>Every change is sent up to three times. Headquarters confirms the first copy it hears, and the box beeps twice so the leader knows it arrived. If nothing comes back, the box keeps trying on its own.</p>
+      <p>Every change is sent up to three times. Headquarters confirms the first copy it hears, and the box beeps twice so the shelter leader knows it arrived. If no confirmation comes back, the box retries automatically.</p>
       <p>Each shelter gets a score: medical 3, water 2, and 1 each for food, blankets and fuel. A crowded shelter adds 1 at 25 people and 2 at 50. A score of 3 or more is high priority and sets off the alarm.</p>
       <button data-drop="1">Lose the signal for 15 seconds</button>
     </div>
@@ -815,7 +815,7 @@ footer p + p { margin-top: 6px; }
   hooks.onCopy.push(flashLed);
 
   // The beeper, with the real box's timings (v0.6 firmware): a 60 ms chirp when a message is queued,
-  // 60-90-60 for "headquarters got it", and one 450 ms beep the first time a message goes unconfirmed.
+  // 60-90-60 for "headquarters received it", and one 450 ms beep the first time a message goes unconfirmed.
   // Off until someone turns it on: a page that beeps by itself is rude.
   let boxSound = false, longDone = false;
   function buzz(pattern) {

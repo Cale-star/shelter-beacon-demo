@@ -25,7 +25,7 @@ function fields() {
     { t: String(st.n), note: "The report number. Every copy of one report carries the same number, so headquarters can drop repeats and can tell when a report went missing." },
     ...NEEDS.map(n => ({ t: n.key + (st.on[n.key] ? 1 : 0), live: !!st.on[n.key], note: `${n.label}: ${st.on[n.key] ? "1, the switch is up, so it's needed." : "0, the switch is down."} Worth ${n.w} point${n.w > 1 ? "s" : ""} when it's on.` })),
     { t: "O" + occ, note: `About how many people: ${occ >= 100 ? "100 or more" : occ}. It comes from the 11-click knob, so it's a round number on purpose.` },
-    { t: "H0", note: "How often the box checks in by itself, in seconds. 0 means it only speaks when something changes, which saves battery and airtime." },
+    { t: "H0", note: "How often the box checks in automatically, in seconds. 0 means it reports only when something changes, which saves battery and airtime." },
   ];
 }
 function paintReport() {
@@ -114,7 +114,7 @@ async function play() {
       y += narrow ? 50 : 44; await wait(300); if (!alive()) return;
     }
     y += side(y - 6, "one long beep");
-    addLog("2.4 s", "No answer. The box gives one long beep and its light starts double-blinking.");
+    addLog("2.4 s", "No confirmation. The box gives one long beep and its light starts double-blinking.");
     seq.append(el("path", { d: `M${BX - 8} ${y + 14}h16M${BX - 8} ${y + 22}h16`, stroke: "var(--ink-2)", "stroke-width": 2 }));
     note(BX + 16, y + 23, narrow ? "waits 5 s, then tries again" : "waits 5 s, then tries again by itself", "start");
     y += 52; await wait(700); if (!alive()) return;
@@ -130,7 +130,7 @@ async function play() {
   addLog((tSend + 0.4).toFixed(1) + " s", "Headquarters confirms. The box stops sending the other copies.");
   y += narrow ? 46 : 34;
   side(y, "two quick beeps");
-  addLog((tSend + 0.5).toFixed(1) + " s", "Two quick beeps and a steady glow: headquarters got it.");
+  addLog((tSend + 0.5).toFixed(1) + " s", "Two quick beeps and a steady glow: headquarters received it.");
 }
 // The 3D version, when the browser can draw it. It tells the same story at a pace you can read.
 let S3 = null;
@@ -149,7 +149,7 @@ async function play3d() {
       addLog((0.1 + (k - 1) * 0.7).toFixed(1) + " s", `Copy ${k} is sent and never arrives.`);
       await S3.copy(k, true); if (!alive()) return;
     }
-    addLog("2.4 s", "No answer. The box gives one long beep and its light starts double-blinking.");
+    addLog("2.4 s", "No confirmation. The box gives one long beep and its light starts double-blinking.");
     await S3.longBeep(); if (!alive()) return;
     await S3.retry(5); if (!alive()) return;
   }
@@ -158,7 +158,7 @@ async function play3d() {
   await S3.copy(1, false); if (!alive()) return;
   addLog((tSend + 0.4).toFixed(1) + " s", "Headquarters confirms. The box stops sending the other copies.");
   await S3.ack(); if (!alive()) return;
-  addLog((tSend + 0.5).toFixed(1) + " s", "Two quick beeps and a steady glow: headquarters got it.");
+  addLog((tSend + 0.5).toFixed(1) + " s", "Two quick beeps and a steady glow: headquarters received it.");
   await S3.twoBeeps();
 }
 const go = () => (S3 ? play3d() : play());

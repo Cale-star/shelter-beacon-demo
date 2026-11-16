@@ -4,12 +4,12 @@
 import * as THREE from "three";
 
 const STEPS = [
-  { t: 0.0, say: "Someone at the shelter flips Water up. The box chirps once." },
+  { t: 0.0, say: "The shelter leader flips Water up. The box chirps once." },
   { t: 4.0, say: "Copy 1 leaves the antenna. It's on air for about a third of a second." },
-  { t: 7.5, say: "It clears the ridge. No towers, no repeaters: the cell tower in the valley is down anyway." },
+  { t: 7.5, say: "It clears the ridge. No towers, no repeaters: the cell tower in the valley is down." },
   { t: 10.5, say: "Headquarters hears it. The dashboard now reads \"needs water\"." },
   { t: 14, say: "Headquarters answers \"got report 42\", and the box stops sending the other copies." },
-  { t: 17, say: "Two quick beeps at the shelter. The person who flipped the switch knows it arrived." },
+  { t: 17, say: "Two quick beeps at the shelter. The shelter leader knows the report arrived." },
 ];
 const LOOP = 22;   // each caption gets three to four seconds
 
@@ -174,7 +174,7 @@ export function createRidge(stage, { onStep } = {}) {
   const OFF = 0x3a3f3d, AMBER = 0xf2b200, WHITE = 0xeef0ed;
   const ease = t => t < .5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
   function show(t) {
-    // shelter light: on once the switch flips; a double blink for "headquarters got it"
+    // shelter light: on once the switch flips; a double blink for "headquarters received it"
     const beep = t > 17 && t < 17.6 && ((t - 17) % .3) < .15;
     shMast.lamp.material.color.setHex(t < .3 ? OFF : beep ? WHITE : AMBER);
     shMast.lamp.scale.setScalar(beep ? 1.5 : 1);

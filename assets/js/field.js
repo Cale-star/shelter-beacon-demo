@@ -56,9 +56,9 @@ if (tool) {
     tool.dataset.state = left < 0 ? "lost" : left < 10 ? "edge" : "ok";
     tool.querySelector("#mSay").textContent =
       !on.length ? "Nothing switched on. This is the link as measured: 13 of 13 packets." :
-      left < 0 ? `Lost. The signal would be ${-left} dB too faint to decode. ${on.length > 1 ? "Any one of these alone would have been survivable; together they aren't." : ""}` :
+      left < 0 ? `Lost. The signal would be ${-left} dB too faint to decode. ${on.length > 1 ? "Each of these alone leaves a working link; together they do not." : ""}` :
       left < 10 ? "Still decodable, but on the edge. In the continuous log, packets started going missing with this little in hand." :
-      on.length === 1 ? "Still gets through with room to spare. One problem at a time is fine." : "Still gets through, with less room than it looks.";
+      on.length === 1 ? "Still gets through with room to spare. A single loss is within the margin." : "Still gets through, with reduced margin.";
   };
   boxes.forEach(b => b.addEventListener("change", paint)); paint();
 }

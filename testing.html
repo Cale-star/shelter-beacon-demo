@@ -44,7 +44,7 @@
         <text x="660" y="214" text-anchor="end">Receiver, 715 ft</text>
         <text class="len" x="350" y="214" text-anchor="middle">1.41 km</text>
       </svg>
-      <p><b>−85 dBm.</b> That is 44 dB stronger than the faintest signal the radio can decode, so there was a lot left over.</p>
+      <p><b>−85 dBm.</b> That is 44 dB stronger than the faintest signal the radio can decode, so the link had a large margin.</p>
     </figure>
     <figure class="path bad">
       <figcaption><b>Two ridges in the way</b><span>0 packets</span></figcaption>
@@ -68,15 +68,15 @@
 
 <section class="block"><div class="wrap">
   <h2 class="say">Every spot, by how much signal was left over.</h2>
-  <p class="prose">The radio can decode down to about −129 dBm. Each bar is how far above that the signal was. More bar means more room for rain, trees and bad luck.</p>
+  <p class="prose">The radio can decode down to about −129 dBm. Each bar is how far above that the signal was. A longer bar means more margin for rain and trees.</p>
   <div class="spots" id="spots" role="table" aria-label="Signal to spare at each test spot"></div>
   <p class="fine-print" style="margin-top:14px"><span class="ev" data-k="measured">Measured</span> One trial per spot, 10 to 60 packets each, read off the receiver's screen. Treat single dB figures as approximate; the pass and fail results are firm.</p>
 </div></section>
 
 <section class="block"><div class="wrap split wide-left">
   <div>
-    <h2 class="say">44 dB to spare sounds like a lot. Spend it.</h2>
-    <p class="prose" style="margin-top:20px">Start from the 1.41 km link and switch on the things that went wrong during the day. Each one was measured once, at that distance or close to it.</p>
+    <h2 class="say">How the 44 dB of spare signal gets used up.</h2>
+    <p class="prose" style="margin-top:20px">Start from the 1.41 km link and switch on the losses measured during the day. Each one was measured once, at that distance or close to it.</p>
     <div class="panel tool" id="margin" style="margin-top:24px"><h3><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><path d="M8.6 8.6a4.8 4.8 0 0 0 0 6.8M15.4 8.6a4.8 4.8 0 0 1 0 6.8M5.7 5.7a8.9 8.9 0 0 0 0 12.6M18.3 5.7a8.9 8.9 0 0 1 0 12.6"/></svg>What's left at 1.41 km?</h3></div>
   </div>
   <div>
@@ -119,13 +119,13 @@
   <div>
     <h2 class="say">What changed because of it.</h2>
     <div class="prose" style="margin-top:20px">
-      <p><b>Every report is now sent three times.</b> Eighteen of the 26 dropouts were a single packet, and a second copy a moment later should get past those. But losses came in bunches, so the copies don't fail independently, and I won't put a percentage on it until a test counts them.</p>
-      <p><b>Then headquarters started answering.</b> Copies can't cross a 22-second dropout, let alone a seven-minute blackout. So the box now waits for a confirmation, and if none comes it retries after 5, 15 and 30 seconds, then every minute, until it gets through.</p>
+      <p><b>Every report is now sent three times.</b> Eighteen of the 26 dropouts were a single packet, and a second copy a moment later should get past those. But losses came in bunches, so the copies don't fail independently, so no delivery percentage is claimed until a test counts them.</p>
+      <p><b>Then headquarters started confirming.</b> Copies can't cross a 22-second dropout, let alone a seven-minute blackout. So the box now waits for a confirmation, and if none comes it retries after 5, 15 and 30 seconds, then every minute, until it gets through.</p>
       <p><b>The box only talks when something changes.</b> A packet every two seconds wasted battery and airtime to say nothing new.</p>
     </div>
   </div>
   <div>
-    <p class="note-box"><b>What this day can't tell you.</b> How far it reaches at most: the 1.41 km link had signal to spare and nobody drove further. How often three copies get through, which is still unmeasured. And anything about Japan's rules: this was 915 MHz at 22 dBm, and Japan allows 20 mW at 920 MHz. The transmitter's mounting also changed between spots, and its battery pack was touching the antenna for two of them.</p>
+    <p class="note-box"><b>What this field day does not show.</b> How far it reaches at most: the 1.41 km link had signal to spare and no test went further. How often three copies get through, which is still unmeasured. And anything about Japan's rules: this was 915 MHz at 22 dBm, and Japan allows 20 mW at 920 MHz. The transmitter's mounting also changed between spots, and its battery pack was touching the antenna for two of them.</p>
     <table class="spec" style="margin-top:24px">
       <thead><tr><th>Checked so far</th><th>Result</th></tr></thead>
       <tbody>
@@ -145,13 +145,13 @@
   <h2 class="say">The next field day counts copies.</h2>
   <div class="split" style="margin-top:20px">
     <div class="prose">
-      <p>A new pair of test programs is written and checked on the bench. The box sends three numbered copies every five seconds and listens for an answer after each. Headquarters answers every copy, and both ends keep their own log.</p>
-      <p>That measures the two things this page is still missing: how often three copies get through when one doesn't, and how often the answer makes it back.</p>
+      <p>A new pair of test programs is written and checked on the bench. The box sends three numbered copies every five seconds and listens for a confirmation after each. Headquarters confirms every copy, and both ends keep their own log.</p>
+      <p>That measures the two things this page is still missing: how often three copies get through when one doesn't, and how often the confirmation gets back.</p>
     </div>
     <dl class="reqs" style="margin-top:0">
       <div><dt>Drive until it stops</dt><dd>From the same ridge, to find where the 44 dB actually runs out.</dd></div>
       <div><dt>At Japan's power</dt><dd>The 1.41 km and blocked-valley spots again at 13 dBm.</dd></div>
-      <div><dt>Three runs per spot</dt><dd>So "about 28 dB" becomes a number with a range on it.</dd></div>
+      <div><dt>Three runs per spot</dt><dd>So "about 28 dB" becomes an average with a range.</dd></div>
       <div><dt>The raw logs</dt><dd>With the analysis scripts, <a href="https://github.com/Cale-star/shelter-beacon/tree/main/data">in the repository</a>.</dd></div>
     </dl>
   </div>

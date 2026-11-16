@@ -20,11 +20,11 @@ const HQ = { x: 43, z: 9 };
 // t = hour the switch was flipped. late = hours the report was blocked before headquarters heard it.
 const EVENTS = [
   { t: 2, s: 2, on: ["W"], say: "The school gym asks for water." },
-  { t: 3, s: 5, on: ["M"], say: "A hamlet of ten people asks for medical help. Small, but it goes to the top." },
+  { t: 3, s: 5, on: ["M"], say: "A hamlet of ten people asks for medical help. It is small, but medical need ranks first." },
   { t: 5, s: 4, on: ["FU"], say: "The fishing co-op is running low on fuel." },
   { t: 7, s: 6, on: ["W", "FD"], say: "Sixty people at the clinic annex need water and food." },
   { t: 14, s: 1, on: ["SH"], say: "Night falls. The community hall asks for blankets." },
-  { t: 18, s: 3, on: ["M", "W"], late: 3, say: "The temple hall needs medical help and water, but the signal is blocked. The box keeps trying by itself.", then: "Three hours later the temple hall's report gets through, and it jumps the list." },
+  { t: 18, s: 3, on: ["M", "W"], late: 3, say: "The temple hall needs medical help and water, but the signal is blocked. The box retries automatically.", then: "Three hours later the temple hall's report gets through, and it jumps the list." },
   { t: 26, s: 5, off: ["M"], say: "A medical team reaches the hamlet on foot. Its switch goes back down." },
   { t: 30, s: 2, on: ["FD"], say: "The school gym, with over a hundred people, now needs food as well." },
   { t: 36, s: 6, off: ["W"], say: "Water reaches the clinic annex." },
