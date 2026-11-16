@@ -65,7 +65,7 @@ function powerTool(el) {
       <div class="big"><dt id="pwLastT">The pack lasts</dt><dd id="pwLast"></dd></div>
     </dl>
     <p class="tool-say" id="pwSay" aria-live="polite"></p>
-    <p class="tool-src"><span class="ev" data-k="estimated">Estimated</span> From the parts' rated current, not a measurement yet. A USB power meter test will replace these numbers. Sleep mode is planned, not built.</p>`);
+    <p class="tool-src"><span class="ev" data-k="estimated">Estimated</span> From the parts' rated current. The sleep mode is a planned firmware feature.</p>`);
   let fw = "now";
   const sun = $("#sunIn", el);
   el.querySelectorAll("[data-fw]").forEach(b => b.onclick = () => {
