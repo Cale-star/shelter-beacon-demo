@@ -416,7 +416,12 @@ details.table summary::-webkit-details-marker { display: none; }
 .page-head .lede { max-width: 46ch; }
 .head-art { position: absolute; inset: 0; pointer-events: none; }
 .head-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, color-mix(in srgb, var(--paper) 55%, transparent), transparent 60%); }
-.topo { position: absolute; inset: 0; color: var(--ink); background: currentColor; opacity: .14; -webkit-mask: url(img/topo.svg) center / cover no-repeat; mask: url(img/topo.svg) center / cover no-repeat; }
+.topo { position: absolute; inset: 0; color: var(--ink); background: currentColor; opacity: .14; -webkit-mask: url(img/topo.svg) 0 0 / 1400px 1400px repeat; mask: url(img/topo.svg) 0 0 / 1400px 1400px repeat; }
+/* The same map runs behind the whole page. Every copy is anchored to the top-left of <main>, so the
+   lines carry straight on from the dark header into the page below it. */
+body:not(.bare) main { position: relative; isolation: isolate; }
+body:not(.bare) main::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--ink); opacity: .06;
+  -webkit-mask: url(img/topo.svg) 0 0 / 1400px 1400px repeat; mask: url(img/topo.svg) 0 0 / 1400px 1400px repeat; }
 .head-art .beacon { position: absolute; right: 10%; top: 50%; width: clamp(150px, 19vw, 220px); transform: translateY(-52%); color: var(--ink); z-index: 1; }
 .beacon .arc { opacity: .22; animation: arc 3.6s ease-in-out infinite; }
 .beacon .a2 { animation-delay: .28s; } .beacon .a3 { animation-delay: .56s; }
@@ -689,7 +694,7 @@ body.bare { background: var(--paper); }
 @page { margin: 16mm; }
 @media print {
   :root { --paper: #fff; --surface: #fff; --ink: #000; --ink-2: #333; --line: #bbb; }
-  .nav, .foot, .skip, .head-art, .topo, .stage3d, .explore, .valley, #scenario, .hero-ctl, .chips, .seq-ctl, button, .tool input, .tool-seg, .peek, .btn-row { display: none !important; }
+  main::before, .nav, .foot, .skip, .head-art, .topo, .stage3d, .explore, .valley, #scenario, .hero-ctl, .chips, .seq-ctl, button, .tool input, .tool-seg, .peek, .btn-row { display: none !important; }
   body, .dark, .band, .page-head { background: #fff !important; color: #000 !important; }
   .page-head { padding: 0 0 12px; }
   section.block { padding-top: 18px; break-inside: avoid-page; }
@@ -834,7 +839,7 @@ body .stage { position: relative; grid-template-columns: minmax(0, 460px) minmax
 @container (max-width: 540px) { .facts li { grid-template-columns: 1fr; gap: 6px; } }
 .demo3d .drop-btn { display: block; margin-top: 12px; min-height: 44px; }
 /* narrow screens: keep the contours at a readable scale instead of shrinking the whole map into the band */
-@media (max-width: 900px) { .topo { -webkit-mask-size: auto max(100%, 560px); mask-size: auto max(100%, 560px); } }
+@media (max-width: 900px) { .topo, body:not(.bare) main::before { -webkit-mask-size: 1000px 1000px; mask-size: 1000px 1000px; } }
 
 /* ---- field day: paths, spots, margin tool ---- */
 .fine-print { font-size: .8125rem; color: var(--ink-2); max-width: 70ch; }
