@@ -239,8 +239,11 @@ export function createBox(container, opts = {}) {
     add(knobGroup, cylZ(17, 17, 0.6, 48), black(0.25), 0, 0, 22.2);
     knobGroup.children.forEach(o => { o.userData.prim = true; });                     // stand-ins until the real knob's STL loads
     add(knobGroup, cylZ(40, 40, 30, 32), new THREE.MeshBasicMaterial({ visible: false }), 0, 0, 12);   // a grab area bigger than the knob
-    add(knobGroup, new RoundedBoxGeometry(3, 15, 1, 2, 0.5), std(0xf2b200, { roughness: 0.4, emissive: 0xf2b200, emissiveIntensity: 0.25 }), 0, 20.5, 5.3);
-    add(knobGroup, new RoundedBoxGeometry(3, 9, 1, 2, 0.5), std(0xf2b200, { roughness: 0.4, emissive: 0xf2b200, emissiveIntensity: 0.25 }), 0, 11, 22.6);
+    // yellow paint, placed where big_knob.scad puts its features once the model is turned to point up (+Y):
+    // the raised pointer on the skirt (r 20–29 mm, top at 4.6 mm) and the groove across the top (r 4–21 mm, 1.6 mm deep)
+    const paint = std(0xf2b200, { roughness: 0.4, emissive: 0xf2b200, emissiveIntensity: 0.25 });
+    add(knobGroup, new RoundedBoxGeometry(3.3, 9.1, 0.4, 1, 0.15), paint, 0, 24.5, 4.65);
+    add(knobGroup, new RoundedBoxGeometry(2.9, 16.8, 1.4, 1, 0.3), paint, 0, 12.5, 22.1);
   });
   // ---------- the real printed parts, from the project's own STL files ----------
   async function loadSTL(url) {
@@ -269,7 +272,9 @@ export function createBox(container, opts = {}) {
   const tagPart = (m, part) => { m.castShadow = m.receiveShadow = true; m.userData.part = part; };
   loadSTL("assets/models/knob.stl").then(geo => {
     knobGroup.children.filter(o => o.userData.prim).forEach(o => knobGroup.remove(o));
-    const m = new THREE.Mesh(geo, black(0.48)); tagPart(m, "knob"); m.userData.knob = true; knobGroup.add(m);
+    const m = new THREE.Mesh(geo, black(0.48)); tagPart(m, "knob"); m.userData.knob = true;
+    m.rotation.z = Math.PI / 2;                                  // the .scad draws the pointer along +X; the dial reads with it pointing up
+    knobGroup.add(m);
     delete knobGroup.parent.userData.box; refit();
   }).catch(() => {});
   loadSTL("assets/models/charger_cover.stl").then(geo => {
