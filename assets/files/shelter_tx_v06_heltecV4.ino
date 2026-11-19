@@ -132,7 +132,11 @@ const uint8_t N_TOGGLES = sizeof(toggles) / sizeof(toggles[0]);
 Input prgButton = {"", "PRG", PRG_PIN, false, false, 0};
 
 #define OCC_POT_PIN        3    // ADC1 channel: wiper of the occupancy knob
-#define OCC_STEPS         11    // knob positions (Alpha 9 mm pot with 11 detents, 300 degrees)
+#define OCC_STEPS         11    // knob positions over the pot's 300 degrees (any 10k linear pot)
+// Knob calibration: the raw reading (0-4095) at each end of the knob's travel. Find them by watching
+// "knob raw" in the Serial Monitor at 115200 while turning the knob fully each way. Leave 0 / 4095 if unsure.
+#define KNOB_RAW_MIN       0     // fully counterclockwise (the dial's 0)
+#define KNOB_RAW_MAX    4095     // fully clockwise (the dial's 100+)
 const int OCC_TABLE[OCC_STEPS] = {0, 5, 10, 15, 20, 30, 40, 50, 60, 80, 100};   // 100 = "100 or more"
 #define EXT_LED_PIN       38    // front-panel status LED
 #define BUZZER_PIN        39    // active buzzer module signal
@@ -205,7 +209,11 @@ int knobStep = -1;
 int readOccupancyRaw() {
   uint32_t sum = 0;
   for (uint8_t i = 0; i < 8; i++) sum += analogRead(OCC_POT_PIN);
-  float pos = (sum / 8.0f) / 4095.0f * (OCC_STEPS - 1);      // 0.0 .. 10.0
+  float raw = sum / 8.0f;
+  static uint32_t lastRawPrint = 0;
+  if (millis() - lastRawPrint > 500) { lastRawPrint = millis(); Serial.printf("knob raw %d\n", (int)raw); }
+  float pos = (raw - KNOB_RAW_MIN) / (float)(KNOB_RAW_MAX - KNOB_RAW_MIN) * (OCC_STEPS - 1);
+  pos = constrain(pos, 0.0f, (float)(OCC_STEPS - 1));                // 0.0 .. 10.0
   int nearest = (int)(pos + 0.5f);
   if (knobStep < 0 || fabsf(pos - knobStep) > 0.65f) knobStep = nearest;
   return OCC_TABLE[knobStep];
